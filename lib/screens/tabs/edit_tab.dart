@@ -6,17 +6,17 @@ import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/pages/arrived_page.dart';
 import 'package:zippy/screens/pages/completed_page.dart';
 import 'package:zippy/screens/pages/profile_page.dart';
-import 'package:zippy/screens/tabs/sales_tab.dart';
+import 'package:zippy/screens/tabs/shop_tab.dart';
 
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
 
-class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key});
+class EditScreen extends StatefulWidget {
+  const EditScreen({super.key});
 
   @override
-  State<HistoryScreen> createState() => _HistoryScreenState();
+  State<EditScreen> createState() => _EditScreenState();
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -24,7 +24,7 @@ class HistoryScreen extends StatefulWidget {
   );
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _EditScreenState extends State<EditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,29 +50,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   padding: const EdgeInsets.only(top: 25, left: 15, right: 15),
                   child: SafeArea(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextWidget(
-                          text: 'Good day! Rider Robert',
-                          fontSize: 22,
-                          fontFamily: 'Bold',
-                          color: Colors.white,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => const ProfilePage()),
-                            );
-                          },
-                          child: const CircleAvatar(
-                            maxRadius: 25,
-                            minRadius: 25,
-                            backgroundImage: AssetImage(
-                              'assets/images/sample_avatar.png',
-                            ),
+                            text: 'Bluebird’s Coffee',
+                            fontSize: 22,
+                            fontFamily: 'Bold',
+                            color: Colors.white,
                           ),
-                        ),
                       ],
                     ),
                   ),
@@ -98,7 +83,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             onTap: () {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                    builder: (context) => const SalesTab()),
+                                    builder: (context) => const ShopTab()),
                               );
                             },
                             child: _buildCravingOption(

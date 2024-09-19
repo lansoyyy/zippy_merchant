@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zippy/screens/pages/arrived_page.dart';
 import 'package:zippy/screens/pages/profile_page.dart';
-import 'package:zippy/screens/tabs/history_tab.dart';
-import 'package:zippy/screens/tabs/sales_tab.dart';
+import 'package:zippy/screens/tabs/edit_tab.dart';
+import 'package:zippy/screens/tabs/shop_tab.dart';
 
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/widgets/button_widget.dart';
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                      builder: (context) => const SalesTab()),
+                                      builder: (context) => const ShopTab()),
                                 );
                               },
                               child: _buildCravingOption(
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const HistoryScreen()),
+                                            const EditScreen()),
                                   );
                                 },
                                 child: _buildCravingOption(
