@@ -20,7 +20,7 @@ class OnboardingSecond extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      for (int i = 0; i < 6; i++)
+                      for (int i = 0; i < 3; i++)
                         Padding(
                           padding: const EdgeInsets.only(left: 3),
                           child: Icon(
@@ -58,24 +58,27 @@ class OnboardingSecond extends StatelessWidget {
               const SizedBox(
                 height: 100,
               ),
-              Image.asset(
-                logo,
-                color: secondary,
-                height: 80,
-                width: 190,
-              ),
-              const SizedBox(
-                height: 25,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextWidget(
+                    text: 'with',
+                    fontSize: 32,
+                    fontFamily: 'Regular',
+                    color: secondary,
+                  ),
+                  TextWidget(
+                    text: 'Zippy',
+                    fontSize: 32,
+                    fontFamily: 'Bold',
+                    color: secondary,
+                  ),
+                ],
               ),
               TextWidget(
-                text: 'Ride Hailing',
-                fontSize: 26,
-                fontFamily: 'Bold',
-              ),
-              TextWidget(
-                text: 'Going somewhere?\nZippy got you covered.',
+                text: 'you can reach track your sales\nand analytics.',
                 fontSize: 16,
-                color: Colors.grey,
+                color: Colors.black,
               ),
               const Expanded(
                 child: SizedBox(

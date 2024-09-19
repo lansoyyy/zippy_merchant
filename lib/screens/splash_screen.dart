@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:zippy/screens/auth/landing_screen.dart';
+import 'package:zippy/screens/onboarding_screens/onboarding_one.dart';
 
 import '../utils/colors.dart';
 
@@ -20,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Timer(const Duration(seconds: 4), () async {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LandingScreen()));
+          MaterialPageRoute(builder: (context) => const OnboardingOne()));
     });
   }
 

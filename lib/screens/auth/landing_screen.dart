@@ -25,7 +25,7 @@ class LandingScreen extends StatelessWidget {
               color: secondary,
             ),
             TextWidget(
-              text: 'RIDERS',
+              text: 'MERCHANT',
               fontSize: 30,
               fontFamily: 'Bold',
               color: secondary,

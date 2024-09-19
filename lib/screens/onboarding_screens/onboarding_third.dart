@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zippy/screens/auth/landing_screen.dart';
 import 'package:zippy/screens/onboarding_screens/onboarding_fourth.dart';
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/utils/const.dart';
@@ -20,7 +21,7 @@ class OnboardingThird extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      for (int i = 0; i < 6; i++)
+                      for (int i = 0; i < 3; i++)
                         Padding(
                           padding: const EdgeInsets.only(left: 3),
                           child: Icon(
@@ -33,8 +34,8 @@ class OnboardingThird extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const OnboardingFourth()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const LandingScreen()));
                     },
                     child: Row(
                       children: [
@@ -58,24 +59,27 @@ class OnboardingThird extends StatelessWidget {
               const SizedBox(
                 height: 100,
               ),
-              Image.asset(
-                logo,
-                color: secondary,
-                height: 80,
-                width: 190,
-              ),
-              const SizedBox(
-                height: 25,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextWidget(
+                    text: 'with',
+                    fontSize: 32,
+                    fontFamily: 'Regular',
+                    color: secondary,
+                  ),
+                  TextWidget(
+                    text: 'Zippy',
+                    fontSize: 32,
+                    fontFamily: 'Bold',
+                    color: secondary,
+                  ),
+                ],
               ),
               TextWidget(
-                text: 'Surprise',
-                fontSize: 26,
-                fontFamily: 'Bold',
-              ),
-              TextWidget(
-                text: 'Surprise your loved ones with\ntreats.',
+                text: 'you can customize your shop based on\nyour preference.',
                 fontSize: 16,
-                color: Colors.grey,
+                color: Colors.black,
               ),
               const Expanded(
                 child: SizedBox(
@@ -83,7 +87,7 @@ class OnboardingThird extends StatelessWidget {
                 ),
               ),
               Image.asset(
-                'assets/images/cat/CAT #8 1.png',
+                'assets/images/cat/CAT #6 1.png',
                 width: 250,
               ),
             ],

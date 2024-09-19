@@ -85,9 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 80,
                     inputType: TextInputType.number,
                     color: Colors.white,
-                    label: 'Rider ID',
+                    label: 'Merchant ID',
                     controller: number,
-                    hint: 'Enter you 12-digit Rider ID',
+                    hint: 'Enter you 12-digit Merchant ID',
                   ),
                   TextFieldWidget(
                     showEye: true,
@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                            builder: (context) => const InitialHomeScreen()),
+                            builder: (context) => const HomeScreen()),
                       );
                     },
                   ),
