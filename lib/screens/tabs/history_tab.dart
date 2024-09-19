@@ -102,12 +102,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               );
                             },
                             child: _buildCravingOption(
-                                Icons.add_chart_rounded, 'Sales', false),
+                                Icons.store_mall_directory_outlined,
+                                'Shop',
+                                false),
                           ),
                           GestureDetector(
                               onTap: () {},
                               child: _buildCravingOption(
-                                  Icons.history, 'History', true)),
+                                  Icons.edit_square, 'Edit', true)),
                         ],
                       ),
                     ],
