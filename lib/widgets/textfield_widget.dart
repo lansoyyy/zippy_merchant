@@ -18,6 +18,8 @@ class TextFieldWidget extends StatefulWidget {
   late Color? borderColor;
   late Color? hintColor;
   late double? radius;
+  late double? fontSize;
+  late double? hintSize;
   final String? Function(String?)? validator; // Add validator parameter
 
   final TextCapitalization? textCapitalization;
@@ -48,6 +50,8 @@ class TextFieldWidget extends StatefulWidget {
     this.labelcolor = Colors.white,
     this.color = Colors.black,
     this.radius = 100,
+    this.fontSize = 24,
+    this.hintSize = 18,
     this.hasValidator = true,
     this.textCapitalization = TextCapitalization.sentences,
     this.inputType = TextInputType.text,
@@ -70,7 +74,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           maxLength: widget.length,
           enabled: widget.enabled,
           style: TextStyle(
-              fontFamily: 'Medium', fontSize: 24, color: widget.labelcolor),
+              fontFamily: 'Medium',
+              fontSize: widget.fontSize,
+              color: widget.labelcolor),
           textCapitalization: widget.textCapitalization!,
           keyboardType: widget.inputType,
           decoration: InputDecoration(
@@ -96,8 +102,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             hintText: widget.hint,
             border: InputBorder.none,
             label: TextWidget(
+              align: TextAlign.start,
               text: widget.label,
-              fontSize: 18,
+              fontSize: widget.hintSize!,
               color: widget.labelcolor,
             ),
             hintStyle: const TextStyle(
