@@ -1,15 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:zippy/screens/pages/arrived_page.dart';
-import 'package:zippy/screens/pages/profile_page.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
 import 'package:zippy/screens/tabs/shop_tab.dart';
-
 import 'package:zippy/utils/colors.dart';
-import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +16,36 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? businessName;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('Merchant')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            businessName = userDoc.get('businessName');
+          });
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,12 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: const BoxDecoration(
                 color: secondary,
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(
-                    40,
-                  ),
-                  bottomRight: Radius.circular(
-                    40,
-                  ),
+                  bottomLeft: Radius.circular(40),
+                  bottomRight: Radius.circular(40),
                 ),
               ),
               child: Column(
@@ -49,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextWidget(
-                            text: 'Bluebird’s Coffee',
+                            text: businessName ?? '...',
                             fontSize: 22,
                             fontFamily: 'Bold',
                             color: Colors.white,
@@ -98,31 +121,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   )
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ButtonWidget(
-                    height: 35,
-                    width: 75,
-                    fontSize: 14,
-                    label: 'Weekly',
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.info,
-                      color: secondary,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -191,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   topRight: Radius.circular(20),
                 ),
               ),
-              height: 275,
+              height: 500,
               width: double.infinity,
               child: Column(
                 children: [
@@ -232,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Container(
                     width: double.infinity,
-                    height: 198,
+                    height: 434,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(

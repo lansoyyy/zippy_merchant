@@ -1,16 +1,13 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zippy/screens/home_screen.dart';
-import 'package:zippy/screens/pages/arrived_page.dart';
-import 'package:zippy/screens/pages/completed_page.dart';
-import 'package:zippy/screens/pages/profile_page.dart';
 import 'package:zippy/screens/tabs/shop_tab.dart';
 
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/utils/const.dart';
-import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
 import 'package:zippy/widgets/textfield_widget.dart';
 
@@ -27,6 +24,55 @@ class _EditScreenState extends State<EditScreen> {
   final merchantId = TextEditingController();
   final operatingHours = TextEditingController();
   final operatingDays = TextEditingController();
+  String? businessName;
+  String? description;
+  String? add;
+  String? id;
+  String? hours;
+  String? days;
+  String? name;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  List<dynamic> categories = [];
+  String? selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('Merchant')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            name = userDoc.get('name');
+            businessName = userDoc.get('businessName');
+            description = userDoc.get('desc');
+            add = userDoc.get('address');
+            id = userDoc.get('merchantId');
+            hours = userDoc.get('operatingHours');
+            days = userDoc.get('operatingDays');
+            categories = userDoc.get('categories');
+            if (categories.isNotEmpty) {
+              selectedCategory = categories[0];
+            }
+          });
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +103,7 @@ class _EditScreenState extends State<EditScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextWidget(
-                            text: 'Bluebird’s Coffee',
+                            text: businessName ?? '..',
                             fontSize: 22,
                             fontFamily: 'Bold',
                             color: Colors.white,
@@ -113,7 +159,7 @@ class _EditScreenState extends State<EditScreen> {
               height: 20,
             ),
             Container(
-              width: 375,
+              width: 500,
               height: 200,
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -127,14 +173,14 @@ class _EditScreenState extends State<EditScreen> {
               height: 20,
             ),
             Container(
-              decoration: const BoxDecoration(
-                color: secondary,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: white,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),
               ),
-              height: 600,
+              height: 430,
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
@@ -148,7 +194,7 @@ class _EditScreenState extends State<EditScreen> {
                             text: 'Description',
                             fontSize: 28,
                             fontFamily: 'Bold',
-                            color: Colors.white,
+                            color: primary,
                           ),
                           const SizedBox(
                             width: 10,
@@ -157,7 +203,7 @@ class _EditScreenState extends State<EditScreen> {
                             onPressed: () {},
                             icon: const Icon(
                               Icons.edit,
-                              color: Colors.white,
+                              color: primary,
                             ),
                           ),
                         ],
@@ -172,17 +218,16 @@ class _EditScreenState extends State<EditScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
-                              color: Colors.white,
+                              color: secondary,
                             ),
                           ),
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: TextWidget(
-                                text:
-                                    'Looking for a cozy rustic quiet workplace to do some productive work? enjoy all these at bluebird cakes, coffee’s, and pasta’s that will pique your taste buds.',
+                                text: description ?? 'No description available',
                                 fontSize: 12,
-                                color: Colors.white,
+                                color: black,
                                 maxLines: 5,
                               ),
                             ),
@@ -198,7 +243,7 @@ class _EditScreenState extends State<EditScreen> {
                             text: 'Information',
                             fontSize: 28,
                             fontFamily: 'Bold',
-                            color: Colors.white,
+                            color: primary,
                           ),
                           const SizedBox(
                             width: 10,
@@ -207,7 +252,7 @@ class _EditScreenState extends State<EditScreen> {
                             onPressed: () {},
                             icon: const Icon(
                               Icons.edit,
-                              color: Colors.white,
+                              color: primary,
                             ),
                           ),
                         ],
@@ -219,31 +264,34 @@ class _EditScreenState extends State<EditScreen> {
                         fontSize: 14,
                         radius: 5,
                         height: 35,
-                        borderColor: Colors.white,
-                        color: Colors.white,
-                        hintColor: Colors.white,
-                        label: 'Business Name',
+                        borderColor: secondary,
+                        color: secondary,
+                        hintColor: secondary,
+                        label: businessName ?? '...',
                         controller: bname,
+                        labelcolor: black,
                       ),
                       TextFieldWidget(
                         fontSize: 14,
                         radius: 5,
                         height: 35,
-                        borderColor: Colors.white,
-                        color: Colors.white,
-                        hintColor: Colors.white,
-                        label: 'Business Address',
+                        borderColor: secondary,
+                        color: secondary,
+                        hintColor: secondary,
+                        label: add ?? '...',
                         controller: address,
+                        labelcolor: black,
                       ),
                       TextFieldWidget(
                         fontSize: 14,
                         radius: 5,
                         height: 35,
-                        borderColor: Colors.white,
-                        color: Colors.white,
-                        hintColor: Colors.white,
-                        label: 'Merchant ID',
+                        borderColor: secondary,
+                        color: secondary,
+                        hintColor: secondary,
+                        label: id ?? '...',
                         controller: merchantId,
+                        labelcolor: black,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -255,11 +303,12 @@ class _EditScreenState extends State<EditScreen> {
                               fontSize: 14,
                               radius: 5,
                               height: 35,
-                              borderColor: Colors.white,
-                              color: Colors.white,
-                              hintColor: Colors.white,
-                              label: 'Operating Hours',
+                              borderColor: secondary,
+                              color: secondary,
+                              hintColor: secondary,
+                              label: hours ?? '...',
                               controller: operatingHours,
+                              labelcolor: black,
                             ),
                           ),
                           SizedBox(
@@ -269,11 +318,12 @@ class _EditScreenState extends State<EditScreen> {
                               fontSize: 14,
                               radius: 5,
                               height: 35,
-                              borderColor: Colors.white,
-                              color: Colors.white,
-                              hintColor: Colors.white,
-                              label: 'Operating Days',
+                              borderColor: secondary,
+                              color: secondary,
+                              hintColor: secondary,
+                              label: days ?? '...',
                               controller: operatingDays,
+                              labelcolor: black,
                             ),
                           ),
                         ],
@@ -287,7 +337,7 @@ class _EditScreenState extends State<EditScreen> {
                             text: 'Categories',
                             fontSize: 28,
                             fontFamily: 'Bold',
-                            color: Colors.white,
+                            color: primary,
                           ),
                           const SizedBox(
                             width: 10,
@@ -296,7 +346,7 @@ class _EditScreenState extends State<EditScreen> {
                             onPressed: () {},
                             icon: const Icon(
                               Icons.edit,
-                              color: Colors.white,
+                              color: primary,
                             ),
                           ),
                         ],
@@ -305,47 +355,66 @@ class _EditScreenState extends State<EditScreen> {
                         height: 10,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 225,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                for (int i = 0; i < 3; i++)
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                            width: 250,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: categories.map((category) {
+                                  bool isSelected =
+                                      category == selectedCategory;
+                                  return Row(
                                     children: [
-                                      TextWidget(
-                                        text: shopCategories[i],
-                                        fontSize: 15,
-                                        fontFamily: 'Medium',
-                                        color: Colors.white,
-                                      ),
-                                      i == 0
-                                          ? const Icon(
-                                              Icons.circle,
-                                              color: Colors.white,
-                                              size: 15,
-                                            )
-                                          : const SizedBox(
-                                              height: 15,
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            selectedCategory = category;
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 3, horizontal: 5),
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? secondary
+                                                : Colors.transparent,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            category,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: 'Medium',
+                                              color: isSelected
+                                                  ? Colors.white
+                                                  : Colors.black,
                                             ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
                                     ],
-                                  ),
-                              ],
+                                  );
+                                }).toList(),
+                              ),
                             ),
+                          ),
+                          const SizedBox(
+                            width: 15,
                           ),
                           Row(
                             children: [
                               Container(
                                 decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(3.0),
+                                    color: secondary, shape: BoxShape.circle),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
                                   child: Icon(
                                     Icons.add,
-                                    color: secondary,
+                                    color: white,
                                     size: 15,
                                   ),
                                 ),
@@ -354,10 +423,10 @@ class _EditScreenState extends State<EditScreen> {
                                 width: 5,
                               ),
                               TextWidget(
-                                text: 'add categories',
+                                text: 'Add',
                                 fontSize: 14,
                                 fontFamily: 'Medium',
-                                color: Colors.white,
+                                color: black,
                               ),
                             ],
                           ),
@@ -372,7 +441,7 @@ class _EditScreenState extends State<EditScreen> {
                             text: 'Wallet',
                             fontSize: 28,
                             fontFamily: 'Bold',
-                            color: Colors.white,
+                            color: primary,
                           ),
                           const SizedBox(
                             width: 10,
@@ -381,7 +450,7 @@ class _EditScreenState extends State<EditScreen> {
                             onPressed: () {},
                             icon: const Icon(
                               Icons.edit,
-                              color: Colors.white,
+                              color: primary,
                             ),
                           ),
                         ],
@@ -391,7 +460,7 @@ class _EditScreenState extends State<EditScreen> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: white,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(

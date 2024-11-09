@@ -1,15 +1,13 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zippy/screens/home_screen.dart';
-import 'package:zippy/screens/pages/arrived_page.dart';
-import 'package:zippy/screens/pages/profile_page.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
 
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/utils/const.dart';
-import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
 
 class ShopTab extends StatefulWidget {
@@ -20,6 +18,42 @@ class ShopTab extends StatefulWidget {
 }
 
 class _ShopTabState extends State<ShopTab> {
+  String? businessName;
+  List<dynamic> categories = [];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('Merchant')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            businessName = userDoc.get('businessName');
+            categories = userDoc.get('categories') ?? [];
+            if (categories.isNotEmpty) {
+              selectedCategory = categories[0];
+            }
+          });
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +84,7 @@ class _ShopTabState extends State<ShopTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextWidget(
-                            text: 'Bluebird’s Coffee',
+                            text: businessName ?? '...',
                             fontSize: 22,
                             fontFamily: 'Bold',
                             color: Colors.white,
@@ -158,7 +192,7 @@ class _ShopTabState extends State<ShopTab> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             TextWidget(
-                              text: 'Bluebird Coffee',
+                              text: businessName ?? '...',
                               fontSize: 15,
                               fontFamily: 'Bold',
                               color: Colors.white,
@@ -194,35 +228,53 @@ class _ShopTabState extends State<ShopTab> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 225,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      for (int i = 0; i < 3; i++)
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                  width: 250,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: categories.map((category) {
+                        bool isSelected = category == selectedCategory;
+                        return Row(
                           children: [
-                            TextWidget(
-                              text: shopCategories[i],
-                              fontSize: 15,
-                              fontFamily: 'Medium',
-                              color: secondary,
-                            ),
-                            i == 0
-                                ? const Icon(
-                                    Icons.circle,
-                                    color: secondary,
-                                    size: 15,
-                                  )
-                                : const SizedBox(
-                                    height: 15,
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedCategory = category;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 3, horizontal: 5),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? secondary
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  category,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'Medium',
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
                           ],
-                        ),
-                    ],
+                        );
+                      }).toList(),
+                    ),
                   ),
+                ),
+                const SizedBox(
+                  width: 15,
                 ),
                 Row(
                   children: [
@@ -242,7 +294,7 @@ class _ShopTabState extends State<ShopTab> {
                       width: 5,
                     ),
                     TextWidget(
-                      text: 'add categories',
+                      text: 'Add',
                       fontSize: 14,
                       fontFamily: 'Medium',
                       color: secondary,
