@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:zippy/screens/auth/signup_screen.dart';
 import 'package:zippy/screens/home_screen.dart';
@@ -6,6 +7,7 @@ import 'package:zippy/utils/colors.dart';
 import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
 import 'package:zippy/widgets/textfield_widget.dart';
+import 'package:zippy/widgets/toast_widget.dart';
 
 import '../../utils/const.dart';
 
@@ -17,8 +19,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final number = TextEditingController();
-  final otp = TextEditingController();
+  final merchantId = TextEditingController();
+  final password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     inputType: TextInputType.number,
                     color: Colors.white,
                     label: 'Merchant ID',
-                    controller: number,
+                    controller: merchantId,
                     hint: 'Enter you 12-digit Merchant ID',
                   ),
                   TextFieldWidget(
@@ -96,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 80,
                     color: Colors.white,
                     label: 'Password',
-                    controller: otp,
+                    controller: password,
                     hint: 'Enter your Password',
                     hintColor: Colors.white,
                     borderColor: Colors.white,
@@ -127,10 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontSize: 20,
                     label: 'Log in',
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen()),
-                      );
+                      login(context);
                     },
                   ),
                   const SizedBox(
@@ -164,5 +163,30 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  login(context) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: '${merchantId.text}@zippy.merchant', password: password.text);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        showToast("No merchant found with that id.");
+      } else if (e.code == 'wrong-password') {
+        showToast("Wrong password provided for that merchant.");
+      } else if (e.code == 'invalid-email') {
+        showToast("Invalid merchant id provided.");
+      } else if (e.code == 'user-disabled') {
+        showToast("merchant account has been disabled.");
+      } else {
+        showToast("An error occurred: ${e.message}");
+      }
+    } on Exception catch (e) {
+      showToast("An error occurred: $e");
+    }
   }
 }
