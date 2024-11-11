@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
 
@@ -21,7 +23,11 @@ class ShopTab extends StatefulWidget {
 }
 
 class _ShopTabState extends State<ShopTab> {
+  File? _image;
+  String _voucherOption = '';
   final name = TextEditingController();
+  final price = TextEditingController();
+  final desc = TextEditingController();
   String? businessName;
   List<dynamic> categories = [];
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,6 +37,17 @@ class _ShopTabState extends State<ShopTab> {
   void initState() {
     super.initState();
     fetchUserData();
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
   }
 
   Future<void> fetchUserData() async {
@@ -457,53 +474,218 @@ class _ShopTabState extends State<ShopTab> {
                             barrierDismissible: false,
                             context: context,
                             builder: (context) {
-                              return AlertDialog(
-                                content: Row(
-                                  children: [
-                                    Card(
-                                      child: Container(
-                                        width: 100,
-                                        height: 112.5,
-                                        decoration: BoxDecoration(
-                                          image: const DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: AssetImage(
-                                                'assets/images/Rectangle 2.png'),
+                              return StatefulBuilder(
+                                builder: (context, setState) {
+                                  return AlertDialog(
+                                    content: SingleChildScrollView(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Card(
+                                                child: Container(
+                                                  width: 100,
+                                                  height: 112.5,
+                                                  decoration: BoxDecoration(
+                                                    image: _image != null
+                                                        ? DecorationImage(
+                                                            fit: BoxFit.fill,
+                                                            image: FileImage(
+                                                                _image!),
+                                                          )
+                                                        : null,
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                      color: secondary,
+                                                    ),
+                                                  ),
+                                                  child: _image == null
+                                                      ? Center(
+                                                          child: IconButton(
+                                                              onPressed:
+                                                                  _pickImage,
+                                                              icon: const Icon(
+                                                                  Icons.add)))
+                                                      : null,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  // TextWidget(
+                                                  //   text: 'Food Name',
+                                                  //   fontSize: 18,
+                                                  //   fontFamily: 'Regular',
+                                                  //   color: primary,
+                                                  // ),
+                                                  SizedBox(
+                                                    width: 100,
+                                                    child: TextFormField(
+                                                      style: const TextStyle(
+                                                          color: primary),
+                                                      controller: name,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                        hintText:
+                                                            'Enter Food Name',
+                                                        hintStyle: TextStyle(
+                                                          color: primary,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // TextWidget(
+                                                  //   text: 'Price',
+                                                  //   fontSize: 18,
+                                                  //   fontFamily: 'Regular',
+                                                  //   color: primary,
+                                                  // ),
+                                                  SizedBox(
+                                                    width: 100,
+                                                    child: TextFormField(
+                                                      style: const TextStyle(
+                                                          color: primary),
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      controller: price,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                        hintText:
+                                                            'Enter Price Amount',
+                                                        hintStyle: TextStyle(
+                                                          color: primary,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  TextWidget(
+                                                    text: 'Accept Voucher',
+                                                    fontSize: 18,
+                                                    fontFamily: 'Medium',
+                                                    color: primary,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Radio<String>(
+                                                        value: 'Yes',
+                                                        groupValue:
+                                                            _voucherOption,
+                                                        onChanged:
+                                                            (String? value) {
+                                                          setState(() {
+                                                            _voucherOption =
+                                                                value!;
+                                                          });
+                                                        },
+                                                      ),
+                                                      const Text('Yes'),
+                                                      Radio<String>(
+                                                        value: 'No',
+                                                        groupValue:
+                                                            _voucherOption,
+                                                        onChanged:
+                                                            (String? value) {
+                                                          setState(() {
+                                                            _voucherOption =
+                                                                value!;
+                                                          });
+                                                        },
+                                                      ),
+                                                      const Text('No'),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: secondary,
+                                          Column(
+                                            children: [
+                                              TextFormField(
+                                                controller: desc,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  hintText: 'Enter Description',
+                                                  hintStyle: TextStyle(
+                                                    color: primary,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextWidget(
+                                                text: 'Choices',
+                                                fontSize: 18,
+                                                fontFamily: "Regular",
+                                                color: primary,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {},
+                                                    child: const Icon(
+                                                      Icons.add,
+                                                      color: primary,
+                                                    ),
+                                                  ),
+                                                  TextWidget(
+                                                    text: 'add choices',
+                                                    fontSize: 12,
+                                                    fontFamily: "Regular",
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    const SizedBox(width: 10),
-                                  ],
-                                ),
-                                actions: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ButtonWidget(
-                                          width: 115,
-                                          label: 'Cancel',
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          }),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      ButtonWidget(
-                                          width: 115,
-                                          label: 'Done',
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          }),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ButtonWidget(
+                                              width: 115,
+                                              label: 'Cancel',
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              }),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          ButtonWidget(
+                                              width: 115,
+                                              label: 'Done',
+                                              onPressed: () {}),
+                                        ],
+                                      )
                                     ],
-                                  )
-                                ],
+                                  );
+                                },
                               );
                             },
                           );

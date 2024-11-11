@@ -270,17 +270,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: 10,
                             itemBuilder: (context, index) {
                               return Center(
                                 child: Container(
                                   margin:
-                                      const EdgeInsets.symmetric(vertical: 5),
+                                      const EdgeInsets.symmetric(vertical: 3),
                                   height: 80,
                                   width: 320,
                                   decoration: BoxDecoration(
@@ -290,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(10),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
