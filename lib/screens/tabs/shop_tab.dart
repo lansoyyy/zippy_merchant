@@ -3,12 +3,15 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
 
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/utils/const.dart';
+import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
+import 'package:zippy/widgets/textfield_widget.dart';
 
 class ShopTab extends StatefulWidget {
   const ShopTab({super.key});
@@ -18,6 +21,7 @@ class ShopTab extends StatefulWidget {
 }
 
 class _ShopTabState extends State<ShopTab> {
+  final name = TextEditingController();
   String? businessName;
   List<dynamic> categories = [];
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -445,11 +449,69 @@ class _ShopTabState extends State<ShopTab> {
                   Container(
                     decoration: const BoxDecoration(
                         color: secondary, shape: BoxShape.circle),
-                    child: const Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Row(
+                                  children: [
+                                    Card(
+                                      child: Container(
+                                        width: 100,
+                                        height: 112.5,
+                                        decoration: BoxDecoration(
+                                          image: const DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: AssetImage(
+                                                'assets/images/Rectangle 2.png'),
+                                          ),
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: secondary,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                  ],
+                                ),
+                                actions: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      ButtonWidget(
+                                          width: 115,
+                                          label: 'Cancel',
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          }),
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      ButtonWidget(
+                                          width: 115,
+                                          label: 'Done',
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          }),
+                                    ],
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),

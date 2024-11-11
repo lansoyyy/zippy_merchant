@@ -33,7 +33,7 @@ class OnboardingSecond extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const OnboardingThird()));
                     },
                     child: Row(

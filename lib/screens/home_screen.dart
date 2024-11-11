@@ -273,71 +273,80 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Center(
-                          child: Container(
-                            height: 80,
-                            width: 320,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: secondary,
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextWidget(
-                                        text: '₱570.00',
-                                        fontSize: 16,
-                                        fontFamily: 'Bold',
-                                        color: secondary,
-                                      ),
-                                      TextWidget(
-                                        text: '111 2222 3333 444',
-                                        fontSize: 12,
-                                        fontFamily: 'Medium',
-                                        color: Colors.black,
-                                      ),
-                                      TextWidget(
-                                        text:
-                                            'Completed on 13/08/24 at 4:50PM ',
-                                        fontSize: 12,
-                                        fontFamily: 'Medium',
-                                        color: secondary,
-                                      ),
-                                    ],
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: 10,
+                            itemBuilder: (context, index) {
+                              return Center(
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  height: 80,
+                                  width: 320,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: secondary,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                  Column(
-                                    children: [
-                                      TextWidget(
-                                        text: 'Preparing',
-                                        fontSize: 14,
-                                        fontFamily: 'Bold',
-                                        color: Colors.red,
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      TextWidget(
-                                        text: 'View List',
-                                        fontSize: 14,
-                                        fontFamily: 'Bold',
-                                        color: secondary,
-                                      ),
-                                    ],
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            TextWidget(
+                                              text: '₱570.00',
+                                              fontSize: 16,
+                                              fontFamily: 'Bold',
+                                              color: secondary,
+                                            ),
+                                            TextWidget(
+                                              text: '111 2222 3333 444',
+                                              fontSize: 12,
+                                              fontFamily: 'Medium',
+                                              color: Colors.black,
+                                            ),
+                                            TextWidget(
+                                              text:
+                                                  'Completed on 13/08/24 at 4:50PM',
+                                              fontSize: 12,
+                                              fontFamily: 'Medium',
+                                              color: secondary,
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            TextWidget(
+                                              text: 'Preparing',
+                                              fontSize: 14,
+                                              fontFamily: 'Bold',
+                                              color: Colors.red,
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            TextWidget(
+                                              text: 'View List',
+                                              fontSize: 14,
+                                              fontFamily: 'Bold',
+                                              color: secondary,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
