@@ -3,11 +3,13 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
+import 'package:zippy/services/add_menu.dart';
 
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/utils/const.dart';
@@ -486,35 +488,53 @@ class _ShopTabState extends State<ShopTab> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              Card(
-                                                child: Container(
-                                                  width: 100,
-                                                  height: 112.5,
-                                                  decoration: BoxDecoration(
-                                                    image: _image != null
-                                                        ? DecorationImage(
-                                                            fit: BoxFit.fill,
-                                                            image: FileImage(
-                                                                _image!),
-                                                          )
-                                                        : null,
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    border: Border.all(
-                                                      color: secondary,
-                                                    ),
-                                                  ),
-                                                  child: _image == null
-                                                      ? Center(
+                                              StatefulBuilder(
+                                                builder: (BuildContext context,
+                                                    StateSetter setState) {
+                                                  return Card(
+                                                    child: Stack(
+                                                      children: [
+                                                        Container(
+                                                          width: 100,
+                                                          height: 112.5,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image: _image !=
+                                                                    null
+                                                                ? DecorationImage(
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                    image: FileImage(
+                                                                        _image!),
+                                                                  )
+                                                                : null,
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            border: Border.all(
+                                                              color: secondary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Center(
                                                           child: IconButton(
-                                                              onPressed:
-                                                                  _pickImage,
-                                                              icon: const Icon(
-                                                                  Icons.add)))
-                                                      : null,
-                                                ),
+                                                            onPressed:
+                                                                () async {
+                                                              await _pickImage();
+                                                              setState(() {});
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons.add,
+                                                              color: primary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
                                               ),
                                               const SizedBox(width: 5),
                                               Column(
@@ -612,20 +632,15 @@ class _ShopTabState extends State<ShopTab> {
                                               ),
                                             ],
                                           ),
-                                          Column(
-                                            children: [
-                                              TextFormField(
-                                                controller: desc,
-                                                decoration:
-                                                    const InputDecoration(
-                                                  hintText: 'Enter Description',
-                                                  hintStyle: TextStyle(
-                                                    color: primary,
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
+                                          TextFormField(
+                                            controller: desc,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Enter Description',
+                                              hintStyle: TextStyle(
+                                                color: primary,
+                                                fontSize: 12,
                                               ),
-                                            ],
+                                            ),
                                           ),
                                           const SizedBox(
                                             height: 10,
@@ -680,7 +695,21 @@ class _ShopTabState extends State<ShopTab> {
                                           ButtonWidget(
                                               width: 115,
                                               label: 'Done',
-                                              onPressed: () {}),
+                                              onPressed: () async {
+                                                await addMenu(
+                                                  name.text,
+                                                  price.text,
+                                                  desc.text,
+                                                  _voucherOption,
+                                                  _image,
+                                                );
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const ShopTab()),
+                                                );
+                                              }),
                                         ],
                                       )
                                     ],
