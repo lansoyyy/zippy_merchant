@@ -1,11 +1,18 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:zippy/utils/const.dart';
 
 Future<void> addMenu(String name, String price, String description,
     String voucherOption, File? image) async {
   CollectionReference menu = FirebaseFirestore.instance.collection('Menu');
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+
+  if (uid == null) {
+    throw Exception('User not logged in');
+  }
 
   String imageUrl = '';
   if (image != null) {
@@ -25,5 +32,6 @@ Future<void> addMenu(String name, String price, String description,
     'voucherOption': voucherOption,
     'imageUrl': imageUrl,
     'createdAt': Timestamp.now(),
+    'uid': uid, // Correctly store the current user's uid here
   });
 }

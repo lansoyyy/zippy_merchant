@@ -32,8 +32,8 @@ class _ShopTabState extends State<ShopTab> {
   final desc = TextEditingController();
   String? businessName;
   List<dynamic> categories = [];
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   String? selectedCategory;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -329,127 +329,158 @@ class _ShopTabState extends State<ShopTab> {
             const SizedBox(
               height: 10,
             ),
-            for (int i = 0; i < 2; i++)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Card(
-                      elevation: 3,
-                      child: Container(
-                        width: 100,
-                        height: 112.5,
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              'assets/images/Rectangle 2.png',
-                            ),
-                          ),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: secondary,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Card(
-                      elevation: 3,
-                      child: Container(
-                        width: 210,
-                        height: 112.5,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: secondary,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 33,
-                              decoration: const BoxDecoration(
-                                color: secondary,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(
-                                    7.5,
-                                  ),
-                                  topRight: Radius.circular(
-                                    7.5,
-                                  ),
-                                ),
-                              ),
-                              child: Center(
-                                child: TextWidget(
-                                  text: 'Coffee and Cake',
-                                  fontSize: 15,
-                                  fontFamily: 'Bold',
-                                  color: Colors.white,
+            // This is the main body
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('Menu')
+                  .where('uid',
+                      isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+                  .orderBy('createdAt', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return const Center(child: Text('Error fetching data'));
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text('No menu items available'));
+                }
+
+                final menuItems = snapshot.data!.docs;
+
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 0, 8.0, 0),
+                  child: Column(
+                    children: menuItems.map((item) {
+                      return Row(
+                        children: [
+                          Card(
+                            elevation: 3,
+                            child: Container(
+                              width: 100,
+                              height: 112.5,
+                              decoration: BoxDecoration(
+                                image: item['imageUrl'] != ''
+                                    ? DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(item['imageUrl']),
+                                      )
+                                    : null,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: secondary,
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            TextWidget(
-                              text:
-                                  '1 serving of americano coffee and 1 slice of cake',
-                              fontSize: 12,
-                              fontFamily: 'Medium',
-                              color: Colors.black,
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                          ),
+                          const SizedBox(width: 5),
+                          Card(
+                            elevation: 3,
+                            child: Container(
+                              width: 210,
+                              height: 112.5,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: secondary,
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  TextWidget(
-                                    text: '₱ 159',
-                                    fontSize: 12,
-                                    fontFamily: 'Bold',
-                                    color: secondary,
+                                  Container(
+                                    width: double.infinity,
+                                    height: 33,
+                                    decoration: const BoxDecoration(
+                                      color: secondary,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(7.5),
+                                        topRight: Radius.circular(7.5),
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          TextWidget(
+                                            text: item['name'] ?? 'Unavailable',
+                                            fontSize: 18,
+                                            fontFamily: 'Bold',
+                                            color: white,
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Icon(
+                                            Icons.edit,
+                                            color: white,
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      TextWidget(
-                                        text: 'Add to Cart',
-                                        fontSize: 12,
-                                        fontFamily: 'Bold',
-                                        color: secondary,
-                                      ),
-                                      const Icon(
-                                        Icons.arrow_right_alt_outlined,
-                                        color: secondary,
-                                      ),
-                                    ],
+                                  const SizedBox(height: 10),
+                                  TextWidget(
+                                    text: item['description'] ?? 'Unavailable',
+                                    fontSize: 12,
+                                    fontFamily: 'Medium',
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextWidget(
+                                          text: item['price'] ?? 'Unavailable',
+                                          fontSize: 12,
+                                          fontFamily: 'Bold',
+                                          color: secondary,
+                                        ),
+                                        Row(
+                                          children: [
+                                            TextWidget(
+                                              text: 'Add to Cart',
+                                              fontSize: 12,
+                                              fontFamily: 'Bold',
+                                              color: secondary,
+                                            ),
+                                            const Icon(
+                                              Icons.arrow_right_alt_outlined,
+                                              color: secondary,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+            ),
+
             const SizedBox(
               height: 20,
             ),
+
             Container(
               width: 320,
               height: 100,
@@ -526,7 +557,8 @@ class _ShopTabState extends State<ShopTab> {
                                                               setState(() {});
                                                             },
                                                             icon: const Icon(
-                                                              Icons.add,
+                                                              Icons
+                                                                  .add_a_photo_rounded,
                                                               color: primary,
                                                             ),
                                                           ),
@@ -652,7 +684,7 @@ class _ShopTabState extends State<ShopTab> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               TextWidget(
-                                                text: 'Choices',
+                                                text: 'Categories',
                                                 fontSize: 18,
                                                 fontFamily: "Regular",
                                                 color: primary,
