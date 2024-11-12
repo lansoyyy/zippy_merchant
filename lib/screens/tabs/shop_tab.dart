@@ -80,90 +80,86 @@ class _ShopTabState extends State<ShopTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 190,
-              decoration: const BoxDecoration(
-                color: secondary,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(
-                    40,
-                  ),
-                  bottomRight: Radius.circular(
-                    40,
-                  ),
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 190,
+            decoration: const BoxDecoration(
+              color: secondary,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(
+                  40,
+                ),
+                bottomRight: Radius.circular(
+                  40,
                 ),
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 25, left: 15, right: 15),
-                    child: SafeArea(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextWidget(
-                            text: businessName ?? '...',
-                            fontSize: 22,
-                            fontFamily: 'Bold',
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 15, top: 15),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 25, left: 15, right: 15),
+                  child: SafeArea(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const HomeScreen()),
-                                  );
-                                },
-                                child: _buildCravingOption(
-                                    Icons.home, 'Home', false)),
-                            GestureDetector(
-                              onTap: () {},
-                              child: _buildCravingOption(
-                                  Icons.store_mall_directory_outlined,
-                                  'Shop',
-                                  true),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const EditScreen()),
-                                  );
-                                },
-                                child: _buildCravingOption(
-                                    Icons.edit_square, 'Edit', false)),
-                          ],
+                        TextWidget(
+                          text: businessName ?? '...',
+                          fontSize: 22,
+                          fontFamily: 'Bold',
+                          color: Colors.white,
                         ),
                       ],
                     ),
-                  )
-                ],
-              ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomeScreen()),
+                                );
+                              },
+                              child: _buildCravingOption(
+                                  Icons.home, 'Home', false)),
+                          GestureDetector(
+                            onTap: () {},
+                            child: _buildCravingOption(
+                                Icons.store_mall_directory_outlined,
+                                'Shop',
+                                true),
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const EditScreen()),
+                                );
+                              },
+                              child: _buildCravingOption(
+                                  Icons.edit_square, 'Edit', false)),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Card(
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            child: Card(
               child: Container(
                 width: 320,
                 height: 160,
@@ -247,531 +243,531 @@ class _ShopTabState extends State<ShopTab> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 250,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: categories.map((category) {
-                        bool isSelected = category == selectedCategory;
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 250,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: categories.map((category) {
+                      bool isSelected = category == selectedCategory;
+                      return Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                selectedCategory = category;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 3, horizontal: 5),
+                              decoration: BoxDecoration(
+                                color:
+                                    isSelected ? secondary : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                category,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Medium',
+                                  color: isSelected ? black : primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                        color: secondary, shape: BoxShape.circle),
+                    child: const Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  TextWidget(
+                    text: 'Add',
+                    fontSize: 14,
+                    fontFamily: 'Medium',
+                    color: secondary,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          // This is the main body
+          StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('Menu')
+                .where('uid', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+                .orderBy('createdAt', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError) {
+                return const Center(child: Text('Error fetching data'));
+              }
+
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(child: Text('No menu items available'));
+              }
+
+              final menuItems = snapshot.data!.docs;
+
+              return Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 8.0, 0),
+                    child: Column(
+                      children: menuItems.map((item) {
                         return Row(
                           children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  selectedCategory = category;
-                                });
-                              },
+                            Card(
+                              elevation: 3,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 3, horizontal: 5),
+                                width: 100,
+                                height: 112.5,
                                 decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? secondary
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  category,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'Medium',
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.black,
+                                  image: item['imageUrl'] != ''
+                                      ? DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(item['imageUrl']),
+                                        )
+                                      : null,
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: secondary,
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 5),
+                            Card(
+                              elevation: 3,
+                              child: Container(
+                                width: 210,
+                                height: 112.5,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: secondary,
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      height: 33,
+                                      decoration: const BoxDecoration(
+                                        color: secondary,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(7.5),
+                                          topRight: Radius.circular(7.5),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            TextWidget(
+                                              text:
+                                                  item['name'] ?? 'Unavailable',
+                                              fontSize: 18,
+                                              fontFamily: 'Bold',
+                                              color: white,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Icon(
+                                              Icons.edit,
+                                              color: white,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    TextWidget(
+                                      text:
+                                          item['description'] ?? 'Unavailable',
+                                      fontSize: 12,
+                                      fontFamily: 'Medium',
+                                      color: Colors.black,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextWidget(
+                                            text:
+                                                item['price'] ?? 'Unavailable',
+                                            fontSize: 12,
+                                            fontFamily: 'Bold',
+                                            color: secondary,
+                                          ),
+                                          Row(
+                                            children: [
+                                              TextWidget(
+                                                text: 'Add to Cart',
+                                                fontSize: 12,
+                                                fontFamily: 'Bold',
+                                                color: secondary,
+                                              ),
+                                              const Icon(
+                                                Icons.arrow_right_alt_outlined,
+                                                color: secondary,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       }).toList(),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                          color: secondary, shape: BoxShape.circle),
-                      child: const Padding(
-                        padding: EdgeInsets.all(3.0),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    TextWidget(
-                      text: 'Add',
-                      fontSize: 14,
-                      fontFamily: 'Medium',
-                      color: secondary,
-                    ),
-                  ],
-                ),
-              ],
+              );
+            },
+          ),
+
+          const SizedBox(
+            height: 20,
+          ),
+
+          Container(
+            width: 320,
+            height: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: secondary,
+              ),
+              borderRadius: BorderRadius.circular(
+                15,
+              ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            // This is the main body
-            StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('Menu')
-                  .where('uid',
-                      isEqualTo: FirebaseAuth.instance.currentUser?.uid)
-                  .orderBy('createdAt', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return const Center(child: Text('Error fetching data'));
-                }
-
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text('No menu items available'));
-                }
-
-                final menuItems = snapshot.data!.docs;
-
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 0, 8.0, 0),
-                  child: Column(
-                    children: menuItems.map((item) {
-                      return Row(
-                        children: [
-                          Card(
-                            elevation: 3,
-                            child: Container(
-                              width: 100,
-                              height: 112.5,
-                              decoration: BoxDecoration(
-                                image: item['imageUrl'] != ''
-                                    ? DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(item['imageUrl']),
-                                      )
-                                    : null,
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: secondary,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          Card(
-                            elevation: 3,
-                            child: Container(
-                              width: 210,
-                              height: 112.5,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: secondary,
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 33,
-                                    decoration: const BoxDecoration(
-                                      color: secondary,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(7.5),
-                                        topRight: Radius.circular(7.5),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          TextWidget(
-                                            text: item['name'] ?? 'Unavailable',
-                                            fontSize: 18,
-                                            fontFamily: 'Bold',
-                                            color: white,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Icon(
-                                            Icons.edit,
-                                            color: white,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  TextWidget(
-                                    text: item['description'] ?? 'Unavailable',
-                                    fontSize: 12,
-                                    fontFamily: 'Medium',
-                                    color: Colors.black,
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                      color: secondary, shape: BoxShape.circle),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return AlertDialog(
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        TextWidget(
-                                          text: item['price'] ?? 'Unavailable',
-                                          fontSize: 12,
-                                          fontFamily: 'Bold',
-                                          color: secondary,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            StatefulBuilder(
+                                              builder: (BuildContext context,
+                                                  StateSetter setState) {
+                                                return Card(
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        width: 100,
+                                                        height: 112.5,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image: _image != null
+                                                              ? DecorationImage(
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  image: FileImage(
+                                                                      _image!),
+                                                                )
+                                                              : null,
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          border: Border.all(
+                                                            color: secondary,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Center(
+                                                        child: IconButton(
+                                                          onPressed: () async {
+                                                            await _pickImage();
+                                                            setState(() {});
+                                                          },
+                                                          icon: const Icon(
+                                                            Icons
+                                                                .add_a_photo_rounded,
+                                                            color: primary,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                // TextWidget(
+                                                //   text: 'Food Name',
+                                                //   fontSize: 18,
+                                                //   fontFamily: 'Regular',
+                                                //   color: primary,
+                                                // ),
+                                                SizedBox(
+                                                  width: 100,
+                                                  child: TextFormField(
+                                                    style: const TextStyle(
+                                                        color: primary),
+                                                    controller: name,
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      hintText:
+                                                          'Enter Food Name',
+                                                      hintStyle: TextStyle(
+                                                        color: primary,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                // TextWidget(
+                                                //   text: 'Price',
+                                                //   fontSize: 18,
+                                                //   fontFamily: 'Regular',
+                                                //   color: primary,
+                                                // ),
+                                                SizedBox(
+                                                  width: 100,
+                                                  child: TextFormField(
+                                                    style: const TextStyle(
+                                                        color: primary),
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    controller: price,
+                                                    decoration:
+                                                        const InputDecoration(
+                                                      hintText:
+                                                          'Enter Price Amount',
+                                                      hintStyle: TextStyle(
+                                                        color: primary,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                TextWidget(
+                                                  text: 'Accept Voucher',
+                                                  fontSize: 18,
+                                                  fontFamily: 'Medium',
+                                                  color: primary,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Radio<String>(
+                                                      value: 'Yes',
+                                                      groupValue:
+                                                          _voucherOption,
+                                                      onChanged:
+                                                          (String? value) {
+                                                        setState(() {
+                                                          _voucherOption =
+                                                              value!;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text('Yes'),
+                                                    Radio<String>(
+                                                      value: 'No',
+                                                      groupValue:
+                                                          _voucherOption,
+                                                      onChanged:
+                                                          (String? value) {
+                                                        setState(() {
+                                                          _voucherOption =
+                                                              value!;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text('No'),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        TextFormField(
+                                          controller: desc,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Enter Description',
+                                            hintStyle: TextStyle(
+                                              color: primary,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
                                         ),
                                         Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             TextWidget(
-                                              text: 'Add to Cart',
-                                              fontSize: 12,
-                                              fontFamily: 'Bold',
-                                              color: secondary,
+                                              text: 'Categories',
+                                              fontSize: 18,
+                                              fontFamily: "Regular",
+                                              color: primary,
                                             ),
-                                            const Icon(
-                                              Icons.arrow_right_alt_outlined,
-                                              color: secondary,
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {},
+                                                  child: const Icon(
+                                                    Icons.add,
+                                                    color: primary,
+                                                  ),
+                                                ),
+                                                TextWidget(
+                                                  text: 'add choices',
+                                                  fontSize: 12,
+                                                  fontFamily: "Regular",
+                                                )
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            Container(
-              width: 320,
-              height: 100,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: secondary,
-                ),
-                borderRadius: BorderRadius.circular(
-                  15,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: secondary, shape: BoxShape.circle),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) {
-                              return StatefulBuilder(
-                                builder: (context, setState) {
-                                  return AlertDialog(
-                                    content: SingleChildScrollView(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              StatefulBuilder(
-                                                builder: (BuildContext context,
-                                                    StateSetter setState) {
-                                                  return Card(
-                                                    child: Stack(
-                                                      children: [
-                                                        Container(
-                                                          width: 100,
-                                                          height: 112.5,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image: _image !=
-                                                                    null
-                                                                ? DecorationImage(
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                    image: FileImage(
-                                                                        _image!),
-                                                                  )
-                                                                : null,
-                                                            color: Colors.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            border: Border.all(
-                                                              color: secondary,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Center(
-                                                          child: IconButton(
-                                                            onPressed:
-                                                                () async {
-                                                              await _pickImage();
-                                                              setState(() {});
-                                                            },
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .add_a_photo_rounded,
-                                                              color: primary,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  // TextWidget(
-                                                  //   text: 'Food Name',
-                                                  //   fontSize: 18,
-                                                  //   fontFamily: 'Regular',
-                                                  //   color: primary,
-                                                  // ),
-                                                  SizedBox(
-                                                    width: 100,
-                                                    child: TextFormField(
-                                                      style: const TextStyle(
-                                                          color: primary),
-                                                      controller: name,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        hintText:
-                                                            'Enter Food Name',
-                                                        hintStyle: TextStyle(
-                                                          color: primary,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  // TextWidget(
-                                                  //   text: 'Price',
-                                                  //   fontSize: 18,
-                                                  //   fontFamily: 'Regular',
-                                                  //   color: primary,
-                                                  // ),
-                                                  SizedBox(
-                                                    width: 100,
-                                                    child: TextFormField(
-                                                      style: const TextStyle(
-                                                          color: primary),
-                                                      keyboardType:
-                                                          TextInputType.number,
-                                                      controller: price,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        hintText:
-                                                            'Enter Price Amount',
-                                                        hintStyle: TextStyle(
-                                                          color: primary,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  TextWidget(
-                                                    text: 'Accept Voucher',
-                                                    fontSize: 18,
-                                                    fontFamily: 'Medium',
-                                                    color: primary,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Radio<String>(
-                                                        value: 'Yes',
-                                                        groupValue:
-                                                            _voucherOption,
-                                                        onChanged:
-                                                            (String? value) {
-                                                          setState(() {
-                                                            _voucherOption =
-                                                                value!;
-                                                          });
-                                                        },
-                                                      ),
-                                                      const Text('Yes'),
-                                                      Radio<String>(
-                                                        value: 'No',
-                                                        groupValue:
-                                                            _voucherOption,
-                                                        onChanged:
-                                                            (String? value) {
-                                                          setState(() {
-                                                            _voucherOption =
-                                                                value!;
-                                                          });
-                                                        },
-                                                      ),
-                                                      const Text('No'),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          TextFormField(
-                                            controller: desc,
-                                            decoration: const InputDecoration(
-                                              hintText: 'Enter Description',
-                                              hintStyle: TextStyle(
-                                                color: primary,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              TextWidget(
-                                                text: 'Categories',
-                                                fontSize: 18,
-                                                fontFamily: "Regular",
-                                                color: primary,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap: () {},
-                                                    child: const Icon(
-                                                      Icons.add,
-                                                      color: primary,
-                                                    ),
-                                                  ),
-                                                  TextWidget(
-                                                    text: 'add choices',
-                                                    fontSize: 12,
-                                                    fontFamily: "Regular",
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    actions: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ButtonWidget(
-                                              width: 115,
-                                              label: 'Cancel',
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              }),
-                                          const SizedBox(
-                                            width: 15,
-                                          ),
-                                          ButtonWidget(
-                                              width: 115,
-                                              label: 'Done',
-                                              onPressed: () async {
-                                                await addMenu(
-                                                  name.text,
-                                                  price.text,
-                                                  desc.text,
-                                                  _voucherOption,
-                                                  _image,
-                                                );
-                                                Navigator.of(context)
-                                                    .pushReplacement(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const ShopTab()),
-                                                );
-                                              }),
-                                        ],
-                                      )
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
+                                  actions: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ButtonWidget(
+                                            width: 115,
+                                            label: 'Cancel',
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        ButtonWidget(
+                                            width: 115,
+                                            label: 'Done',
+                                            onPressed: () async {
+                                              await addMenu(
+                                                name.text,
+                                                price.text,
+                                                desc.text,
+                                                _voucherOption,
+                                                _image,
+                                              );
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ShopTab()),
+                                              );
+                                            }),
+                                      ],
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  TextWidget(
-                    text: 'add menu item',
-                    fontSize: 16,
-                    fontFamily: 'Medium',
-                    color: secondary,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 3,
+                ),
+                TextWidget(
+                  text: 'add menu item',
+                  fontSize: 16,
+                  fontFamily: 'Medium',
+                  color: secondary,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
