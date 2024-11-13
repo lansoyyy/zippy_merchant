@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zippy/screens/home_screen.dart';
@@ -16,6 +17,7 @@ import 'package:zippy/utils/const.dart';
 import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
 import 'package:zippy/widgets/textfield_widget.dart';
+import 'package:zippy/widgets/toast_widget.dart';
 
 class ShopTab extends StatefulWidget {
   const ShopTab({super.key});
@@ -340,7 +342,25 @@ class _ShopTabState extends State<ShopTab> {
               }
 
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(child: Text('No menu items available'));
+                return Center(
+                    child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Image.asset(
+                      'assets/images/Group 121 (2).png',
+                      width: 200,
+                      height: 200,
+                    ),
+                    TextWidget(
+                      text: 'No menu items available',
+                      fontSize: 25,
+                      fontFamily: 'Bold',
+                      color: secondary,
+                    ),
+                  ],
+                ));
               }
 
               final menuItems = snapshot.data!.docs;
@@ -415,9 +435,93 @@ class _ShopTabState extends State<ShopTab> {
                                             const SizedBox(
                                               width: 10,
                                             ),
-                                            Icon(
-                                              Icons.edit,
-                                              color: white,
+                                            GestureDetector(
+                                              onTap: () {},
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.edit,
+                                                    color: white,
+                                                    size: 20,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      showDialog(
+                                                          barrierDismissible:
+                                                              true,
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              title: TextWidget(
+                                                                text:
+                                                                    'Are you sure you want to remove from the list?',
+                                                                fontSize: 23,
+                                                                color:
+                                                                    secondary,
+                                                                fontFamily:
+                                                                    "Bold",
+                                                              ),
+                                                              actions: [
+                                                                TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child:
+                                                                        TextWidget(
+                                                                      text:
+                                                                          'Cancel',
+                                                                      fontSize:
+                                                                          18,
+                                                                      color:
+                                                                          secondary,
+                                                                      fontFamily:
+                                                                          "Bold",
+                                                                    )),
+                                                                TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'Menu')
+                                                                          .doc(item
+                                                                              .id)
+                                                                          .delete();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      showToast(
+                                                                          'Successfully removed!');
+                                                                    },
+                                                                    child:
+                                                                        TextWidget(
+                                                                      text:
+                                                                          'OK',
+                                                                      fontSize:
+                                                                          18,
+                                                                      fontFamily:
+                                                                          "Bold",
+                                                                      color:
+                                                                          secondary,
+                                                                    )),
+                                                              ],
+                                                            );
+                                                          });
+                                                    },
+                                                    child: Icon(
+                                                      Icons.delete,
+                                                      color: white,
+                                                      size: 20,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             )
                                           ],
                                         ),
@@ -440,8 +544,9 @@ class _ShopTabState extends State<ShopTab> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           TextWidget(
-                                            text:
-                                                item['price'] ?? 'Unavailable',
+                                            text: item['price'] != null
+                                                ? '₱ ${item['price']}.00'
+                                                : 'Unavailable',
                                             fontSize: 12,
                                             fontFamily: 'Bold',
                                             color: secondary,
@@ -682,8 +787,8 @@ class _ShopTabState extends State<ShopTab> {
                                           children: [
                                             TextWidget(
                                               text: 'Categories',
-                                              fontSize: 18,
-                                              fontFamily: "Regular",
+                                              fontSize: 15,
+                                              fontFamily: "Medium",
                                               color: primary,
                                             ),
                                             Row(
@@ -696,8 +801,9 @@ class _ShopTabState extends State<ShopTab> {
                                                   ),
                                                 ),
                                                 TextWidget(
-                                                  text: 'add choices',
+                                                  text: 'category',
                                                   fontSize: 12,
+                                                  color: primary,
                                                   fontFamily: "Regular",
                                                 )
                                               ],
