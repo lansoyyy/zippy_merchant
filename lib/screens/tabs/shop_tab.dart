@@ -516,12 +516,6 @@ class _ShopTabState extends State<ShopTab> {
                                                                           crossAxisAlignment:
                                                                               CrossAxisAlignment.start,
                                                                           children: [
-                                                                            // TextWidget(
-                                                                            //   text: 'Food Name',
-                                                                            //   fontSize: 18,
-                                                                            //   fontFamily: 'Regular',
-                                                                            //   color: primary,
-                                                                            // ),
                                                                             SizedBox(
                                                                               width: 100,
                                                                               child: TextFormField(
@@ -671,9 +665,16 @@ class _ShopTabState extends State<ShopTab> {
                                                                         width:
                                                                             115,
                                                                         label:
-                                                                            'Done',
+                                                                            'Update',
                                                                         onPressed:
                                                                             () async {
+                                                                          FirebaseFirestore
+                                                                              .instance
+                                                                              .collection('Menu')
+                                                                              .doc(item.id)
+                                                                              .delete();
+                                                                          Navigator.of(context)
+                                                                              .pop();
                                                                           await addMenu(
                                                                             name.text,
                                                                             price.text,
@@ -681,6 +682,8 @@ class _ShopTabState extends State<ShopTab> {
                                                                             _voucherOption,
                                                                             _image,
                                                                           );
+                                                                          showToast(
+                                                                              'Successfully updated!');
                                                                           Navigator.of(context)
                                                                               .pushReplacement(
                                                                             MaterialPageRoute(builder: (context) => const ShopTab()),
