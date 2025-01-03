@@ -268,13 +268,24 @@ class _EditScreenState extends State<EditScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
                       TextWidget(
-                          text: businessName ?? '...',
-                          fontSize: 14,
-                          color: black),
+                          text: 'Business Name', fontSize: 18, color: black),
+                      Row(
+                        children: [
+                          TextWidget(
+                            text: businessName ?? 'Loading...',
+                            fontFamily: "Bold",
+                            fontSize: 23,
+                            color: black,
+                            maxLines: 5,
+                          ),
+                        ],
+                      ),
+                      const Divider(
+                        color: primary,
+                        thickness: 1,
+                        endIndent: 0,
+                      ),
                       // TextFieldWidget(
                       //   fontSize: 14,
                       //   radius: 5,
@@ -286,75 +297,75 @@ class _EditScreenState extends State<EditScreen> {
                       //   controller: bname,
                       //   labelcolor: black,
                       // ),
-                      TextWidget(
-                          text: add ?? '...', fontSize: 14, color: black),
-
-                      // TextFieldWidget(
-                      //   fontSize: 14,
-                      //   radius: 5,
-                      //   height: 35,
-                      //   borderColor: secondary,
-                      //   color: secondary,
-                      //   hintColor: secondary,
-                      //   label: add ?? '...',
-                      //   controller: address,
-                      //   labelcolor: black,
-                      // ),
-                      TextWidget(text: id ?? '...', fontSize: 14, color: black),
-
-                      // TextFieldWidget(
-                      //   fontSize: 14,
-                      //   radius: 5,
-                      //   height: 35,
-                      //   borderColor: secondary,
-                      //   color: secondary,
-                      //   hintColor: secondary,
-                      //   label: id ?? '...',
-                      //   controller: merchantId,
-                      //   labelcolor: black,
-                      // ),
+                      TextWidget(text: 'Address', fontSize: 18, color: black),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(
-                            width: 185,
-                            child: TextWidget(
-                                text: hours ?? '...',
-                                fontSize: 14,
-                                color: black),
-                            // child: TextFieldWidget(
-                            //   hintSize: 12,
-                            //   fontSize: 14,
-                            //   radius: 5,
-                            //   height: 35,
-                            //   borderColor: secondary,
-                            //   color: secondary,
-                            //   hintColor: secondary,
-                            //   label: hours ?? '...',
-                            //   controller: operatingHours,
-                            //   labelcolor: black,
-                            // ),
-                          ),
-                          SizedBox(
-                            width: 185,
-                            child: TextWidget(
-                                text: days ?? '...',
-                                fontSize: 14,
-                                color: black),
-                            // child: TextFieldWidget(
-                            //   hintSize: 12,
-                            //   fontSize: 14,
-                            //   radius: 5,
-                            //   height: 35,
-                            //   borderColor: secondary,
-                            //   color: secondary,
-                            //   hintColor: secondary,
-                            //   label: days ?? '...',
-                            //   controller: operatingDays,
-                            //   labelcolor: black,
-                            // ),
+                          TextWidget(
+                            text: add ?? 'Loading...',
+                            fontSize: 23,
+                            fontFamily: "Bold",
+                            color: black,
+                            maxLines: 5,
                           ),
                         ],
+                      ),
+                      const Divider(
+                        color: primary,
+                        thickness: 1,
+                        endIndent: 0,
+                      ),
+                      TextWidget(
+                          text: 'Merchant ID', fontSize: 18, color: black),
+                      Row(
+                        children: [
+                          TextWidget(
+                            text: id ?? 'Loading...',
+                            fontSize: 23,
+                            fontFamily: "Bold",
+                            color: black,
+                            maxLines: 5,
+                          ),
+                        ],
+                      ),
+                      const Divider(
+                        color: primary,
+                        thickness: 1,
+                        endIndent: 0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextWidget(
+                              text: 'Operating Hours',
+                              fontSize: 18,
+                              color: black),
+                          TextWidget(
+                              text: 'Operating Days',
+                              fontSize: 18,
+                              color: black),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextWidget(
+                            text: hours ?? '...',
+                            fontSize: 23,
+                            color: black,
+                            fontFamily: "Bold",
+                          ),
+                          TextWidget(
+                            text: days ?? '...',
+                            fontSize: 23,
+                            color: black,
+                            fontFamily: "Bold",
+                          ),
+                        ],
+                      ),
+                      const Divider(
+                        color: primary,
+                        thickness: 1,
+                        endIndent: 0,
                       ),
                       const SizedBox(
                         height: 10,
