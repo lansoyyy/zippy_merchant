@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
             .collection('Merchant')
             .doc(user.uid)
             .get();
-
         if (userDoc.exists) {
           setState(() {
             businessName = userDoc.get('businessName');

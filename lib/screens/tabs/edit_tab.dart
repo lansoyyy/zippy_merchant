@@ -31,6 +31,17 @@ class _EditScreenState extends State<EditScreen> {
   String? hours;
   String? days;
   String? name;
+  bool isEditing = false;
+  bool isBusinessNameEditing = false;
+  bool isDescEditing = false;
+  bool isAddEditing = false;
+  bool isTimeEditing = false;
+  bool isDayEditing = false;
+  TextEditingController businessNameController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  TextEditingController addController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController dayController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   List<dynamic> categories = [];
@@ -260,71 +271,88 @@ class _EditScreenState extends State<EditScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      TextFieldWidget(
-                        fontSize: 14,
-                        radius: 5,
-                        height: 35,
-                        borderColor: secondary,
-                        color: secondary,
-                        hintColor: secondary,
-                        label: businessName ?? '...',
-                        controller: bname,
-                        labelcolor: black,
-                      ),
-                      TextFieldWidget(
-                        fontSize: 14,
-                        radius: 5,
-                        height: 35,
-                        borderColor: secondary,
-                        color: secondary,
-                        hintColor: secondary,
-                        label: add ?? '...',
-                        controller: address,
-                        labelcolor: black,
-                      ),
-                      TextFieldWidget(
-                        fontSize: 14,
-                        radius: 5,
-                        height: 35,
-                        borderColor: secondary,
-                        color: secondary,
-                        hintColor: secondary,
-                        label: id ?? '...',
-                        controller: merchantId,
-                        labelcolor: black,
-                      ),
+                      TextWidget(
+                          text: businessName ?? '...',
+                          fontSize: 14,
+                          color: black),
+                      // TextFieldWidget(
+                      //   fontSize: 14,
+                      //   radius: 5,
+                      //   height: 35,
+                      //   borderColor: secondary,
+                      //   color: secondary,
+                      //   hintColor: secondary,
+                      //   label: businessName ?? '...',
+                      //   controller: bname,
+                      //   labelcolor: black,
+                      // ),
+                      TextWidget(
+                          text: add ?? '...', fontSize: 14, color: black),
+
+                      // TextFieldWidget(
+                      //   fontSize: 14,
+                      //   radius: 5,
+                      //   height: 35,
+                      //   borderColor: secondary,
+                      //   color: secondary,
+                      //   hintColor: secondary,
+                      //   label: add ?? '...',
+                      //   controller: address,
+                      //   labelcolor: black,
+                      // ),
+                      TextWidget(text: id ?? '...', fontSize: 14, color: black),
+
+                      // TextFieldWidget(
+                      //   fontSize: 14,
+                      //   radius: 5,
+                      //   height: 35,
+                      //   borderColor: secondary,
+                      //   color: secondary,
+                      //   hintColor: secondary,
+                      //   label: id ?? '...',
+                      //   controller: merchantId,
+                      //   labelcolor: black,
+                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           SizedBox(
                             width: 185,
-                            child: TextFieldWidget(
-                              hintSize: 12,
-                              fontSize: 14,
-                              radius: 5,
-                              height: 35,
-                              borderColor: secondary,
-                              color: secondary,
-                              hintColor: secondary,
-                              label: hours ?? '...',
-                              controller: operatingHours,
-                              labelcolor: black,
-                            ),
+                            child: TextWidget(
+                                text: hours ?? '...',
+                                fontSize: 14,
+                                color: black),
+                            // child: TextFieldWidget(
+                            //   hintSize: 12,
+                            //   fontSize: 14,
+                            //   radius: 5,
+                            //   height: 35,
+                            //   borderColor: secondary,
+                            //   color: secondary,
+                            //   hintColor: secondary,
+                            //   label: hours ?? '...',
+                            //   controller: operatingHours,
+                            //   labelcolor: black,
+                            // ),
                           ),
                           SizedBox(
                             width: 185,
-                            child: TextFieldWidget(
-                              hintSize: 12,
-                              fontSize: 14,
-                              radius: 5,
-                              height: 35,
-                              borderColor: secondary,
-                              color: secondary,
-                              hintColor: secondary,
-                              label: days ?? '...',
-                              controller: operatingDays,
-                              labelcolor: black,
-                            ),
+                            child: TextWidget(
+                                text: days ?? '...',
+                                fontSize: 14,
+                                color: black),
+                            // child: TextFieldWidget(
+                            //   hintSize: 12,
+                            //   fontSize: 14,
+                            //   radius: 5,
+                            //   height: 35,
+                            //   borderColor: secondary,
+                            //   color: secondary,
+                            //   hintColor: secondary,
+                            //   label: days ?? '...',
+                            //   controller: operatingDays,
+                            //   labelcolor: black,
+                            // ),
                           ),
                         ],
                       ),
