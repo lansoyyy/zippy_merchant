@@ -10,6 +10,7 @@ import 'package:zippy/utils/colors.dart';
 import 'package:zippy/utils/const.dart';
 import 'package:zippy/widgets/text_widget.dart';
 import 'package:zippy/widgets/textfield_widget.dart';
+import 'package:zippy/widgets/toast_widget.dart';
 
 class EditScreen extends StatefulWidget {
   const EditScreen({super.key});
@@ -24,6 +25,7 @@ class _EditScreenState extends State<EditScreen> {
   final merchantId = TextEditingController();
   final operatingHours = TextEditingController();
   final operatingDays = TextEditingController();
+  Map<String, dynamic>? userData;
   String? businessName;
   String? description;
   String? add;
@@ -37,7 +39,10 @@ class _EditScreenState extends State<EditScreen> {
   bool isAddEditing = false;
   bool isTimeEditing = false;
   bool isDayEditing = false;
+  bool isMerchantEditing = false;
+
   TextEditingController businessNameController = TextEditingController();
+  TextEditingController merchantController = TextEditingController();
   TextEditingController descController = TextEditingController();
   TextEditingController addController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -51,6 +56,96 @@ class _EditScreenState extends State<EditScreen> {
   void initState() {
     super.initState();
     fetchUserData();
+  }
+
+  Future<void> updateDesc() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Merchant')
+          .doc(userId)
+          .update({'desc': descController.text});
+      setState(() {
+        userData!['name'] = descController.text;
+        isEditing = false;
+      });
+    } catch (e) {
+      print("Error updating name: $e");
+    }
+  }
+
+  Future<void> updateBusinessName() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Merchant')
+          .doc(userId)
+          .update({'businessName': businessNameController.text});
+      setState(() {
+        userData!['businessName'] = businessNameController.text;
+        isBusinessNameEditing = false;
+      });
+    } catch (e) {
+      print("Error updating name: $e");
+    }
+  }
+
+  Future<void> updateAddress() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Merchant')
+          .doc(userId)
+          .update({'address': addController.text});
+      setState(() {
+        userData!['address'] = addController.text;
+        isAddEditing = false;
+      });
+    } catch (e) {
+      print("Error updating name: $e");
+    }
+  }
+
+  Future<void> updateMerchantId() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Merchant')
+          .doc(userId)
+          .update({'merchantId': merchantController.text});
+      setState(() {
+        userData!['merchantId'] = merchantController.text;
+        isMerchantEditing = false;
+      });
+    } catch (e) {
+      print("Error updating name: $e");
+    }
+  }
+
+  Future<void> updateOpeHours() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Merchant')
+          .doc(userId)
+          .update({'operatingHours': timeController.text});
+      setState(() {
+        userData!['operatingHours'] = timeController.text;
+        isTimeEditing = false;
+      });
+    } catch (e) {
+      print("Error updating name: $e");
+    }
+  }
+
+  Future<void> updateOpeDays() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Merchant')
+          .doc(userId)
+          .update({'operatingDays': dayController.text});
+      setState(() {
+        userData!['operatingDays'] = dayController.text;
+        isDayEditing = false;
+      });
+    } catch (e) {
+      print("Error updating name: $e");
+    }
   }
 
   Future<void> fetchUserData() async {
@@ -211,7 +306,12 @@ class _EditScreenState extends State<EditScreen> {
                             width: 10,
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                isDescEditing = true;
+                                descController.text = description ?? '';
+                              });
+                            },
                             icon: const Icon(
                               Icons.edit,
                               color: primary,
@@ -223,27 +323,89 @@ class _EditScreenState extends State<EditScreen> {
                         height: 10,
                       ),
                       Center(
-                        child: Container(
-                          height: 70,
-                          width: 320,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              color: secondary,
-                            ),
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: TextWidget(
-                                text: description ?? 'No description available',
-                                fontSize: 12,
-                                color: black,
-                                maxLines: 5,
+                        child: isDescEditing
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      controller: descController,
+                                      maxLines: 5,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          borderSide: const BorderSide(
+                                              color: secondary),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.all(10),
+                                      ),
+                                      style: TextStyle(
+                                        color: black,
+                                        fontSize: 15,
+                                        fontFamily: "Bold",
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.check,
+                                          color: Colors.green,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          updateDesc();
+                                          setState(() {
+                                            description = descController
+                                                .text; // Update description
+                                            isDescEditing = false;
+                                          });
+                                        },
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.cancel,
+                                          color: Colors.red,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            isDescEditing = false;
+                                            descController.text = description ??
+                                                'No description available'; // Revert changes
+                                          });
+                                        },
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: secondary,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: TextWidget(
+                                    text: description ??
+                                        'No description available',
+                                    fontSize: 15,
+                                    fontFamily: "Bold",
+                                    color: grey,
+                                    maxLines: 5,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
                       ),
                       const SizedBox(
                         height: 10,
@@ -260,7 +422,21 @@ class _EditScreenState extends State<EditScreen> {
                             width: 10,
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                isBusinessNameEditing = true;
+                                businessNameController.text =
+                                    businessName ?? '';
+                                isMerchantEditing = true;
+                                merchantController.text = id ?? '';
+                                isAddEditing = true;
+                                addController.text = add ?? '';
+                                isTimeEditing = true;
+                                timeController.text = hours ?? '';
+                                isDayEditing = true;
+                                dayController.text = days ?? '';
+                              });
+                            },
                             icon: const Icon(
                               Icons.edit,
                               color: primary,
@@ -270,45 +446,126 @@ class _EditScreenState extends State<EditScreen> {
                       ),
                       TextWidget(
                           text: 'Business Name', fontSize: 18, color: black),
-                      Row(
-                        children: [
-                          TextWidget(
-                            text: businessName ?? 'Loading...',
-                            fontFamily: "Bold",
-                            fontSize: 23,
-                            color: black,
-                            maxLines: 5,
-                          ),
-                        ],
-                      ),
+                      // THis is for businessName
+                      isBusinessNameEditing
+                          ? Row(
+                              children: [
+                                SizedBox(
+                                  width: 250,
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none),
+                                    controller: businessNameController,
+                                    style: TextStyle(
+                                      color: black,
+                                      fontSize: 23,
+                                      fontFamily: 'Bold',
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                    icon: const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      updateBusinessName();
+                                      setState(() {
+                                        businessName = businessNameController
+                                            .text; // Update description
+                                        isBusinessNameEditing = false;
+                                      });
+                                    } // Confirm number update
+
+                                    ),
+                                const Padding(padding: EdgeInsets.zero),
+                                IconButton(
+                                  icon: const Icon(Icons.cancel,
+                                      color: Colors.red, size: 17),
+                                  onPressed: () {
+                                    setState(() {
+                                      isBusinessNameEditing = false;
+                                      businessNameController.text = businessName ??
+                                          'No name available'; // Revert changes
+                                    });
+                                  },
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                TextWidget(
+                                  text: businessName ?? '...',
+                                  fontSize: 23,
+                                  color: grey,
+                                  fontFamily: 'Bold',
+                                ),
+                              ],
+                            ),
                       const Divider(
                         color: primary,
                         thickness: 1,
                         endIndent: 0,
                       ),
-                      // TextFieldWidget(
-                      //   fontSize: 14,
-                      //   radius: 5,
-                      //   height: 35,
-                      //   borderColor: secondary,
-                      //   color: secondary,
-                      //   hintColor: secondary,
-                      //   label: businessName ?? '...',
-                      //   controller: bname,
-                      //   labelcolor: black,
-                      // ),
                       TextWidget(text: 'Address', fontSize: 18, color: black),
-                      Row(
-                        children: [
-                          TextWidget(
-                            text: add ?? 'Loading...',
-                            fontSize: 23,
-                            fontFamily: "Bold",
-                            color: black,
-                            maxLines: 5,
-                          ),
-                        ],
-                      ),
+                      //
+                      isAddEditing
+                          ? Row(
+                              children: [
+                                SizedBox(
+                                  width: 250,
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none),
+                                    controller: addController,
+                                    style: TextStyle(
+                                      color: black,
+                                      fontSize: 23,
+                                      fontFamily: 'Bold',
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                    icon: const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      updateAddress();
+                                      setState(() {
+                                        add = addController
+                                            .text; // Update description
+                                        isAddEditing = false;
+                                      });
+                                    } // Confirm number update
+
+                                    ),
+                                const Padding(padding: EdgeInsets.zero),
+                                IconButton(
+                                  icon: const Icon(Icons.cancel,
+                                      color: Colors.red, size: 17),
+                                  onPressed: () {
+                                    setState(() {
+                                      isAddEditing = false;
+                                      addController.text = add ??
+                                          'No address available'; // Revert changes
+                                    });
+                                  },
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                TextWidget(
+                                  text: add ?? '...',
+                                  fontSize: 23,
+                                  color: grey,
+                                  fontFamily: 'Bold',
+                                ),
+                              ],
+                            ),
                       const Divider(
                         color: primary,
                         thickness: 1,
@@ -316,17 +573,62 @@ class _EditScreenState extends State<EditScreen> {
                       ),
                       TextWidget(
                           text: 'Merchant ID', fontSize: 18, color: black),
-                      Row(
-                        children: [
-                          TextWidget(
-                            text: id ?? 'Loading...',
-                            fontSize: 23,
-                            fontFamily: "Bold",
-                            color: black,
-                            maxLines: 5,
-                          ),
-                        ],
-                      ),
+                      isMerchantEditing
+                          ? Row(
+                              children: [
+                                SizedBox(
+                                  width: 200,
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none),
+                                    controller: merchantController,
+                                    style: TextStyle(
+                                      color: black,
+                                      fontSize: 23,
+                                      fontFamily: 'Bold',
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                    icon: const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      updateMerchantId();
+                                      setState(() {
+                                        id = merchantController
+                                            .text; // Update description
+                                        isMerchantEditing = false;
+                                      });
+                                    } // Confirm number update
+
+                                    ),
+                                const Padding(padding: EdgeInsets.zero),
+                                IconButton(
+                                  icon: const Icon(Icons.cancel,
+                                      color: Colors.red, size: 17),
+                                  onPressed: () {
+                                    setState(() {
+                                      isMerchantEditing = false;
+                                      merchantController.text = id ??
+                                          'No Id available'; // Revert changes
+                                    });
+                                  },
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                TextWidget(
+                                  text: id ?? '...',
+                                  fontSize: 23,
+                                  color: grey,
+                                  fontFamily: 'Bold',
+                                ),
+                              ],
+                            ),
                       const Divider(
                         color: primary,
                         thickness: 1,
@@ -348,18 +650,119 @@ class _EditScreenState extends State<EditScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          TextWidget(
-                            text: hours ?? '...',
-                            fontSize: 23,
-                            color: black,
-                            fontFamily: "Bold",
-                          ),
-                          TextWidget(
-                            text: days ?? '...',
-                            fontSize: 23,
-                            color: black,
-                            fontFamily: "Bold",
-                          ),
+                          isTimeEditing
+                              ? Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 55,
+                                      child: TextField(
+                                        decoration: const InputDecoration(
+                                            border: InputBorder.none),
+                                        controller: timeController,
+                                        style: TextStyle(
+                                          color: black,
+                                          fontSize: 23,
+                                          fontFamily: 'Bold',
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                        icon: const Icon(
+                                          Icons.check,
+                                          color: Colors.green,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          updateOpeHours();
+                                          setState(() {
+                                            hours = timeController
+                                                .text; // Update description
+                                            isTimeEditing = false;
+                                          });
+                                        } // Confirm number update
+
+                                        ),
+                                    const Padding(padding: EdgeInsets.zero),
+                                    IconButton(
+                                      icon: const Icon(Icons.cancel,
+                                          color: Colors.red, size: 17),
+                                      onPressed: () {
+                                        setState(() {
+                                          isTimeEditing = false;
+                                          timeController.text = hours ??
+                                              'No time available'; // Revert changes
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    TextWidget(
+                                      text: hours ?? '...',
+                                      fontSize: 23,
+                                      color: grey,
+                                      fontFamily: 'Bold',
+                                    ),
+                                  ],
+                                ),
+                          // Days daun ni
+                          isDayEditing
+                              ? Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 55,
+                                      child: TextField(
+                                        decoration: const InputDecoration(
+                                            border: InputBorder.none),
+                                        controller: dayController,
+                                        style: TextStyle(
+                                          color: black,
+                                          fontSize: 23,
+                                          fontFamily: 'Bold',
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                        icon: const Icon(
+                                          Icons.check,
+                                          color: Colors.green,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          updateOpeDays();
+                                          setState(() {
+                                            days = dayController
+                                                .text; // Update description
+                                            isDayEditing = false;
+                                          });
+                                        } // Confirm number update
+
+                                        ),
+                                    const Padding(padding: EdgeInsets.zero),
+                                    IconButton(
+                                      icon: const Icon(Icons.cancel,
+                                          color: Colors.red, size: 17),
+                                      onPressed: () {
+                                        setState(() {
+                                          isDayEditing = false;
+                                          dayController.text = days ??
+                                              'No days available'; // Revert changes
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    TextWidget(
+                                      text: days ?? '...',
+                                      fontSize: 23,
+                                      color: grey,
+                                      fontFamily: 'Bold',
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                       const Divider(
