@@ -791,7 +791,7 @@ class _ShopTabState extends State<ShopTab> {
                                         TextWidget(
                                           text: item['description'] ??
                                               'Unavailable',
-                                          fontSize: 12,
+                                          fontSize: 15,
                                           fontFamily: 'Medium',
                                           color: Colors.black,
                                         ),
@@ -807,24 +807,9 @@ class _ShopTabState extends State<ShopTab> {
                                                 text: item['price'] != null
                                                     ? '₱ ${item['price']}.00'
                                                     : 'Unavailable',
-                                                fontSize: 12,
+                                                fontSize: 18,
                                                 fontFamily: 'Bold',
                                                 color: secondary,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  TextWidget(
-                                                    text: 'Add to Cart',
-                                                    fontSize: 12,
-                                                    fontFamily: 'Bold',
-                                                    color: secondary,
-                                                  ),
-                                                  const Icon(
-                                                    Icons
-                                                        .arrow_right_alt_outlined,
-                                                    color: secondary,
-                                                  ),
-                                                ],
                                               ),
                                             ],
                                           ),

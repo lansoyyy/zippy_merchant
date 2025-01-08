@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
 import 'package:zippy/screens/tabs/shop_tab.dart';
 import 'package:zippy/utils/colors.dart';
@@ -17,12 +18,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? businessName;
+  String? merchantId;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  int orderCount = 0;
 
   @override
   void initState() {
     super.initState();
     fetchUserData();
+    fetchOrderCount();
   }
 
   Future<void> fetchUserData() async {
@@ -37,11 +41,27 @@ class _HomeScreenState extends State<HomeScreen> {
         if (userDoc.exists) {
           setState(() {
             businessName = userDoc.get('businessName');
+            merchantId = userDoc.get('id');
           });
         }
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> fetchOrderCount() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Orders')
+          .where('merchantId', isEqualTo: merchantId)
+          .get();
+
+      setState(() {
+        orderCount = querySnapshot.size;
+      });
+    } catch (e) {
+      print('Error fetching order count: $e');
     }
   }
 
@@ -199,7 +219,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextWidget(
-                          text: '78 orders',
+                          text: orderCount != '1'
+                              ? '1 order'
+                              : '$orderCount orders',
                           fontSize: 40,
                           fontFamily: 'Bold',
                           color: Colors.white,
@@ -269,78 +291,138 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return Center(
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 3),
-                                  height: 80,
-                                  width: 320,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: secondary,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                        StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('Orders')
+                              .where('merchantId', isEqualTo: merchantId)
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Center(child: Text('Loading'));
+                            } else if (snapshot.hasError) {
+                              return const Center(
+                                  child: Text('Something went wrong'));
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+
+                            final orders = snapshot.data!.docs;
+
+                            if (orders.isEmpty) {
+                              return const Center(
+                                  child: Text('No orders found.'));
+                            }
+
+                            return Expanded(
+                              child: ListView.builder(
+                                itemCount: orders.length,
+                                itemBuilder: (context, index) {
+                                  final order = orders[index];
+                                  final data =
+                                      order.data() as Map<String, dynamic>?;
+
+                                  final price = data != null &&
+                                          data.containsKey('items') &&
+                                          data['items'] is List &&
+                                          data['items'].isNotEmpty
+                                      ? data['items'][0]['price']
+                                      : 'N/A';
+                                  final tip =
+                                      data != null && data.containsKey('tip')
+                                          ? data['tip']
+                                          : 'N/A';
+                                  final status =
+                                      data != null && data.containsKey('status')
+                                          ? data['status']
+                                          : 'Unknown';
+                                  final completedAt =
+                                      data != null && data.containsKey('date')
+                                          ? data['date']
+                                          : null;
+
+                                  final formattedDate = (completedAt != null &&
+                                          completedAt is Timestamp)
+                                      ? DateFormat('MMMM d, y \'at\' h:mm a')
+                                          .format(completedAt.toDate())
+                                      : 'N/A';
+
+                                  return Center(
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 3),
+                                      height: 80,
+                                      width: 320,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: secondary),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            TextWidget(
-                                              text: '₱570.00',
-                                              fontSize: 16,
-                                              fontFamily: 'Bold',
-                                              color: secondary,
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextWidget(
+                                                  text: price != 'N/A'
+                                                      ? 'Total Amount: ₱$price'
+                                                      : 'Price unavailable',
+                                                  fontSize: 19,
+                                                  fontFamily: 'Bold',
+                                                  color: secondary,
+                                                ),
+                                                TextWidget(
+                                                  text: tip != 'N/A'
+                                                      ? 'Tip: ₱$tip'
+                                                      : 'No tip',
+                                                  fontSize: 16,
+                                                  fontFamily: 'Bold',
+                                                  color: secondary,
+                                                ),
+                                                TextWidget(
+                                                  text: status == 'Completed'
+                                                      ? 'Completed on $formattedDate'
+                                                      : 'Ordered on $formattedDate',
+                                                  fontSize: 14,
+                                                  fontFamily: 'Medium',
+                                                  color: secondary,
+                                                ),
+                                              ],
                                             ),
-                                            TextWidget(
-                                              text: '111 2222 3333 444',
-                                              fontSize: 12,
-                                              fontFamily: 'Medium',
-                                              color: Colors.black,
-                                            ),
-                                            TextWidget(
-                                              text:
-                                                  'Completed on 13/08/24 at 4:50PM',
-                                              fontSize: 12,
-                                              fontFamily: 'Medium',
-                                              color: secondary,
+                                            Column(
+                                              children: [
+                                                TextWidget(
+                                                  text: status,
+                                                  fontSize: 20,
+                                                  fontFamily: 'Bold',
+                                                  color: status == 'Completed'
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                                ),
+                                                const SizedBox(height: 5),
+                                                TextWidget(
+                                                  text: 'View List',
+                                                  fontSize: 14,
+                                                  fontFamily: 'Bold',
+                                                  color: secondary,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                        Column(
-                                          children: [
-                                            TextWidget(
-                                              text: 'Preparing',
-                                              fontSize: 14,
-                                              fontFamily: 'Bold',
-                                              color: Colors.red,
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            TextWidget(
-                                              text: 'View List',
-                                              fontSize: 14,
-                                              fontFamily: 'Bold',
-                                              color: secondary,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         )
                       ],
                     ),
