@@ -21,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? merchantId;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   int orderCount = 0;
+  double totalEarned = 0.0;
 
   @override
   void initState() {
@@ -57,8 +58,23 @@ class _HomeScreenState extends State<HomeScreen> {
           .where('merchantId', isEqualTo: merchantId)
           .get();
 
+      double calculatedTotalPrice = 0.0;
+      for (var doc in querySnapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>?;
+        if (data != null &&
+            data.containsKey('items') &&
+            data['items'] is List) {
+          for (var item in data['items']) {
+            if (item.containsKey('price')) {
+              calculatedTotalPrice += item['price'];
+            }
+          }
+        }
+      }
+
       setState(() {
         orderCount = querySnapshot.size;
+        totalEarned = calculatedTotalPrice;
       });
     } catch (e) {
       print('Error fetching order count: $e');
@@ -186,13 +202,13 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 10,
             ),
             TextWidget(
-              text: '₱18,760',
+              text: '₱${totalEarned.toStringAsFixed(2)}',
               fontSize: 64,
               fontFamily: 'Bold',
               color: secondary,
             ),
             TextWidget(
-              text: 'total earned this week',
+              text: 'total earned',
               fontSize: 18,
               fontFamily: 'Medium',
               color: secondary,
@@ -276,12 +292,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontFamily: 'Bold',
                                     color: secondary,
                                   ),
-                                  TextWidget(
-                                    text: 'recent orders made in the week',
-                                    fontSize: 16,
-                                    fontFamily: 'Regular',
-                                    color: secondary,
-                                  ),
+                                  // TextWidget(
+                                  //   text: 'recent orders made in the week',
+                                  //   fontSize: 16,
+                                  //   fontFamily: 'Regular',
+                                  //   color: secondary,
+                                  // ),
                                 ],
                               ),
                               Image.asset(
@@ -352,12 +368,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   return Center(
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
-                                          vertical: 3),
+                                          vertical: 2),
                                       height: 80,
-                                      width: 320,
+                                      width: 350,
                                       decoration: BoxDecoration(
                                         border: Border.all(color: secondary),
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(10),
@@ -371,7 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
                                                 TextWidget(
                                                   text: price != 'N/A'
-                                                      ? 'Total Amount: ₱$price'
+                                                      ? 'Total Amount: ₱${price.toStringAsFixed(2)}'
                                                       : 'Price unavailable',
                                                   fontSize: 19,
                                                   fontFamily: 'Bold',
@@ -379,7 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 TextWidget(
                                                   text: tip != 'N/A'
-                                                      ? 'Tip: ₱$tip'
+                                                      ? 'Tip: ₱${tip.toStringAsFixed(2)}'
                                                       : 'No tip',
                                                   fontSize: 16,
                                                   fontFamily: 'Bold',
