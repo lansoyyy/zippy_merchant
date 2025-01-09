@@ -441,6 +441,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .format(completedAt.toDate())
                                       : 'N/A';
 
+                                  final items =
+                                      data?['items'] as List<dynamic>?;
+
+                                  final groupedItems =
+                                      <String, Map<String, dynamic>>{};
+                                  if (items != null && items.isNotEmpty) {
+                                    for (var item in items) {
+                                      final itemName =
+                                          item['name'] ?? 'Unnamed Item';
+                                      final quantity = item['quantity'] ?? 1;
+                                      final itemPrice = item['price'] ?? 0;
+
+                                      if (groupedItems.containsKey(itemName)) {
+                                        groupedItems[itemName]!['quantity'] +=
+                                            quantity;
+                                      } else {
+                                        groupedItems[itemName] = {
+                                          'quantity': quantity,
+                                          'price': itemPrice,
+                                        };
+                                      }
+                                    }
+                                  }
+
+                                  double grandTotal = groupedItems.entries
+                                      .fold(0, (sum, entry) {
+                                    final quantity = entry.value['quantity'];
+                                    final itemPrice = entry.value['price'];
+                                    return sum + (quantity * itemPrice);
+                                  });
+
                                   return Center(
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
@@ -465,16 +496,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
                                                 TextWidget(
                                                   text: price != 'N/A'
-                                                      ? 'Total Amount: ₱${price.toStringAsFixed(2)}'
+                                                      ? 'Total: ₱${grandTotal.toStringAsFixed(2)}'
                                                       : 'Price unavailable',
                                                   fontSize: 19,
                                                   fontFamily: 'Bold',
                                                   color: secondary,
                                                 ),
                                                 TextWidget(
-                                                  text: tip != 'N/A'
-                                                      ? 'Tip: ₱${tip.toStringAsFixed(2)}'
-                                                      : 'No tip',
+                                                  text: 'Order ID: ${order.id}',
                                                   fontSize: 16,
                                                   fontFamily: 'Bold',
                                                   color: secondary,
@@ -495,11 +524,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
                                                 TextWidget(
                                                   text: status,
-                                                  fontSize: 20,
+                                                  fontSize: 15,
                                                   fontFamily: 'Bold',
                                                   color: status == 'Completed'
                                                       ? Colors.green
-                                                      : Colors.red,
+                                                      : status == 'Pending'
+                                                          ? Colors.red
+                                                          : status ==
+                                                                  'Preparing'
+                                                              ? Colors.orange
+                                                              : status ==
+                                                                      'For Pick-up'
+                                                                  ? Colors.yellow[
+                                                                      800]
+                                                                  : status ==
+                                                                          'On the way'
+                                                                      ? secondary
+                                                                      : Colors
+                                                                          .black,
                                                 ),
                                                 const SizedBox(height: 5),
                                                 TextWidget(
@@ -511,7 +553,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 GestureDetector(
                                                   onTap: () {
                                                     showDialog(
-                                                      barrierDismissible: false,
+                                                      barrierDismissible: true,
                                                       context: context,
                                                       builder: (context) {
                                                         final items = data?[
@@ -555,6 +597,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             }
                                                           }
                                                         }
+                                                        double grandTotal =
+                                                            groupedItems.entries
+                                                                .fold(0, (sum,
+                                                                    entry) {
+                                                          final quantity =
+                                                              entry.value[
+                                                                  'quantity'];
+                                                          final itemPrice =
+                                                              entry.value[
+                                                                  'price'];
+                                                          return sum +
+                                                              (quantity *
+                                                                  itemPrice);
+                                                        });
 
                                                         return AlertDialog(
                                                           title: TextWidget(
@@ -587,28 +643,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           entry.value[
                                                                               'price'];
 
-                                                                      return Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
+                                                                      return Column(
                                                                         children: [
-                                                                          Expanded(
-                                                                            child:
-                                                                                TextWidget(
-                                                                              text: 'x$quantity $itemName ',
-                                                                              fontSize: 16,
-                                                                              color: secondary,
-                                                                              fontFamily: "Bold",
-                                                                            ),
+                                                                          Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              TextWidget(
+                                                                                text: 'x$quantity $itemName ',
+                                                                                fontSize: 18,
+                                                                                color: secondary,
+                                                                                fontFamily: "Bold",
+                                                                              ),
+                                                                              TextWidget(
+                                                                                text: '₱${(itemPrice * quantity).toStringAsFixed(2)}',
+                                                                                fontSize: 18,
+                                                                                color: secondary,
+                                                                                fontFamily: "Bold",
+                                                                              ),
+                                                                            ],
                                                                           ),
-                                                                          TextWidget(
-                                                                            text:
-                                                                                '₱${(itemPrice * quantity).toStringAsFixed(2)}',
-                                                                            fontSize:
-                                                                                16,
+                                                                          const Divider(
+                                                                            // indent:
+                                                                            //     20,
                                                                             color:
                                                                                 secondary,
-                                                                            fontFamily:
-                                                                                "Bold",
+                                                                            thickness:
+                                                                                .5,
                                                                           ),
                                                                         ],
                                                                       );
@@ -625,52 +686,132 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       "Regular",
                                                                 ),
                                                           actions: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
+                                                            Column(
                                                               children: [
-                                                                TextWidget(
-                                                                  text:
-                                                                      'Total: ₱${price.toStringAsFixed(2)}',
-                                                                  fontSize: 18,
-                                                                  color:
-                                                                      secondary,
-                                                                  fontFamily:
-                                                                      'Bold',
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    width: 140,
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            10),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color:
-                                                                          secondary,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20),
-                                                                    ),
-                                                                    child:
-                                                                        TextWidget(
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    TextWidget(
                                                                       text:
-                                                                          'Close',
+                                                                          'Total: ₱${grandTotal.toStringAsFixed(2)}',
                                                                       fontSize:
                                                                           18,
                                                                       color:
-                                                                          white,
+                                                                          secondary,
                                                                       fontFamily:
-                                                                          "Bold",
+                                                                          'Bold',
                                                                     ),
-                                                                  ),
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        FirebaseFirestore
+                                                                            .instance
+                                                                            .collection('Orders')
+                                                                            .doc(order.id)
+                                                                            .update({
+                                                                          'status': status == 'Pending'
+                                                                              ? 'Preparing'
+                                                                              : status == 'Preparing'
+                                                                                  ? 'For Pick-up'
+                                                                                  : status == 'For Pick-up'
+                                                                                      ? 'On the way'
+                                                                                      //This needs that the rider must complete the delivery.
+                                                                                      : 'Pending',
+                                                                        });
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            140,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            10),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              secondary,
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(20),
+                                                                        ),
+                                                                        child:
+                                                                            TextWidget(
+                                                                          text: status == 'Pending'
+                                                                              ? 'Prepare Food'
+                                                                              : status == 'Preparing'
+                                                                                  ? 'Ready to Pick Up'
+                                                                                  : status == 'For Pick-up'
+                                                                                      ? 'Picked Up'
+                                                                                      : status == 'On the way'
+                                                                                          ? 'Close'
+                                                                                          : 'Close',
+                                                                          fontSize:
+                                                                              18,
+                                                                          color:
+                                                                              white,
+                                                                          fontFamily:
+                                                                              "Bold",
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 10),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    TextWidget(
+                                                                      text:
+                                                                          'Payment Method: ${data?['mop'] ?? 'N/A'}',
+                                                                      fontSize:
+                                                                          18,
+                                                                      color:
+                                                                          secondary,
+                                                                      fontFamily:
+                                                                          'Bold',
+                                                                    ),
+                                                                    // GestureDetector(
+                                                                    //   onTap:
+                                                                    //       () {
+                                                                    //     Navigator.pop(
+                                                                    //         context);
+                                                                    //   },
+                                                                    //   child:
+                                                                    //       Container(
+                                                                    //     width:
+                                                                    //         140,
+                                                                    //     padding: const EdgeInsets
+                                                                    //         .all(
+                                                                    //         10),
+                                                                    //     decoration:
+                                                                    //         BoxDecoration(
+                                                                    //       color:
+                                                                    //           Colors.transparent,
+                                                                    //       border:
+                                                                    //           Border.all(color: secondary),
+                                                                    //       borderRadius:
+                                                                    //           BorderRadius.circular(20),
+                                                                    //     ),
+                                                                    //     child:
+                                                                    //         TextWidget(
+                                                                    //       text:
+                                                                    //           '',
+                                                                    //       fontSize:
+                                                                    //           18,
+                                                                    //       color:
+                                                                    //           secondary,
+                                                                    //       fontFamily:
+                                                                    //           "Bold",
+                                                                    //     ),
+                                                                    //   ),
+                                                                    // ),
+                                                                  ],
                                                                 ),
                                                               ],
                                                             ),
