@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
 import 'package:zippy/screens/tabs/shop_tab.dart';
 import 'package:zippy/utils/colors.dart';
+import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -244,12 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontFamily: 'Bold',
                       color: secondary,
                     ),
-                    TextWidget(
-                      text: 'total earned',
-                      fontSize: 18,
-                      fontFamily: 'Medium',
-                      color: secondary,
-                    ),
                   ],
                 );
               },
@@ -359,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: const EdgeInsets.only(left: 20, right: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -414,6 +409,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             return Expanded(
                               child: ListView.builder(
+                                padding: const EdgeInsets.only(bottom: 50),
                                 itemCount: orders.length,
                                 itemBuilder: (context, index) {
                                   final order = orders[index];
@@ -448,8 +444,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   return Center(
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
-                                          vertical: 2),
-                                      height: 80,
+                                          vertical: 7),
+                                      height: 100,
                                       width: 350,
                                       decoration: BoxDecoration(
                                         border: Border.all(color: secondary),
@@ -464,6 +460,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 TextWidget(
                                                   text: price != 'N/A'
@@ -492,6 +490,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ],
                                             ),
                                             Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 TextWidget(
                                                   text: status,
@@ -507,6 +507,183 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   fontSize: 14,
                                                   fontFamily: 'Bold',
                                                   color: secondary,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        final items = data?[
+                                                                'items']
+                                                            as List<dynamic>?;
+
+                                                        // Group items by name
+                                                        final groupedItems =
+                                                            <String,
+                                                                Map<String,
+                                                                    dynamic>>{};
+                                                        if (items != null &&
+                                                            items.isNotEmpty) {
+                                                          for (var item
+                                                              in items) {
+                                                            final itemName = item[
+                                                                    'name'] ??
+                                                                'Unnamed Item';
+                                                            final quantity =
+                                                                item['quantity'] ??
+                                                                    1;
+                                                            final itemPrice =
+                                                                item['price'] ??
+                                                                    0;
+
+                                                            if (groupedItems
+                                                                .containsKey(
+                                                                    itemName)) {
+                                                              groupedItems[
+                                                                          itemName]![
+                                                                      'quantity'] +=
+                                                                  quantity;
+                                                            } else {
+                                                              groupedItems[
+                                                                  itemName] = {
+                                                                'quantity':
+                                                                    quantity,
+                                                                'price':
+                                                                    itemPrice,
+                                                              };
+                                                            }
+                                                          }
+                                                        }
+
+                                                        return AlertDialog(
+                                                          title: TextWidget(
+                                                            text:
+                                                                "Order Details",
+                                                            fontSize: 22,
+                                                            color: secondary,
+                                                            fontFamily: "Bold",
+                                                          ),
+                                                          content: groupedItems
+                                                                  .isNotEmpty
+                                                              ? SizedBox(
+                                                                  width: double
+                                                                      .maxFinite,
+                                                                  child:
+                                                                      ListView(
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    children: groupedItems
+                                                                        .entries
+                                                                        .map(
+                                                                            (entry) {
+                                                                      final itemName =
+                                                                          entry
+                                                                              .key;
+                                                                      final quantity =
+                                                                          entry.value[
+                                                                              'quantity'];
+                                                                      final itemPrice =
+                                                                          entry.value[
+                                                                              'price'];
+
+                                                                      return Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          Expanded(
+                                                                            child:
+                                                                                TextWidget(
+                                                                              text: 'x$quantity $itemName ',
+                                                                              fontSize: 16,
+                                                                              color: secondary,
+                                                                              fontFamily: "Bold",
+                                                                            ),
+                                                                          ),
+                                                                          TextWidget(
+                                                                            text:
+                                                                                '₱${(itemPrice * quantity).toStringAsFixed(2)}',
+                                                                            fontSize:
+                                                                                16,
+                                                                            color:
+                                                                                secondary,
+                                                                            fontFamily:
+                                                                                "Bold",
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    }).toList(),
+                                                                  ),
+                                                                )
+                                                              : TextWidget(
+                                                                  text:
+                                                                      "No items available.",
+                                                                  fontSize: 16,
+                                                                  color:
+                                                                      secondary,
+                                                                  fontFamily:
+                                                                      "Regular",
+                                                                ),
+                                                          actions: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                TextWidget(
+                                                                  text:
+                                                                      'Total: ₱${price.toStringAsFixed(2)}',
+                                                                  fontSize: 18,
+                                                                  color:
+                                                                      secondary,
+                                                                  fontFamily:
+                                                                      'Bold',
+                                                                ),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    width: 140,
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            10),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color:
+                                                                          secondary,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20),
+                                                                    ),
+                                                                    child:
+                                                                        TextWidget(
+                                                                      text:
+                                                                          'Close',
+                                                                      fontSize:
+                                                                          18,
+                                                                      color:
+                                                                          white,
+                                                                      fontFamily:
+                                                                          "Bold",
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.receipt,
+                                                    color: secondary,
+                                                    // size: 20,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -552,6 +729,67 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
       ],
+    );
+  }
+
+  showPrivacy(context, String label, String caption) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          height: 500,
+          width: double.infinity,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  TextWidget(
+                    text: label,
+                    fontSize: 24,
+                    color: secondary,
+                    fontFamily: 'Bold',
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 300,
+                    width: 320,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: secondary,
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: TextWidget(
+                          align: TextAlign.start,
+                          maxLines: 500,
+                          text: caption,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ButtonWidget(
+                    width: 320,
+                    label: 'OKAY',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
