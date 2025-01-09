@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     fetchUserData();
-    fetchOrderCount();
+    // fetchOrderCount();
   }
 
   Future<void> fetchUserData() async {
@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
             businessName = userDoc.get('businessName');
             merchantId = userDoc.get('id');
           });
+          fetchOrderCount();
         }
       }
     } catch (e) {
@@ -52,6 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> fetchOrderCount() async {
+    if (merchantId == null) {
+      print("Merchant ID is null. Cannot fetch orders.");
+      return;
+    }
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('Orders')
@@ -201,11 +206,53 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
-            TextWidget(
-              text: '₱${totalEarned.toStringAsFixed(2)}',
-              fontSize: 64,
-              fontFamily: 'Bold',
-              color: secondary,
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Orders')
+                  .where('merchantId', isEqualTo: merchantId)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Something went wrong'));
+                }
+
+                final orders = snapshot.data!.docs;
+                double calculatedTotalPrice = 0.0;
+                for (var doc in orders) {
+                  final data = doc.data() as Map<String, dynamic>?;
+                  if (data != null &&
+                      data.containsKey('items') &&
+                      data['items'] is List) {
+                    for (var item in data['items']) {
+                      if (item.containsKey('price')) {
+                        calculatedTotalPrice += item['price'];
+                      }
+                    }
+                  }
+                }
+
+                orderCount = orders.length;
+                totalEarned = calculatedTotalPrice;
+
+                return Column(
+                  children: [
+                    TextWidget(
+                      text: '₱${totalEarned.toStringAsFixed(2)}',
+                      fontSize: 64,
+                      fontFamily: 'Bold',
+                      color: secondary,
+                    ),
+                    TextWidget(
+                      text: 'total earned',
+                      fontSize: 18,
+                      fontFamily: 'Medium',
+                      color: secondary,
+                    ),
+                  ],
+                );
+              },
             ),
             TextWidget(
               text: 'total earned',
@@ -228,39 +275,72 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextWidget(
-                          text: orderCount != '1'
-                              ? '1 order'
-                              : '$orderCount orders',
-                          fontSize: 40,
-                          fontFamily: 'Bold',
-                          color: Colors.white,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Orders')
+                        .where('merchantId', isEqualTo: merchantId)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                            child: Text('Something went wrong'));
+                      }
+
+                      final orders = snapshot.data!.docs;
+                      double calculatedTotalPrice = 0.0;
+                      for (var doc in orders) {
+                        final data = doc.data() as Map<String, dynamic>?;
+                        if (data != null &&
+                            data.containsKey('items') &&
+                            data['items'] is List) {
+                          for (var item in data['items']) {
+                            if (item.containsKey('price')) {
+                              calculatedTotalPrice += item['price'];
+                            }
+                          }
+                        }
+                      }
+
+                      orderCount = orders.length;
+                      totalEarned = calculatedTotalPrice;
+
+                      return Padding(
+                        padding:
+                            const EdgeInsets.only(left: 20, right: 20, top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             TextWidget(
-                              text: '15.2%',
-                              fontSize: 24,
-                              fontFamily: 'Regular',
+                              text: orderCount == 1
+                                  ? '1 order'
+                                  : '$orderCount orders',
+                              fontSize: 40,
+                              fontFamily: 'Bold',
                               color: Colors.white,
                             ),
-                            TextWidget(
-                              text: 'higher than last week',
-                              fontSize: 8,
-                              fontFamily: 'Regular',
-                              color: Colors.white,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                TextWidget(
+                                  text: '15.2%',
+                                  fontSize: 24,
+                                  fontFamily: 'Regular',
+                                  color: Colors.white,
+                                ),
+                                TextWidget(
+                                  text: 'higher than last week',
+                                  fontSize: 8,
+                                  fontFamily: 'Regular',
+                                  color: Colors.white,
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   const SizedBox(
                     height: 10,
