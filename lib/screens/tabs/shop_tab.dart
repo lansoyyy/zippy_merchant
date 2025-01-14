@@ -55,6 +55,15 @@ class _ShopTabState extends State<ShopTab> {
     }
   }
 
+  Future<String> uploadImage(File image) async {
+    final storageRef = FirebaseStorage.instance
+        .ref()
+        .child('menu_images/${DateTime.now().millisecondsSinceEpoch}.jpg');
+    final uploadTask = storageRef.putFile(image);
+    final snapshot = await uploadTask.whenComplete(() => {});
+    return await snapshot.ref.getDownloadURL();
+  }
+
   Future<void> fetchUserData() async {
     try {
       User? user = _auth.currentUser;
@@ -453,6 +462,22 @@ class _ShopTabState extends State<ShopTab> {
                                                       barrierDismissible: false,
                                                       context: context,
                                                       builder: (context) {
+                                                        // Pre-fill the text fields with the existing data
+                                                        name.text =
+                                                            item['name'] ?? '';
+                                                        price.text = item[
+                                                                    'price']
+                                                                ?.toString() ??
+                                                            '';
+                                                        desc.text = item[
+                                                                'description'] ??
+                                                            '';
+                                                        _voucherOption = item[
+                                                                'voucherOption'] ??
+                                                            'No';
+                                                        _image =
+                                                            null; // Reset the image
+
                                                         return StatefulBuilder(
                                                           builder: (context,
                                                               setState) {
@@ -484,7 +509,12 @@ class _ShopTabState extends State<ShopTab> {
                                                                                               fit: BoxFit.fill,
                                                                                               image: FileImage(_image!),
                                                                                             )
-                                                                                          : null,
+                                                                                          : item['imageUrl'] != ''
+                                                                                              ? DecorationImage(
+                                                                                                  fit: BoxFit.fill,
+                                                                                                  image: NetworkImage(item['imageUrl']),
+                                                                                                )
+                                                                                              : null,
                                                                                       color: Colors.white,
                                                                                       borderRadius: BorderRadius.circular(10),
                                                                                       border: Border.all(
@@ -545,9 +575,7 @@ class _ShopTabState extends State<ShopTab> {
                                                                                 ),
                                                                               ),
                                                                             ),
-                                                                            const SizedBox(
-                                                                              height: 10,
-                                                                            ),
+                                                                            const SizedBox(height: 10),
                                                                             TextWidget(
                                                                               text: 'Accept Voucher',
                                                                               fontSize: 18,
@@ -599,9 +627,8 @@ class _ShopTabState extends State<ShopTab> {
                                                                       ),
                                                                     ),
                                                                     const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
+                                                                        height:
+                                                                            10),
                                                                     Row(
                                                                       crossAxisAlignment:
                                                                           CrossAxisAlignment
@@ -649,46 +676,66 @@ class _ShopTabState extends State<ShopTab> {
                                                                           .center,
                                                                   children: [
                                                                     ButtonWidget(
-                                                                        width:
-                                                                            115,
-                                                                        label:
-                                                                            'Cancel',
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        }),
-                                                                    const SizedBox(
-                                                                      width: 15,
+                                                                      width:
+                                                                          115,
+                                                                      label:
+                                                                          'Cancel',
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
                                                                     ),
-                                                                    ButtonWidget(
+                                                                    const SizedBox(
                                                                         width:
-                                                                            115,
-                                                                        label:
-                                                                            'Update',
-                                                                        onPressed:
-                                                                            () async {
-                                                                          FirebaseFirestore
-                                                                              .instance
-                                                                              .collection('Menu')
-                                                                              .doc(item.id)
-                                                                              .delete();
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                          await addMenu(
-                                                                            name.text,
-                                                                            price.text,
-                                                                            desc.text,
-                                                                            _voucherOption,
-                                                                            _image,
-                                                                          );
-                                                                          showToast(
-                                                                              'Successfully updated!');
-                                                                          Navigator.of(context)
-                                                                              .pushReplacement(
-                                                                            MaterialPageRoute(builder: (context) => const ShopTab()),
-                                                                          );
-                                                                        }),
+                                                                            15),
+                                                                    ButtonWidget(
+                                                                      width:
+                                                                          115,
+                                                                      label:
+                                                                          'Update',
+                                                                      onPressed:
+                                                                          () async {
+                                                                        setState(
+                                                                            () {
+                                                                          _isLoading =
+                                                                              true;
+                                                                        });
+
+                                                                        // Update the menu item in Firestore
+                                                                        await FirebaseFirestore
+                                                                            .instance
+                                                                            .collection('Menu')
+                                                                            .doc(item.id)
+                                                                            .update({
+                                                                          'name':
+                                                                              name.text,
+                                                                          'price':
+                                                                              price.text,
+                                                                          'description':
+                                                                              desc.text,
+                                                                          'voucherOption':
+                                                                              _voucherOption,
+                                                                          'imageUrl': _image != null
+                                                                              ? await uploadImage(_image!)
+                                                                              : item['imageUrl'],
+                                                                        });
+
+                                                                        setState(
+                                                                            () {
+                                                                          _isLoading =
+                                                                              false;
+                                                                        });
+
+                                                                        showToast(
+                                                                            'Successfully updated!');
+                                                                        Navigator.of(context)
+                                                                            .pushReplacement(
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) => const ShopTab()),
+                                                                        );
+                                                                      },
+                                                                    ),
                                                                   ],
                                                                 )
                                                               ],
