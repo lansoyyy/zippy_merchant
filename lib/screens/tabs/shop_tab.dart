@@ -930,6 +930,15 @@ class _ShopTabState extends State<ShopTab> {
                                                 fontFamily: 'Bold',
                                                 color: secondary,
                                               ),
+                                              TextWidget(
+                                                text: item['availability'] ==
+                                                        'Not Available'
+                                                    ? 'Not Available'
+                                                    : "In Menu",
+                                                fontSize: 16,
+                                                color: secondary,
+                                                fontFamily: "Bold",
+                                              )
                                             ],
                                           ),
                                         ),
