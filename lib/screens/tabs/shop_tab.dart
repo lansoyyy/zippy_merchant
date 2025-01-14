@@ -462,7 +462,6 @@ class _ShopTabState extends State<ShopTab> {
                                                       barrierDismissible: false,
                                                       context: context,
                                                       builder: (context) {
-                                                        // Pre-fill the text fields with the existing data
                                                         name.text =
                                                             item['name'] ?? '';
                                                         price.text = item[
@@ -701,8 +700,6 @@ class _ShopTabState extends State<ShopTab> {
                                                                           _isLoading =
                                                                               true;
                                                                         });
-
-                                                                        // Update the menu item in Firestore
                                                                         await FirebaseFirestore
                                                                             .instance
                                                                             .collection('Menu')
