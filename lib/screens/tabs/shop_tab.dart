@@ -934,7 +934,7 @@ class _ShopTabState extends State<ShopTab> {
                                                 text: item['availability'] ==
                                                         'Not Available'
                                                     ? 'Not Available'
-                                                    : "In Menu",
+                                                    : "Available",
                                                 fontSize: 16,
                                                 color: secondary,
                                                 fontFamily: "Bold",
@@ -1214,6 +1214,16 @@ class _ShopTabState extends State<ShopTab> {
                                               width: 115,
                                               label: 'Done',
                                               onPressed: () async {
+                                                if (_image == null ||
+                                                    name.text.isEmpty ||
+                                                    price.text.isEmpty ||
+                                                    desc.text.isEmpty ||
+                                                    _voucherOption.isEmpty) {
+                                                  showToast(
+                                                      'Please fill all fields.');
+                                                  return;
+                                                }
+
                                                 setState(() {
                                                   _isLoading = true;
                                                 });
@@ -1225,6 +1235,8 @@ class _ShopTabState extends State<ShopTab> {
                                                   _voucherOption,
                                                   _image,
                                                 );
+                                                showToast(
+                                                    'Successfully added!');
                                                 setState(() {
                                                   _isLoading = false;
                                                 });

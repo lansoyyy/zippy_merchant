@@ -26,6 +26,7 @@ Future<void> addMenu(String name, String price, String description,
   }
 
   await menu.add({
+    'availability': 'Available',
     'name': name,
     'price': price,
     'description': description,
