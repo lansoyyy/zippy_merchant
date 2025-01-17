@@ -780,7 +780,7 @@ class _ShopTabState extends State<ShopTab> {
                                                                           'name':
                                                                               name.text,
                                                                           'price':
-                                                                              price.text,
+                                                                              num.parse(price.text),
                                                                           'description':
                                                                               desc.text,
                                                                           'voucherOption':
@@ -1230,7 +1230,7 @@ class _ShopTabState extends State<ShopTab> {
 
                                                 await addMenu(
                                                   name.text,
-                                                  price.text,
+                                                  num.parse(price.text),
                                                   desc.text,
                                                   _voucherOption,
                                                   _image,
@@ -1279,7 +1279,10 @@ class _ShopTabState extends State<ShopTab> {
               ),
             ],
           ),
-          if (_isLoading) const CircularProgressIndicator(),
+          if (_isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
         ],
       ),
     );

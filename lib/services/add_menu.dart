@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:zippy/utils/const.dart';
 
-Future<void> addMenu(String name, String price, String description,
+Future<void> addMenu(String name, num price, String description,
     String voucherOption, File? image) async {
   CollectionReference menu = FirebaseFirestore.instance.collection('Menu');
   final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -33,6 +33,6 @@ Future<void> addMenu(String name, String price, String description,
     'voucherOption': voucherOption,
     'imageUrl': imageUrl,
     'createdAt': Timestamp.now(),
-    'uid': uid, // Correctly store the current user's uid here
+    'uid': uid,
   });
 }
