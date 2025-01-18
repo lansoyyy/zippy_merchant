@@ -185,98 +185,106 @@ class _EditScreenState extends State<EditScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              height: 190,
-              decoration: const BoxDecoration(
-                color: secondary,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(
-                    40,
-                  ),
-                  bottomRight: Radius.circular(
-                    40,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  top: 150,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    width: 500,
+                    height: 250,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
+                            'assets/images/Rectangle 38.png',
+                          ),
+                          fit: BoxFit.cover),
+                    ),
                   ),
                 ),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 25, left: 15, right: 15),
-                    child: SafeArea(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextWidget(
-                            text: businessName ?? '..',
-                            fontSize: 22,
-                            fontFamily: 'Bold',
-                            color: Colors.white,
-                          ),
-                        ],
+                Container(
+                  width: double.infinity,
+                  height: 190,
+                  decoration: const BoxDecoration(
+                    color: secondary,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(
+                        40,
+                      ),
+                      bottomRight: Radius.circular(
+                        40,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 15, top: 15),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 25, left: 15, right: 15),
+                        child: SafeArea(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextWidget(
+                                text: businessName ?? '..',
+                                fontSize: 22,
+                                fontFamily: 'Bold',
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 15, right: 15, top: 15),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const HomeScreen()),
-                                  );
-                                },
-                                child: _buildCravingOption(
-                                    Icons.home, 'Home', false)),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => const ShopTab()),
-                                );
-                              },
-                              child: _buildCravingOption(
-                                  Icons.store_mall_directory_outlined,
-                                  'Shop',
-                                  false),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomeScreen()),
+                                      );
+                                    },
+                                    child: _buildCravingOption(
+                                        Icons.home, 'Home', false)),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ShopTab()),
+                                    );
+                                  },
+                                  child: _buildCravingOption(
+                                      Icons.store_mall_directory_outlined,
+                                      'Shop',
+                                      false),
+                                ),
+                                GestureDetector(
+                                    onTap: () {},
+                                    child: _buildCravingOption(
+                                        Icons.edit_square, 'Edit', true)),
+                              ],
                             ),
-                            GestureDetector(
-                                onTap: () {},
-                                child: _buildCravingOption(
-                                    Icons.edit_square, 'Edit', true)),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(
-              height: 20,
-            ),
-            Container(
-              width: 500,
-              height: 200,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/Rectangle 38.png',
-                    ),
-                    fit: BoxFit.cover),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
+              height: 190,
             ),
             Container(
               decoration: BoxDecoration(
