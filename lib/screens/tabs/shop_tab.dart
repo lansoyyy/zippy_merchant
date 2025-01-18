@@ -353,7 +353,10 @@ class _ShopTabState extends State<ShopTab> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: secondary,
+                    ));
                   }
 
                   if (snapshot.hasError) {
@@ -988,269 +991,254 @@ class _ShopTabState extends State<ShopTab> {
                               builder: (context) {
                                 return StatefulBuilder(
                                   builder: (context, setState) {
-                                    return AlertDialog(
-                                      content: SingleChildScrollView(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                    return Stack(
+                                      children: [
+                                        AlertDialog(
+                                          content: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                StatefulBuilder(
-                                                  builder: (BuildContext
-                                                          context,
-                                                      StateSetter setState) {
-                                                    return Card(
-                                                      child: Stack(
-                                                        children: [
-                                                          Container(
-                                                            width: 100,
-                                                            height: 112.5,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              image: _image !=
-                                                                      null
-                                                                  ? DecorationImage(
-                                                                      fit: BoxFit
-                                                                          .fill,
-                                                                      image: FileImage(
-                                                                          _image!),
-                                                                    )
-                                                                  : null,
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              border:
-                                                                  Border.all(
-                                                                color:
-                                                                    secondary,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Center(
-                                                            child: IconButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                await _pickImage();
-                                                                setState(() {});
-                                                              },
-                                                              icon: const Icon(
-                                                                Icons
-                                                                    .add_a_photo_rounded,
-                                                                color: primary,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                                const SizedBox(width: 5),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
                                                   children: [
-                                                    // TextWidget(
-                                                    //   text: 'Food Name',
-                                                    //   fontSize: 18,
-                                                    //   fontFamily: 'Regular',
-                                                    //   color: primary,
-                                                    // ),
-                                                    SizedBox(
-                                                      width: 100,
-                                                      child: TextFormField(
-                                                        style: const TextStyle(
-                                                            color: primary),
-                                                        controller: name,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          hintText:
-                                                              'Enter Food Name',
-                                                          hintStyle: TextStyle(
-                                                            color: primary,
-                                                            fontSize: 12,
+                                                    StatefulBuilder(
+                                                      builder:
+                                                          (BuildContext context,
+                                                              StateSetter
+                                                                  setState) {
+                                                        return Card(
+                                                          child: Stack(
+                                                            children: [
+                                                              Container(
+                                                                width: 100,
+                                                                height: 112.5,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  image: _image !=
+                                                                          null
+                                                                      ? DecorationImage(
+                                                                          fit: BoxFit
+                                                                              .fill,
+                                                                          image:
+                                                                              FileImage(_image!),
+                                                                        )
+                                                                      : null,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  border: Border
+                                                                      .all(
+                                                                    color:
+                                                                        secondary,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Center(
+                                                                child:
+                                                                    IconButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    await _pickImage();
+                                                                    setState(
+                                                                        () {});
+                                                                  },
+                                                                  icon:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .add_a_photo_rounded,
+                                                                    color:
+                                                                        primary,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ),
+                                                        );
+                                                      },
                                                     ),
-                                                    // TextWidget(
-                                                    //   text: 'Price',
-                                                    //   fontSize: 18,
-                                                    //   fontFamily: 'Regular',
-                                                    //   color: primary,
-                                                    // ),
-                                                    SizedBox(
-                                                      width: 100,
-                                                      child: TextFormField(
-                                                        style: const TextStyle(
-                                                            color: primary),
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        controller: price,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          hintText:
-                                                              'Enter Price Amount',
-                                                          hintStyle: TextStyle(
-                                                            color: primary,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    TextWidget(
-                                                      text: 'Accept Voucher',
-                                                      fontSize: 18,
-                                                      fontFamily: 'Medium',
-                                                      color: primary,
-                                                    ),
-                                                    Row(
+                                                    const SizedBox(width: 5),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        Radio<String>(
-                                                          value: 'Yes',
-                                                          groupValue:
-                                                              _voucherOption,
-                                                          onChanged:
-                                                              (String? value) {
-                                                            setState(() {
-                                                              _voucherOption =
-                                                                  value!;
-                                                            });
-                                                          },
+                                                        SizedBox(
+                                                          width: 100,
+                                                          child: TextFormField(
+                                                            style:
+                                                                const TextStyle(
+                                                                    color:
+                                                                        primary),
+                                                            controller: name,
+                                                            decoration:
+                                                                const InputDecoration(
+                                                              hintText:
+                                                                  'Enter Food Name',
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                color: primary,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                        const Text('Yes'),
-                                                        Radio<String>(
-                                                          value: 'No',
-                                                          groupValue:
-                                                              _voucherOption,
-                                                          onChanged:
-                                                              (String? value) {
-                                                            setState(() {
-                                                              _voucherOption =
-                                                                  value!;
-                                                            });
-                                                          },
+                                                        SizedBox(
+                                                          width: 100,
+                                                          child: TextFormField(
+                                                            style:
+                                                                const TextStyle(
+                                                                    color:
+                                                                        primary),
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            controller: price,
+                                                            decoration:
+                                                                const InputDecoration(
+                                                              hintText:
+                                                                  'Enter Price Amount',
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                color: primary,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                        const Text('No'),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        TextWidget(
+                                                          text:
+                                                              'Accept Voucher',
+                                                          fontSize: 18,
+                                                          fontFamily: 'Medium',
+                                                          color: primary,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Radio<String>(
+                                                              value: 'Yes',
+                                                              groupValue:
+                                                                  _voucherOption,
+                                                              onChanged:
+                                                                  (String?
+                                                                      value) {
+                                                                setState(() {
+                                                                  _voucherOption =
+                                                                      value!;
+                                                                });
+                                                              },
+                                                            ),
+                                                            const Text('Yes'),
+                                                            Radio<String>(
+                                                              value: 'No',
+                                                              groupValue:
+                                                                  _voucherOption,
+                                                              onChanged:
+                                                                  (String?
+                                                                      value) {
+                                                                setState(() {
+                                                                  _voucherOption =
+                                                                      value!;
+                                                                });
+                                                              },
+                                                            ),
+                                                            const Text('No'),
+                                                          ],
+                                                        ),
                                                       ],
                                                     ),
                                                   ],
                                                 ),
+                                                TextFormField(
+                                                  controller: desc,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    hintText:
+                                                        'Enter Description',
+                                                    hintStyle: TextStyle(
+                                                      color: primary,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
                                               ],
                                             ),
-                                            TextFormField(
-                                              controller: desc,
-                                              decoration: const InputDecoration(
-                                                hintText: 'Enter Description',
-                                                hintStyle: TextStyle(
-                                                  color: primary,
-                                                  fontSize: 12,
+                                          ),
+                                          actions: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ButtonWidget(
+                                                    width: 115,
+                                                    label: 'Cancel',
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }),
+                                                const SizedBox(
+                                                  width: 15,
                                                 ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            // Row(
-                                            //   crossAxisAlignment:
-                                            //       CrossAxisAlignment.center,
-                                            //   mainAxisAlignment:
-                                            //       MainAxisAlignment
-                                            //           .spaceBetween,
-                                            //   children: [
-                                            //     TextWidget(
-                                            //       text: 'Categories',
-                                            //       fontSize: 15,
-                                            //       fontFamily: "Medium",
-                                            //       color: primary,
-                                            //     ),
-                                            //     Row(
-                                            //       children: [
-                                            //         GestureDetector(
-                                            //           onTap: () {},
-                                            //           child: const Icon(
-                                            //             Icons.add,
-                                            //             color: primary,
-                                            //           ),
-                                            //         ),
-                                            //         TextWidget(
-                                            //           text: 'category',
-                                            //           fontSize: 12,
-                                            //           color: primary,
-                                            //           fontFamily: "Regular",
-                                            //         )
-                                            //       ],
-                                            //     ),
-                                            //   ],
-                                            // ),
-                                          ],
-                                        ),
-                                      ),
-                                      actions: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            ButtonWidget(
-                                                width: 115,
-                                                label: 'Cancel',
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                }),
-                                            const SizedBox(
-                                              width: 15,
-                                            ),
-                                            ButtonWidget(
-                                              width: 115,
-                                              label: 'Done',
-                                              onPressed: () async {
-                                                if (_image == null ||
-                                                    name.text.isEmpty ||
-                                                    price.text.isEmpty ||
-                                                    desc.text.isEmpty ||
-                                                    _voucherOption.isEmpty) {
-                                                  showToast(
-                                                      'Please fill all fields.');
-                                                  return;
-                                                }
+                                                ButtonWidget(
+                                                  width: 115,
+                                                  label: 'Add Menu',
+                                                  onPressed: () async {
+                                                    if (_image == null ||
+                                                        name.text.isEmpty ||
+                                                        price.text.isEmpty ||
+                                                        desc.text.isEmpty ||
+                                                        _voucherOption
+                                                            .isEmpty) {
+                                                      showToast(
+                                                          'Please fill all fields.');
+                                                      return;
+                                                    }
 
-                                                setState(() {
-                                                  _isLoading = true;
-                                                });
+                                                    setState(() {
+                                                      _isLoading = true;
+                                                    });
 
-                                                await addMenu(
-                                                  name.text,
-                                                  num.parse(price.text),
-                                                  desc.text,
-                                                  _voucherOption,
-                                                  _image,
-                                                );
-                                                showToast(
-                                                    'Successfully added!');
-                                                setState(() {
-                                                  _isLoading = false;
-                                                });
-                                                Navigator.of(context)
-                                                    .pushReplacement(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const ShopTab(),
-                                                  ),
-                                                );
-                                              },
+                                                    await addMenu(
+                                                      name.text,
+                                                      num.parse(price.text),
+                                                      desc.text,
+                                                      _voucherOption,
+                                                      _image,
+                                                    );
+                                                    showToast(
+                                                        'Successfully added!');
+                                                    setState(() {
+                                                      _isLoading = false;
+                                                    });
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const ShopTab(),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
+                                        if (_isLoading)
+                                          const Center(
+                                            child: CircularProgressIndicator(
+                                              color: secondary,
+                                            ),
+                                          ),
                                       ],
                                     );
                                   },
@@ -1279,10 +1267,6 @@ class _ShopTabState extends State<ShopTab> {
               ),
             ],
           ),
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
         ],
       ),
     );
