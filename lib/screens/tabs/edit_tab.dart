@@ -188,21 +188,55 @@ class _EditScreenState extends State<EditScreen> {
             Stack(
               clipBehavior: Clip.none,
               children: [
-                Positioned(
-                  top: 150,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    width: 500,
-                    height: 250,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/images/Rectangle 38.png',
+                StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Merchant')
+                      .doc(userId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                          child: CircularProgressIndicator(
+                        color: secondary,
+                      ));
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: TextWidget(
+                        text: 'Error loading image',
+                        fontSize: 18,
+                        color: secondary,
+                        fontFamily: "Medium",
+                      ));
+                    }
+                    if (!snapshot.hasData || !snapshot.data!.exists) {
+                      return Center(
+                          child: TextWidget(
+                        text: 'No image available',
+                        fontSize: 18,
+                        color: secondary,
+                        fontFamily: "Medium",
+                      ));
+                    }
+                    var userDoc = snapshot.data!;
+                    var imageUrl =
+                        userDoc.get('img') ?? 'assets/images/Rectangle 38.png';
+                    return Positioned(
+                      top: 150,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        width: 500,
+                        height: 250,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(imageUrl),
+                            fit: BoxFit.cover,
                           ),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 Container(
                   width: double.infinity,
@@ -287,6 +321,7 @@ class _EditScreenState extends State<EditScreen> {
               height: 190,
             ),
             Container(
+              padding: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
                 color: white,
                 borderRadius: const BorderRadius.only(
@@ -294,7 +329,7 @@ class _EditScreenState extends State<EditScreen> {
                   topRight: Radius.circular(20),
                 ),
               ),
-              height: 430,
+              height: MediaQuery.of(context).size.height * 0.6,
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
