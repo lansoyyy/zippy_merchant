@@ -165,47 +165,103 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            // const SizedBox(
+            //   height: 20,
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     for (int i = 0; i < 6; i++)
+            //       Container(
+            //         width: 45,
+            //         height: 70,
+            //         decoration: BoxDecoration(
+            //           border: Border.all(
+            //             color: secondary,
+            //           ),
+            //           borderRadius: BorderRadius.circular(
+            //             10,
+            //           ),
+            //         ),
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           children: [
+            //             TextWidget(
+            //               text: 'Aug',
+            //               fontSize: 12,
+            //               fontFamily: 'Medium',
+            //               color: secondary,
+            //             ),
+            //             TextWidget(
+            //               text: '${i + 1}',
+            //               fontSize: 32,
+            //               fontFamily: 'Bold',
+            //               color: Colors.black,
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //   ],
+            // ),
+
+            // const SizedBox(
+            //   height: 10,
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (int i = 0; i < 6; i++)
-                  Container(
-                    width: 45,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: secondary,
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        10,
-                      ),
+              children: List.generate(7, (index) {
+                DateTime now = DateTime.now();
+                DateTime date =
+                    now.subtract(Duration(days: now.weekday - 1 - index));
+                bool isToday = date.day == now.day &&
+                    date.month == now.month &&
+                    date.year == now.year;
+                return Container(
+                  width: 45,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    color: isToday ? secondary : Colors.transparent,
+                    border: Border.all(
+                      color: secondary,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextWidget(
-                          text: 'Aug',
-                          fontSize: 12,
-                          fontFamily: 'Medium',
-                          color: secondary,
-                        ),
-                        TextWidget(
-                          text: '${i + 1}',
-                          fontSize: 32,
-                          fontFamily: 'Bold',
-                          color: Colors.black,
-                        ),
-                      ],
+                    borderRadius: BorderRadius.circular(
+                      10,
                     ),
                   ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextWidget(
+                        text: [
+                          'Jan',
+                          'Feb',
+                          'Mar',
+                          'Apr',
+                          'May',
+                          'Jun',
+                          'Jul',
+                          'Aug',
+                          'Sep',
+                          'Oct',
+                          'Nov',
+                          'Dec'
+                        ][date.month - 1],
+                        fontSize: 12,
+                        fontFamily: 'Medium',
+                        color: isToday ? Colors.white : secondary,
+                      ),
+                      TextWidget(
+                        text: '${date.day}',
+                        fontSize: 32,
+                        fontFamily: 'Bold',
+                        color: isToday ? Colors.white : Colors.black,
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ),
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
