@@ -350,13 +350,14 @@ class _EditScreenState extends State<EditScreen> {
                           ),
                           IconButton(
                             onPressed: () {
-                              setState(() {
-                                isDescEditing = true;
-                                descController.text = description ?? '';
-                              });
+                              showToast('Click the field to edit');
+                              // setState(() {
+                              //   isDescEditing = true;
+                              //   descController.text = description ?? '';
+                              // });
                             },
                             icon: const Icon(
-                              Icons.edit,
+                              Icons.help_outlined,
                               color: primary,
                             ),
                           ),
@@ -429,23 +430,31 @@ class _EditScreenState extends State<EditScreen> {
                                   ),
                                 ],
                               )
-                            : Container(
-                                height: 80,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    color: secondary,
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isDescEditing = true;
+                                    descController.text = description ?? '';
+                                  });
+                                },
+                                child: Container(
+                                  height: 80,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                      color: secondary,
+                                    ),
                                   ),
-                                ),
-                                child: Center(
-                                  child: TextWidget(
-                                    text: description ??
-                                        'No description available',
-                                    fontSize: 15,
-                                    fontFamily: "Bold",
-                                    color: grey,
-                                    maxLines: 5,
+                                  child: Center(
+                                    child: TextWidget(
+                                      text: description ??
+                                          'No description available',
+                                      fontSize: 15,
+                                      fontFamily: "Bold",
+                                      color: grey,
+                                      maxLines: 5,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -454,6 +463,7 @@ class _EditScreenState extends State<EditScreen> {
                         height: 10,
                       ),
                       Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextWidget(
                             text: 'Information',
@@ -466,22 +476,23 @@ class _EditScreenState extends State<EditScreen> {
                           ),
                           IconButton(
                             onPressed: () {
-                              setState(() {
-                                isBusinessNameEditing = true;
-                                businessNameController.text =
-                                    businessName ?? '';
-                                isMerchantEditing = true;
-                                merchantController.text = id ?? '';
-                                isAddEditing = true;
-                                addController.text = add ?? '';
-                                isTimeEditing = true;
-                                timeController.text = hours ?? '';
-                                isDayEditing = true;
-                                dayController.text = days ?? '';
-                              });
+                              showToast('Click the field to edit');
+                              // setState(() {
+                              //   isBusinessNameEditing = true;
+                              //   businessNameController.text =
+                              //       businessName ?? '';
+                              //   isMerchantEditing = true;
+                              //   merchantController.text = id ?? '';
+                              //   isAddEditing = true;
+                              //   addController.text = add ?? '';
+                              //   isTimeEditing = true;
+                              //   timeController.text = hours ?? '';
+                              //   isDayEditing = true;
+                              //   dayController.text = days ?? '';
+                              // });
                             },
                             icon: const Icon(
-                              Icons.edit,
+                              Icons.help_outlined,
                               color: primary,
                             ),
                           ),
@@ -536,15 +547,20 @@ class _EditScreenState extends State<EditScreen> {
                                 ),
                               ],
                             )
-                          : Row(
-                              children: [
-                                TextWidget(
-                                  text: businessName ?? '...',
-                                  fontSize: 23,
-                                  color: grey,
-                                  fontFamily: 'Bold',
-                                ),
-                              ],
+                          : GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isBusinessNameEditing = true;
+                                  businessNameController.text =
+                                      businessName ?? '';
+                                });
+                              },
+                              child: TextWidget(
+                                text: businessName ?? '...',
+                                fontSize: 23,
+                                color: grey,
+                                fontFamily: 'Bold',
+                              ),
                             ),
                       const Divider(
                         color: primary,
@@ -599,15 +615,19 @@ class _EditScreenState extends State<EditScreen> {
                                 ),
                               ],
                             )
-                          : Row(
-                              children: [
-                                TextWidget(
-                                  text: add ?? '...',
-                                  fontSize: 23,
-                                  color: grey,
-                                  fontFamily: 'Bold',
-                                ),
-                              ],
+                          : GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isAddEditing = true;
+                                  addController.text = add ?? '';
+                                });
+                              },
+                              child: TextWidget(
+                                text: add ?? '...',
+                                fontSize: 23,
+                                color: grey,
+                                fontFamily: 'Bold',
+                              ),
                             ),
                       const Divider(
                         color: primary,
@@ -620,7 +640,7 @@ class _EditScreenState extends State<EditScreen> {
                           ? Row(
                               children: [
                                 SizedBox(
-                                  width: 200,
+                                  width: 250,
                                   child: TextField(
                                     decoration: const InputDecoration(
                                         border: InputBorder.none),
@@ -662,15 +682,19 @@ class _EditScreenState extends State<EditScreen> {
                                 ),
                               ],
                             )
-                          : Row(
-                              children: [
-                                TextWidget(
-                                  text: id ?? '...',
-                                  fontSize: 23,
-                                  color: grey,
-                                  fontFamily: 'Bold',
-                                ),
-                              ],
+                          : GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isMerchantEditing = true;
+                                  merchantController.text = id ?? '';
+                                });
+                              },
+                              child: TextWidget(
+                                text: id ?? '...',
+                                fontSize: 23,
+                                color: grey,
+                                fontFamily: 'Bold',
+                              ),
                             ),
                       const Divider(
                         color: primary,
@@ -739,15 +763,19 @@ class _EditScreenState extends State<EditScreen> {
                                     ),
                                   ],
                                 )
-                              : Row(
-                                  children: [
-                                    TextWidget(
-                                      text: hours ?? '...',
-                                      fontSize: 23,
-                                      color: grey,
-                                      fontFamily: 'Bold',
-                                    ),
-                                  ],
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isTimeEditing = true;
+                                      timeController.text = hours ?? '';
+                                    });
+                                  },
+                                  child: TextWidget(
+                                    text: hours ?? '...',
+                                    fontSize: 23,
+                                    color: grey,
+                                    fontFamily: 'Bold',
+                                  ),
                                 ),
                           // Days daun ni
                           isDayEditing
@@ -796,15 +824,19 @@ class _EditScreenState extends State<EditScreen> {
                                     ),
                                   ],
                                 )
-                              : Row(
-                                  children: [
-                                    TextWidget(
-                                      text: days ?? '...',
-                                      fontSize: 23,
-                                      color: grey,
-                                      fontFamily: 'Bold',
-                                    ),
-                                  ],
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isDayEditing = true;
+                                      dayController.text = days ?? '';
+                                    });
+                                  },
+                                  child: TextWidget(
+                                    text: days ?? '...',
+                                    fontSize: 23,
+                                    color: grey,
+                                    fontFamily: 'Bold',
+                                  ),
                                 ),
                         ],
                       ),

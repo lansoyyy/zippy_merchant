@@ -199,7 +199,7 @@ class _ShopTabState extends State<ShopTab> {
                   return SizedBox(
                     child: Card(
                       child: Container(
-                        width: MediaQuery.of(context).size.width - 40,
+                        width: MediaQuery.of(context).size.width - 48,
                         height: 160,
                         decoration: BoxDecoration(
                           color: Colors.white,
