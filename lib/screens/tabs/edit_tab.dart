@@ -240,7 +240,7 @@ class _EditScreenState extends State<EditScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 190,
+                  height: MediaQuery.of(context).size.height * 0.25,
                   decoration: const BoxDecoration(
                     color: secondary,
                     borderRadius: BorderRadius.only(

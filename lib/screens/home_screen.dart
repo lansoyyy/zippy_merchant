@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Container(
               width: double.infinity,
-              height: 190,
+              height: MediaQuery.of(context).size.height * 0.25,
               decoration: const BoxDecoration(
                 color: secondary,
                 borderRadius: BorderRadius.only(
@@ -218,8 +218,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     date.month == now.month &&
                     date.year == now.year;
                 return Container(
-                  width: 45,
-                  height: 70,
+                  width: 60,
+                  height: 90,
                   decoration: BoxDecoration(
                     color: isToday ? secondary : Colors.transparent,
                     border: Border.all(
@@ -396,505 +396,517 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 434,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextWidget(
-                                    text: 'Transactions',
-                                    fontSize: 40,
-                                    fontFamily: 'Bold',
-                                    color: secondary,
-                                  ),
-                                  // TextWidget(
-                                  //   text: 'recent orders made in the week',
-                                  //   fontSize: 16,
-                                  //   fontFamily: 'Regular',
-                                  //   color: secondary,
-                                  // ),
-                                ],
-                              ),
-                              Image.asset(
-                                'assets/images/star.png',
-                                height: 35,
-                              ),
-                            ],
-                          ),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
                         ),
-                        StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('Orders')
-                              .where('merchantId', isEqualTo: merchantId)
-                              .snapshots(),
-                          builder:
-                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Center(child: Text('Loading'));
-                            } else if (snapshot.hasError) {
-                              return const Center(
-                                  child: Text('Something went wrong'));
-                            } else if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
+                                      text: 'Transactions',
+                                      fontSize: 40,
+                                      fontFamily: 'Bold',
+                                      color: secondary,
+                                    ),
+                                    // TextWidget(
+                                    //   text: 'recent orders made in the week',
+                                    //   fontSize: 16,
+                                    //   fontFamily: 'Regular',
+                                    //   color: secondary,
+                                    // ),
+                                  ],
+                                ),
+                                Image.asset(
+                                  'assets/images/star.png',
+                                  height: 35,
+                                ),
+                              ],
+                            ),
+                          ),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('Orders')
+                                .where('merchantId', isEqualTo: merchantId)
+                                .snapshots(),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(child: Text('Loading'));
+                              } else if (snapshot.hasError) {
+                                return const Center(
+                                    child: Text('Something went wrong'));
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
 
-                            final orders = snapshot.data!.docs;
+                              final orders = snapshot.data!.docs;
 
-                            if (orders.isEmpty) {
-                              return const Center(
-                                  child: Text('No orders found.'));
-                            }
+                              if (orders.isEmpty) {
+                                return const Center(
+                                    child: Text('No orders found.'));
+                              }
 
-                            return Expanded(
-                              child: ListView.builder(
-                                padding: const EdgeInsets.only(bottom: 50),
-                                itemCount: orders.length,
-                                itemBuilder: (context, index) {
-                                  final order = orders[index];
-                                  final data =
-                                      order.data() as Map<String, dynamic>?;
+                              return Expanded(
+                                child: ListView.builder(
+                                  // padding: const EdgeInsets.only(bottom),
+                                  itemCount: orders.length,
+                                  itemBuilder: (context, index) {
+                                    final order = orders[index];
+                                    final data =
+                                        order.data() as Map<String, dynamic>?;
 
-                                  final price = data != null &&
-                                          data.containsKey('items') &&
-                                          data['items'] is List &&
-                                          data['items'].isNotEmpty
-                                      ? data['items'][0]['price']
-                                      : 'N/A';
-                                  final tip =
-                                      data != null && data.containsKey('tip')
-                                          ? data['tip']
-                                          : 'N/A';
-                                  final status =
-                                      data != null && data.containsKey('status')
-                                          ? data['status']
-                                          : 'Unknown';
-                                  final completedAt =
-                                      data != null && data.containsKey('date')
-                                          ? data['date']
-                                          : null;
+                                    final price = data != null &&
+                                            data.containsKey('items') &&
+                                            data['items'] is List &&
+                                            data['items'].isNotEmpty
+                                        ? data['items'][0]['price']
+                                        : 'N/A';
+                                    final tip =
+                                        data != null && data.containsKey('tip')
+                                            ? data['tip']
+                                            : 'N/A';
+                                    final status = data != null &&
+                                            data.containsKey('status')
+                                        ? data['status']
+                                        : 'Unknown';
+                                    final completedAt =
+                                        data != null && data.containsKey('date')
+                                            ? data['date']
+                                            : null;
 
-                                  final formattedDate = (completedAt != null &&
-                                          completedAt is Timestamp)
-                                      ? DateFormat('MMMM d, y \'at\' h:mm a')
-                                          .format(completedAt.toDate())
-                                      : 'N/A';
+                                    final formattedDate = (completedAt !=
+                                                null &&
+                                            completedAt is Timestamp)
+                                        ? DateFormat('MMMM d, y \'at\' h:mm a')
+                                            .format(completedAt.toDate())
+                                        : 'N/A';
 
-                                  final items =
-                                      data?['items'] as List<dynamic>?;
+                                    final items =
+                                        data?['items'] as List<dynamic>?;
 
-                                  final groupedItems =
-                                      <String, Map<String, dynamic>>{};
-                                  if (items != null && items.isNotEmpty) {
-                                    for (var item in items) {
-                                      final itemName =
-                                          item['name'] ?? 'Unnamed Item';
-                                      final quantity = item['quantity'] ?? 1;
-                                      final itemPrice = item['price'] ?? 0;
+                                    final groupedItems =
+                                        <String, Map<String, dynamic>>{};
+                                    if (items != null && items.isNotEmpty) {
+                                      for (var item in items) {
+                                        final itemName =
+                                            item['name'] ?? 'Unnamed Item';
+                                        final quantity = item['quantity'] ?? 1;
+                                        final itemPrice = item['price'] ?? 0;
 
-                                      if (groupedItems.containsKey(itemName)) {
-                                        groupedItems[itemName]!['quantity'] +=
-                                            quantity;
-                                      } else {
-                                        groupedItems[itemName] = {
-                                          'quantity': quantity,
-                                          'price': itemPrice,
-                                        };
+                                        if (groupedItems
+                                            .containsKey(itemName)) {
+                                          groupedItems[itemName]!['quantity'] +=
+                                              quantity;
+                                        } else {
+                                          groupedItems[itemName] = {
+                                            'quantity': quantity,
+                                            'price': itemPrice,
+                                          };
+                                        }
                                       }
                                     }
-                                  }
 
-                                  double grandTotal = groupedItems.entries
-                                      .fold(0, (sum, entry) {
-                                    final quantity = entry.value['quantity'];
-                                    final itemPrice = entry.value['price'];
-                                    return sum + (quantity * itemPrice);
-                                  });
+                                    double grandTotal = groupedItems.entries
+                                        .fold(0, (sum, entry) {
+                                      final quantity = entry.value['quantity'];
+                                      final itemPrice = entry.value['price'];
+                                      return sum + (quantity * itemPrice);
+                                    });
 
-                                  return Center(
-                                    child: Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 7),
-                                      height: 100,
-                                      width: 350,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: secondary),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20),
+                                      child: Center(
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 07),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.15,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              1,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: secondary),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5),
+                                            child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                TextWidget(
-                                                  text: price != 'N/A'
-                                                      ? 'Total: ₱${grandTotal.toStringAsFixed(2)}'
-                                                      : 'Price unavailable',
-                                                  fontSize: 19,
-                                                  fontFamily: 'Bold',
-                                                  color: secondary,
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    TextWidget(
+                                                      text: price != 'N/A'
+                                                          ? 'Total: ₱${grandTotal.toStringAsFixed(2)}'
+                                                          : 'Price unavailable',
+                                                      fontSize: 19,
+                                                      fontFamily: 'Bold',
+                                                      color: secondary,
+                                                    ),
+                                                    TextWidget(
+                                                      text:
+                                                          'Order ID: ${order.id}',
+                                                      fontSize: 16,
+                                                      fontFamily: 'Bold',
+                                                      color: secondary,
+                                                    ),
+                                                    TextWidget(
+                                                      text: status ==
+                                                              'Completed'
+                                                          ? 'Completed on $formattedDate'
+                                                          : 'Ordered on $formattedDate',
+                                                      fontSize: 14,
+                                                      fontFamily: 'Medium',
+                                                      color: secondary,
+                                                    ),
+                                                  ],
                                                 ),
-                                                TextWidget(
-                                                  text: 'Order ID: ${order.id}',
-                                                  fontSize: 16,
-                                                  fontFamily: 'Bold',
-                                                  color: secondary,
-                                                ),
-                                                TextWidget(
-                                                  text: status == 'Completed'
-                                                      ? 'Completed on $formattedDate'
-                                                      : 'Ordered on $formattedDate',
-                                                  fontSize: 14,
-                                                  fontFamily: 'Medium',
-                                                  color: secondary,
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                TextWidget(
-                                                  text: status,
-                                                  fontSize: 15,
-                                                  fontFamily: 'Bold',
-                                                  color: status == 'Completed'
-                                                      ? Colors.green
-                                                      : status == 'Pending'
-                                                          ? Colors.red
-                                                          : status ==
-                                                                  'Preparing'
-                                                              ? Colors.orange
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextWidget(
+                                                      text: status,
+                                                      fontSize: 15,
+                                                      fontFamily: 'Bold',
+                                                      color: status ==
+                                                              'Completed'
+                                                          ? Colors.green
+                                                          : status == 'Pending'
+                                                              ? Colors.red
                                                               : status ==
-                                                                      'For Pick-up'
-                                                                  ? Colors.yellow[
-                                                                      800]
+                                                                      'Preparing'
+                                                                  ? Colors
+                                                                      .orange
                                                                   : status ==
-                                                                          'On the way'
-                                                                      ? secondary
-                                                                      : Colors
-                                                                          .black,
-                                                ),
-                                                const SizedBox(height: 5),
-                                                TextWidget(
-                                                  text: 'View List',
-                                                  fontSize: 14,
-                                                  fontFamily: 'Bold',
-                                                  color: secondary,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    showDialog(
-                                                      barrierDismissible: true,
-                                                      context: context,
-                                                      builder: (context) {
-                                                        final items = data?[
-                                                                'items']
-                                                            as List<dynamic>?;
+                                                                          'For Pick-up'
+                                                                      ? Colors.yellow[
+                                                                          800]
+                                                                      : status ==
+                                                                              'On the way'
+                                                                          ? secondary
+                                                                          : Colors
+                                                                              .black,
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    TextWidget(
+                                                      text: 'View List',
+                                                      fontSize: 14,
+                                                      fontFamily: 'Bold',
+                                                      color: secondary,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        showDialog(
+                                                          barrierDismissible:
+                                                              true,
+                                                          context: context,
+                                                          builder: (context) {
+                                                            final items = data?[
+                                                                    'items']
+                                                                as List<
+                                                                    dynamic>?;
 
-                                                        // Group items by name
-                                                        final groupedItems =
-                                                            <String,
-                                                                Map<String,
-                                                                    dynamic>>{};
-                                                        if (items != null &&
-                                                            items.isNotEmpty) {
-                                                          for (var item
-                                                              in items) {
-                                                            final itemName = item[
-                                                                    'name'] ??
-                                                                'Unnamed Item';
-                                                            final quantity =
-                                                                item['quantity'] ??
-                                                                    1;
-                                                            final itemPrice =
-                                                                item['price'] ??
-                                                                    0;
+                                                            // Group items by name
+                                                            final groupedItems =
+                                                                <String,
+                                                                    Map<String,
+                                                                        dynamic>>{};
+                                                            if (items != null &&
+                                                                items
+                                                                    .isNotEmpty) {
+                                                              for (var item
+                                                                  in items) {
+                                                                final itemName =
+                                                                    item['name'] ??
+                                                                        'Unnamed Item';
+                                                                final quantity =
+                                                                    item['quantity'] ??
+                                                                        1;
+                                                                final itemPrice =
+                                                                    item['price'] ??
+                                                                        0;
 
-                                                            if (groupedItems
-                                                                .containsKey(
-                                                                    itemName)) {
-                                                              groupedItems[
-                                                                          itemName]![
-                                                                      'quantity'] +=
-                                                                  quantity;
-                                                            } else {
-                                                              groupedItems[
-                                                                  itemName] = {
-                                                                'quantity':
-                                                                    quantity,
-                                                                'price':
-                                                                    itemPrice,
-                                                              };
+                                                                if (groupedItems
+                                                                    .containsKey(
+                                                                        itemName)) {
+                                                                  groupedItems[
+                                                                              itemName]![
+                                                                          'quantity'] +=
+                                                                      quantity;
+                                                                } else {
+                                                                  groupedItems[
+                                                                      itemName] = {
+                                                                    'quantity':
+                                                                        quantity,
+                                                                    'price':
+                                                                        itemPrice,
+                                                                  };
+                                                                }
+                                                              }
                                                             }
-                                                          }
-                                                        }
-                                                        double grandTotal =
-                                                            groupedItems.entries
-                                                                .fold(0, (sum,
-                                                                    entry) {
-                                                          final quantity =
-                                                              entry.value[
-                                                                  'quantity'];
-                                                          final itemPrice =
-                                                              entry.value[
-                                                                  'price'];
-                                                          return sum +
-                                                              (quantity *
-                                                                  itemPrice);
-                                                        });
+                                                            double grandTotal =
+                                                                groupedItems
+                                                                    .entries
+                                                                    .fold(0, (sum,
+                                                                        entry) {
+                                                              final quantity =
+                                                                  entry.value[
+                                                                      'quantity'];
+                                                              final itemPrice =
+                                                                  entry.value[
+                                                                      'price'];
+                                                              return sum +
+                                                                  (quantity *
+                                                                      itemPrice);
+                                                            });
 
-                                                        return AlertDialog(
-                                                          title: TextWidget(
-                                                            text:
-                                                                "Order Details",
-                                                            fontSize: 22,
-                                                            color: secondary,
-                                                            fontFamily: "Bold",
-                                                          ),
-                                                          content: groupedItems
-                                                                  .isNotEmpty
-                                                              ? SizedBox(
-                                                                  width: double
-                                                                      .maxFinite,
-                                                                  child:
-                                                                      ListView(
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    children: groupedItems
-                                                                        .entries
-                                                                        .map(
-                                                                            (entry) {
-                                                                      final itemName =
-                                                                          entry
-                                                                              .key;
-                                                                      final quantity =
-                                                                          entry.value[
-                                                                              'quantity'];
-                                                                      final itemPrice =
-                                                                          entry.value[
-                                                                              'price'];
+                                                            return AlertDialog(
+                                                              title: TextWidget(
+                                                                text:
+                                                                    "Order Details",
+                                                                fontSize: 22,
+                                                                color:
+                                                                    secondary,
+                                                                fontFamily:
+                                                                    "Bold",
+                                                              ),
+                                                              content: groupedItems
+                                                                      .isNotEmpty
+                                                                  ? SizedBox(
+                                                                      width: double
+                                                                          .maxFinite,
+                                                                      child:
+                                                                          ListView(
+                                                                        shrinkWrap:
+                                                                            true,
+                                                                        children: groupedItems
+                                                                            .entries
+                                                                            .map((entry) {
+                                                                          final itemName =
+                                                                              entry.key;
+                                                                          final quantity =
+                                                                              entry.value['quantity'];
+                                                                          final itemPrice =
+                                                                              entry.value['price'];
 
-                                                                      return Column(
-                                                                        children: [
-                                                                          Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
+                                                                          return Column(
                                                                             children: [
-                                                                              TextWidget(
-                                                                                text: 'x$quantity $itemName ',
-                                                                                fontSize: 18,
-                                                                                color: secondary,
-                                                                                fontFamily: "Bold",
+                                                                              Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                children: [
+                                                                                  TextWidget(
+                                                                                    text: 'x$quantity $itemName ',
+                                                                                    fontSize: 18,
+                                                                                    color: secondary,
+                                                                                    fontFamily: "Bold",
+                                                                                  ),
+                                                                                  TextWidget(
+                                                                                    text: '₱${(itemPrice * quantity).toStringAsFixed(2)}',
+                                                                                    fontSize: 18,
+                                                                                    color: secondary,
+                                                                                    fontFamily: "Bold",
+                                                                                  ),
+                                                                                ],
                                                                               ),
-                                                                              TextWidget(
-                                                                                text: '₱${(itemPrice * quantity).toStringAsFixed(2)}',
-                                                                                fontSize: 18,
+                                                                              const Divider(
+                                                                                // indent:
+                                                                                //     20,
                                                                                 color: secondary,
-                                                                                fontFamily: "Bold",
+                                                                                thickness: .5,
                                                                               ),
                                                                             ],
-                                                                          ),
-                                                                          const Divider(
-                                                                            // indent:
-                                                                            //     20,
-                                                                            color:
-                                                                                secondary,
-                                                                            thickness:
-                                                                                .5,
-                                                                          ),
-                                                                        ],
-                                                                      );
-                                                                    }).toList(),
-                                                                  ),
-                                                                )
-                                                              : TextWidget(
-                                                                  text:
-                                                                      "No items available.",
-                                                                  fontSize: 16,
-                                                                  color:
-                                                                      secondary,
-                                                                  fontFamily:
-                                                                      "Regular",
-                                                                ),
-                                                          actions: [
-                                                            Column(
-                                                              children: [
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    TextWidget(
+                                                                          );
+                                                                        }).toList(),
+                                                                      ),
+                                                                    )
+                                                                  : TextWidget(
                                                                       text:
-                                                                          'Total: ₱${grandTotal.toStringAsFixed(2)}',
+                                                                          "No items available.",
                                                                       fontSize:
-                                                                          18,
+                                                                          16,
                                                                       color:
                                                                           secondary,
                                                                       fontFamily:
-                                                                          'Bold',
+                                                                          "Regular",
                                                                     ),
-                                                                    GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        FirebaseFirestore
-                                                                            .instance
-                                                                            .collection('Orders')
-                                                                            .doc(order.id)
-                                                                            .update({
-                                                                          'status': status == 'Pending'
-                                                                              ? 'Preparing'
-                                                                              : status == 'Preparing'
-                                                                                  ? 'For Pick-up'
-                                                                                  : status == 'For Pick-up'
-                                                                                      ? 'On the way'
-                                                                                      //This needs that the rider must complete the delivery.
-                                                                                      : 'Pending',
-                                                                        });
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            140,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            10),
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color:
-                                                                              secondary,
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(20),
-                                                                        ),
-                                                                        child:
-                                                                            TextWidget(
-                                                                          text: status == 'Pending'
-                                                                              ? 'Prepare Food'
-                                                                              : status == 'Preparing'
-                                                                                  ? 'Ready to Pick Up'
-                                                                                  : status == 'For Pick-up'
-                                                                                      ? 'Picked Up'
-                                                                                      : status == 'On the way'
-                                                                                          ? 'Close'
-                                                                                          : 'Close',
+                                                              actions: [
+                                                                Column(
+                                                                  children: [
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        TextWidget(
+                                                                          text:
+                                                                              'Total: ₱${grandTotal.toStringAsFixed(2)}',
                                                                           fontSize:
                                                                               18,
                                                                           color:
-                                                                              white,
+                                                                              secondary,
                                                                           fontFamily:
-                                                                              "Bold",
+                                                                              'Bold',
                                                                         ),
-                                                                      ),
+                                                                        GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            FirebaseFirestore.instance.collection('Orders').doc(order.id).update({
+                                                                              'status': status == 'Pending'
+                                                                                  ? 'Preparing'
+                                                                                  : status == 'Preparing'
+                                                                                      ? 'For Pick-up'
+                                                                                      : status == 'For Pick-up'
+                                                                                          ? 'On the way'
+                                                                                          //This needs that the rider must complete the delivery.
+                                                                                          : 'Pending',
+                                                                            });
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child:
+                                                                              Container(
+                                                                            width:
+                                                                                140,
+                                                                            padding:
+                                                                                const EdgeInsets.all(10),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: secondary,
+                                                                              borderRadius: BorderRadius.circular(20),
+                                                                            ),
+                                                                            child:
+                                                                                TextWidget(
+                                                                              text: status == 'Pending'
+                                                                                  ? 'Prepare Food'
+                                                                                  : status == 'Preparing'
+                                                                                      ? 'Ready to Pick Up'
+                                                                                      : status == 'For Pick-up'
+                                                                                          ? 'Picked Up'
+                                                                                          : status == 'On the way'
+                                                                                              ? 'Close'
+                                                                                              : 'Close',
+                                                                              fontSize: 18,
+                                                                              color: white,
+                                                                              fontFamily: "Bold",
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                                const SizedBox(
-                                                                    height: 10),
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    TextWidget(
-                                                                      text:
-                                                                          'Payment Method: ${data?['mop'] ?? 'N/A'}',
-                                                                      fontSize:
-                                                                          18,
-                                                                      color:
-                                                                          secondary,
-                                                                      fontFamily:
-                                                                          'Bold',
+                                                                    const SizedBox(
+                                                                        height:
+                                                                            10),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        TextWidget(
+                                                                          text:
+                                                                              'Payment Method: ${data?['mop'] ?? 'N/A'}',
+                                                                          fontSize:
+                                                                              18,
+                                                                          color:
+                                                                              secondary,
+                                                                          fontFamily:
+                                                                              'Bold',
+                                                                        ),
+                                                                        // GestureDetector(
+                                                                        //   onTap:
+                                                                        //       () {
+                                                                        //     Navigator.pop(
+                                                                        //         context);
+                                                                        //   },
+                                                                        //   child:
+                                                                        //       Container(
+                                                                        //     width:
+                                                                        //         140,
+                                                                        //     padding: const EdgeInsets
+                                                                        //         .all(
+                                                                        //         10),
+                                                                        //     decoration:
+                                                                        //         BoxDecoration(
+                                                                        //       color:
+                                                                        //           Colors.transparent,
+                                                                        //       border:
+                                                                        //           Border.all(color: secondary),
+                                                                        //       borderRadius:
+                                                                        //           BorderRadius.circular(20),
+                                                                        //     ),
+                                                                        //     child:
+                                                                        //         TextWidget(
+                                                                        //       text:
+                                                                        //           '',
+                                                                        //       fontSize:
+                                                                        //           18,
+                                                                        //       color:
+                                                                        //           secondary,
+                                                                        //       fontFamily:
+                                                                        //           "Bold",
+                                                                        //     ),
+                                                                        //   ),
+                                                                        // ),
+                                                                      ],
                                                                     ),
-                                                                    // GestureDetector(
-                                                                    //   onTap:
-                                                                    //       () {
-                                                                    //     Navigator.pop(
-                                                                    //         context);
-                                                                    //   },
-                                                                    //   child:
-                                                                    //       Container(
-                                                                    //     width:
-                                                                    //         140,
-                                                                    //     padding: const EdgeInsets
-                                                                    //         .all(
-                                                                    //         10),
-                                                                    //     decoration:
-                                                                    //         BoxDecoration(
-                                                                    //       color:
-                                                                    //           Colors.transparent,
-                                                                    //       border:
-                                                                    //           Border.all(color: secondary),
-                                                                    //       borderRadius:
-                                                                    //           BorderRadius.circular(20),
-                                                                    //     ),
-                                                                    //     child:
-                                                                    //         TextWidget(
-                                                                    //       text:
-                                                                    //           '',
-                                                                    //       fontSize:
-                                                                    //           18,
-                                                                    //       color:
-                                                                    //           secondary,
-                                                                    //       fontFamily:
-                                                                    //           "Bold",
-                                                                    //     ),
-                                                                    //   ),
-                                                                    // ),
                                                                   ],
                                                                 ),
                                                               ],
-                                                            ),
-                                                          ],
+                                                            );
+                                                          },
                                                         );
                                                       },
-                                                    );
-                                                  },
-                                                  child: const Icon(
-                                                    Icons.receipt,
-                                                    color: secondary,
-                                                    // size: 20,
-                                                  ),
+                                                      child: const Icon(
+                                                        Icons.receipt,
+                                                        color: secondary,
+                                                        // size: 20,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
-                                          ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        )
-                      ],
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],
