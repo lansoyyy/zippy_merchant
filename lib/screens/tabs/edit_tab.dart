@@ -222,7 +222,7 @@ class _EditScreenState extends State<EditScreen> {
                     var imageUrl =
                         userDoc.get('img') ?? 'assets/images/Rectangle 38.png';
                     return Positioned(
-                      top: 150,
+                      top: MediaQuery.of(context).size.height * 0.22,
                       left: 0,
                       right: 0,
                       child: Container(

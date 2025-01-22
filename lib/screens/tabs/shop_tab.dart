@@ -200,7 +200,7 @@ class _ShopTabState extends State<ShopTab> {
                     child: Card(
                       child: Container(
                         width: MediaQuery.of(context).size.width - 48,
-                        height: 160,
+                        height: MediaQuery.of(context).size.height * 0.25,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: secondary),
@@ -459,8 +459,9 @@ class _ShopTabState extends State<ShopTab> {
                               Card(
                                 elevation: 3,
                                 child: Container(
-                                  width: 100,
-                                  height: 112.5,
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.12,
                                   decoration: BoxDecoration(
                                     image: item['imageUrl'] != ''
                                         ? DecorationImage(
@@ -479,8 +480,9 @@ class _ShopTabState extends State<ShopTab> {
                               ),
                               // const SizedBox(width: 5),
                               Container(
-                                width: 240,
-                                height: 112.5,
+                                width: MediaQuery.of(context).size.width - 170,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.12,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(10),
@@ -1036,7 +1038,7 @@ class _ShopTabState extends State<ShopTab> {
               ),
 
               Container(
-                width: 320,
+                width: MediaQuery.of(context).size.width - 48,
                 height: 100,
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -1336,6 +1338,9 @@ class _ShopTabState extends State<ShopTab> {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 15,
               ),
             ],
           ),
