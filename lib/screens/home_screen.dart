@@ -218,8 +218,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     date.month == now.month &&
                     date.year == now.year;
                 return Container(
-                  width: 60,
-                  height: 90,
+                  width: MediaQuery.of(context).size.width * 0.12,
+                  height: MediaQuery.of(context).size.width * 0.2,
                   decoration: BoxDecoration(
                     color: isToday ? secondary : Colors.transparent,
                     border: Border.all(
