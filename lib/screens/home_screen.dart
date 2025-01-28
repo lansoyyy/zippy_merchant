@@ -1,4 +1,7 @@
 import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +10,6 @@ import 'package:zippy/screens/tabs/shop_tab.dart';
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -371,23 +372,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontFamily: 'Bold',
                               color: Colors.white,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                TextWidget(
-                                  text: '15.2%',
-                                  fontSize: 24,
-                                  fontFamily: 'Regular',
-                                  color: Colors.white,
-                                ),
-                                TextWidget(
-                                  text: 'higher than last week',
-                                  fontSize: 8,
-                                  fontFamily: 'Regular',
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   children: [
+                            //     TextWidget(
+                            //       text: '15.2%',
+                            //       fontSize: 24,
+                            //       fontFamily: 'Regular',
+                            //       color: Colors.white,
+                            //     ),
+                            //     TextWidget(
+                            //       text: 'higher than last week',
+                            //       fontSize: 8,
+                            //       fontFamily: 'Regular',
+                            //       color: Colors.white,
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       );
