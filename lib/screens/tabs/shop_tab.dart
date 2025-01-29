@@ -5,18 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
 import 'package:zippy/services/add_menu.dart';
-
 import 'package:zippy/utils/colors.dart';
-import 'package:zippy/utils/const.dart';
 import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
-import 'package:zippy/widgets/textfield_widget.dart';
 import 'package:zippy/widgets/toast_widget.dart';
 
 class ShopTab extends StatefulWidget {
@@ -252,17 +247,17 @@ class _ShopTabState extends State<ShopTab> {
                                     ),
                                   ),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 10, right: 15),
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: Icon(
-                                      Icons.favorite,
-                                      color: Colors.white,
-                                      size: 35,
-                                    ),
-                                  ),
-                                ),
+                                // const Padding(
+                                //   padding: EdgeInsets.only(top: 10, right: 15),
+                                //   child: Align(
+                                //     alignment: Alignment.topRight,
+                                //     child: Icon(
+                                //       Icons.favorite,
+                                //       color: Colors.white,
+                                //       size: 35,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                             Container(

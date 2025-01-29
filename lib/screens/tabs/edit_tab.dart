@@ -5,11 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/tabs/shop_tab.dart';
-
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/utils/const.dart';
 import 'package:zippy/widgets/text_widget.dart';
-import 'package:zippy/widgets/textfield_widget.dart';
 import 'package:zippy/widgets/toast_widget.dart';
 
 class EditScreen extends StatefulWidget {
@@ -848,272 +846,272 @@ class _EditScreenState extends State<EditScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          TextWidget(
-                            text: 'Categories',
-                            fontSize: 28,
-                            fontFamily: 'Bold',
-                            color: primary,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.edit,
-                              color: primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: categories.map((category) {
-                                  bool isSelected =
-                                      category == selectedCategory;
-                                  return Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedCategory = category;
-                                          });
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 3, horizontal: 5),
-                                          decoration: BoxDecoration(
-                                            color: isSelected
-                                                ? secondary
-                                                : Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Text(
-                                            category,
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontFamily: 'Medium',
-                                              color: isSelected
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                    color: secondary, shape: BoxShape.circle),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Icon(
-                                    Icons.add,
-                                    color: white,
-                                    size: 15,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              TextWidget(
-                                text: 'Add',
-                                fontSize: 14,
-                                fontFamily: 'Medium',
-                                color: black,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          TextWidget(
-                            text: 'Wallet',
-                            fontSize: 28,
-                            fontFamily: 'Bold',
-                            color: primary,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.edit,
-                              color: primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                gcash,
-                                width: 80,
-                                height: 25,
-                              ),
-                              TextWidget(
-                                text: '+639 9999 9999',
-                                fontSize: 12,
-                                color: secondary,
-                                fontFamily: 'Medium',
-                              ),
-                              Container(
-                                width: 60,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: secondary,
-                                ),
-                                child: Center(
-                                  child: TextWidget(
-                                    text: 'Unlink',
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                    fontFamily: 'Medium',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                paymaya,
-                                width: 80,
-                                height: 25,
-                              ),
-                              const SizedBox(),
-                              Container(
-                                width: 60,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: secondary,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: TextWidget(
-                                    text: 'Link',
-                                    fontSize: 10,
-                                    color: secondary,
-                                    fontFamily: 'Medium',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    bpi,
-                                    width: 25,
-                                    height: 25,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  TextWidget(
-                                    text: 'BPI',
-                                    fontSize: 15,
-                                    color: secondary,
-                                  ),
-                                ],
-                              ),
-                              TextWidget(
-                                text: '123 1234 1234',
-                                fontSize: 12,
-                                color: secondary,
-                                fontFamily: 'Medium',
-                              ),
-                              Container(
-                                width: 60,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: secondary,
-                                ),
-                                child: Center(
-                                  child: TextWidget(
-                                    text: 'Unlink',
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                    fontFamily: 'Medium',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Row(
+                      //   children: [
+                      //     TextWidget(
+                      //       text: 'Categories',
+                      //       fontSize: 28,
+                      //       fontFamily: 'Bold',
+                      //       color: primary,
+                      //     ),
+                      //     const SizedBox(
+                      //       width: 10,
+                      //     ),
+                      //     IconButton(
+                      //       onPressed: () {},
+                      //       icon: const Icon(
+                      //         Icons.edit,
+                      //         color: primary,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     SizedBox(
+                      //       width: 250,
+                      //       child: SingleChildScrollView(
+                      //         scrollDirection: Axis.horizontal,
+                      //         child: Row(
+                      //           children: categories.map((category) {
+                      //             bool isSelected =
+                      //                 category == selectedCategory;
+                      //             return Row(
+                      //               children: [
+                      //                 InkWell(
+                      //                   onTap: () {
+                      //                     setState(() {
+                      //                       selectedCategory = category;
+                      //                     });
+                      //                   },
+                      //                   child: Container(
+                      //                     padding: const EdgeInsets.symmetric(
+                      //                         vertical: 3, horizontal: 5),
+                      //                     decoration: BoxDecoration(
+                      //                       color: isSelected
+                      //                           ? secondary
+                      //                           : Colors.transparent,
+                      //                       borderRadius:
+                      //                           BorderRadius.circular(8),
+                      //                     ),
+                      //                     child: Text(
+                      //                       category,
+                      //                       style: TextStyle(
+                      //                         fontSize: 15,
+                      //                         fontFamily: 'Medium',
+                      //                         color: isSelected
+                      //                             ? Colors.white
+                      //                             : Colors.black,
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //                 const SizedBox(width: 10),
+                      //               ],
+                      //             );
+                      //           }).toList(),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     const SizedBox(
+                      //       width: 15,
+                      //     ),
+                      //     Row(
+                      //       children: [
+                      //         Container(
+                      //           decoration: const BoxDecoration(
+                      //               color: secondary, shape: BoxShape.circle),
+                      //           child: Padding(
+                      //             padding: const EdgeInsets.all(3.0),
+                      //             child: Icon(
+                      //               Icons.add,
+                      //               color: white,
+                      //               size: 15,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //         const SizedBox(
+                      //           width: 5,
+                      //         ),
+                      //         TextWidget(
+                      //           text: 'Add',
+                      //           fontSize: 14,
+                      //           fontFamily: 'Medium',
+                      //           color: black,
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ],
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     TextWidget(
+                      //       text: 'Wallet',
+                      //       fontSize: 28,
+                      //       fontFamily: 'Bold',
+                      //       color: primary,
+                      //     ),
+                      //     const SizedBox(
+                      //       width: 10,
+                      //     ),
+                      //     IconButton(
+                      //       onPressed: () {},
+                      //       icon: const Icon(
+                      //         Icons.edit,
+                      //         color: primary,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     color: white,
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.only(left: 30, right: 30),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: [
+                      //         Image.asset(
+                      //           gcash,
+                      //           width: 80,
+                      //           height: 25,
+                      //         ),
+                      //         TextWidget(
+                      //           text: '+639 9999 9999',
+                      //           fontSize: 12,
+                      //           color: secondary,
+                      //           fontFamily: 'Medium',
+                      //         ),
+                      //         Container(
+                      //           width: 60,
+                      //           height: 18,
+                      //           decoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.circular(20),
+                      //             color: secondary,
+                      //           ),
+                      //           child: Center(
+                      //             child: TextWidget(
+                      //               text: 'Unlink',
+                      //               fontSize: 10,
+                      //               color: Colors.white,
+                      //               fontFamily: 'Medium',
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.only(left: 30, right: 30),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: [
+                      //         Image.asset(
+                      //           paymaya,
+                      //           width: 80,
+                      //           height: 25,
+                      //         ),
+                      //         const SizedBox(),
+                      //         Container(
+                      //           width: 60,
+                      //           height: 18,
+                      //           decoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.circular(20),
+                      //             border: Border.all(
+                      //               color: secondary,
+                      //             ),
+                      //           ),
+                      //           child: Center(
+                      //             child: TextWidget(
+                      //               text: 'Link',
+                      //               fontSize: 10,
+                      //               color: secondary,
+                      //               fontFamily: 'Medium',
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.only(left: 30, right: 30),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: [
+                      //         Row(
+                      //           crossAxisAlignment: CrossAxisAlignment.center,
+                      //           children: [
+                      //             Image.asset(
+                      //               bpi,
+                      //               width: 25,
+                      //               height: 25,
+                      //             ),
+                      //             const SizedBox(
+                      //               width: 5,
+                      //             ),
+                      //             TextWidget(
+                      //               text: 'BPI',
+                      //               fontSize: 15,
+                      //               color: secondary,
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         TextWidget(
+                      //           text: '123 1234 1234',
+                      //           fontSize: 12,
+                      //           color: secondary,
+                      //           fontFamily: 'Medium',
+                      //         ),
+                      //         Container(
+                      //           width: 60,
+                      //           height: 18,
+                      //           decoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.circular(20),
+                      //             color: secondary,
+                      //           ),
+                      //           child: Center(
+                      //             child: TextWidget(
+                      //               text: 'Unlink',
+                      //               fontSize: 10,
+                      //               color: Colors.white,
+                      //               fontFamily: 'Medium',
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
