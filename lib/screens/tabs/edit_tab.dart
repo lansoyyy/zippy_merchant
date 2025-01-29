@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:zippy/screens/auth/login_screen.dart';
 import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/tabs/shop_tab.dart';
 import 'package:zippy/utils/colors.dart';
@@ -220,7 +221,7 @@ class _EditScreenState extends State<EditScreen> {
                     var imageUrl =
                         userDoc.get('img') ?? 'assets/images/Rectangle 38.png';
                     return Positioned(
-                      top: MediaQuery.of(context).size.height * 0.22,
+                      top: MediaQuery.of(context).size.height * 0.17,
                       left: 0,
                       right: 0,
                       child: Container(
@@ -238,7 +239,7 @@ class _EditScreenState extends State<EditScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  height: MediaQuery.of(context).size.height * 0.21,
                   decoration: const BoxDecoration(
                     color: secondary,
                     borderRadius: BorderRadius.only(
@@ -257,13 +258,116 @@ class _EditScreenState extends State<EditScreen> {
                             const EdgeInsets.only(top: 25, left: 15, right: 15),
                         child: SafeArea(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               TextWidget(
-                                text: businessName ?? '..',
+                                text: '...',
+                                fontSize: 22,
+                                fontFamily: 'Bold',
+                                color: Colors.transparent,
+                              ),
+                              TextWidget(
+                                text: businessName ?? '...',
                                 fontSize: 22,
                                 fontFamily: 'Bold',
                                 color: Colors.white,
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.logout, color: white),
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: TextWidget(
+                                            text:
+                                                'Are you sure you want to logout?',
+                                            fontSize: 20,
+                                            fontFamily: "ExtraBold",
+                                          ),
+                                          actions: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  padding:
+                                                      const EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    color: secondary,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                      color: secondary,
+                                                    ),
+                                                  ),
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: TextWidget(
+                                                      text: 'No',
+                                                      fontSize: 17,
+                                                      color: white,
+                                                      fontFamily: "Bold",
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  padding:
+                                                      const EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border: Border.all(
+                                                      color: secondary,
+                                                    ),
+                                                  ),
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      _auth.signOut();
+                                                      Navigator.of(context)
+                                                          .pushAndRemoveUntil(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const LoginScreen()),
+                                                        (Route<dynamic>
+                                                                route) =>
+                                                            false,
+                                                      );
+                                                      showToast(
+                                                          'Logout Successful');
+                                                    },
+                                                    child: TextWidget(
+                                                      text: 'Logout',
+                                                      fontSize: 17,
+                                                      color: secondary,
+                                                      fontFamily: "Bold",
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        );
+                                      });
+                                },
                               ),
                             ],
                           ),

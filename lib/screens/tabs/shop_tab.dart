@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:zippy/screens/auth/login_screen.dart';
 import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/tabs/edit_tab.dart';
 import 'package:zippy/services/add_menu.dart';
@@ -96,7 +97,7 @@ class _ShopTabState extends State<ShopTab> {
             children: [
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.21,
                 decoration: const BoxDecoration(
                   color: secondary,
                   borderRadius: BorderRadius.only(
@@ -115,13 +116,111 @@ class _ShopTabState extends State<ShopTab> {
                           const EdgeInsets.only(top: 25, left: 15, right: 15),
                       child: SafeArea(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            TextWidget(
+                              text: '...',
+                              fontSize: 22,
+                              fontFamily: 'Bold',
+                              color: Colors.transparent,
+                            ),
                             TextWidget(
                               text: businessName ?? '...',
                               fontSize: 22,
                               fontFamily: 'Bold',
                               color: Colors.white,
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.logout, color: white),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: TextWidget(
+                                          text:
+                                              'Are you sure you want to logout?',
+                                          fontSize: 20,
+                                          fontFamily: "ExtraBold",
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  color: secondary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: secondary,
+                                                  ),
+                                                ),
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: TextWidget(
+                                                    text: 'No',
+                                                    fontSize: 17,
+                                                    color: white,
+                                                    fontFamily: "Bold",
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: secondary,
+                                                  ),
+                                                ),
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    _auth.signOut();
+                                                    Navigator.of(context)
+                                                        .pushAndRemoveUntil(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const LoginScreen()),
+                                                      (Route<dynamic> route) =>
+                                                          false,
+                                                    );
+                                                    showToast(
+                                                        'Logout Successful');
+                                                  },
+                                                  child: TextWidget(
+                                                    text: 'Logout',
+                                                    fontSize: 17,
+                                                    color: secondary,
+                                                    fontFamily: "Bold",
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      );
+                                    });
+                              },
                             ),
                           ],
                         ),
@@ -322,80 +421,80 @@ class _ShopTabState extends State<ShopTab> {
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width - 120,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: categories.map((category) {
-                          bool isSelected = category == selectedCategory;
-                          return Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    selectedCategory = category;
-                                  });
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 5),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? secondary
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    category,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontFamily: 'Medium',
-                                      color: isSelected ? black : primary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                            color: secondary, shape: BoxShape.circle),
-                        child: const Padding(
-                          padding: EdgeInsets.all(3.0),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 15,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      TextWidget(
-                        text: 'Add',
-                        fontSize: 14,
-                        fontFamily: 'Medium',
-                        color: secondary,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     SizedBox(
+              //       width: MediaQuery.of(context).size.width - 120,
+              //       child: SingleChildScrollView(
+              //         scrollDirection: Axis.horizontal,
+              //         child: Row(
+              //           children: categories.map((category) {
+              //             bool isSelected = category == selectedCategory;
+              //             return Row(
+              //               children: [
+              //                 InkWell(
+              //                   onTap: () {
+              //                     setState(() {
+              //                       selectedCategory = category;
+              //                     });
+              //                   },
+              //                   child: Container(
+              //                     padding: const EdgeInsets.symmetric(
+              //                         vertical: 3, horizontal: 5),
+              //                     decoration: BoxDecoration(
+              //                       color: isSelected
+              //                           ? secondary
+              //                           : Colors.transparent,
+              //                       borderRadius: BorderRadius.circular(8),
+              //                     ),
+              //                     child: Text(
+              //                       category,
+              //                       style: TextStyle(
+              //                         fontSize: 15,
+              //                         fontFamily: 'Medium',
+              //                         color: isSelected ? black : primary,
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 const SizedBox(width: 10),
+              //               ],
+              //             );
+              //           }).toList(),
+              //         ),
+              //       ),
+              //     ),
+              //     const SizedBox(
+              //       width: 15,
+              //     ),
+              //     Row(
+              //       children: [
+              //         Container(
+              //           decoration: const BoxDecoration(
+              //               color: secondary, shape: BoxShape.circle),
+              //           child: const Padding(
+              //             padding: EdgeInsets.all(3.0),
+              //             child: Icon(
+              //               Icons.add,
+              //               color: Colors.white,
+              //               size: 15,
+              //             ),
+              //           ),
+              //         ),
+              //         const SizedBox(
+              //           width: 5,
+              //         ),
+              //         TextWidget(
+              //           text: 'Add',
+              //           fontSize: 14,
+              //           fontFamily: 'Medium',
+              //           color: secondary,
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
               const SizedBox(
                 height: 10,
               ),
