@@ -11,12 +11,9 @@ import 'package:zippy/screens/tabs/shop_tab.dart';
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
-<<<<<<< HEAD
-=======
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zippy/widgets/toast_widget.dart';
->>>>>>> dev/neil
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
