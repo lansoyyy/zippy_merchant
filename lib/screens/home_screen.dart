@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   int orderCount = 0;
   double totalEarned = 0.0;
+  String selectedStatus = 'Pending';
 
   @override
   void initState() {
@@ -371,23 +372,76 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontFamily: 'Bold',
                               color: Colors.white,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                            Row(
                               children: [
                                 TextWidget(
-                                  text: '15.2%',
-                                  fontSize: 24,
-                                  fontFamily: 'Regular',
-                                  color: Colors.white,
+                                  text: 'Filter by',
+                                  fontSize: 17,
+                                  fontFamily: 'Bold',
+                                  color: white,
                                 ),
-                                TextWidget(
-                                  text: 'higher than last week',
-                                  fontSize: 8,
-                                  fontFamily: 'Regular',
-                                  color: Colors.white,
+                                PopupMenuButton<String>(
+                                  onSelected: (String value) {
+                                    setState(() {
+                                      selectedStatus = value;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_drop_down,
+                                    color: white,
+                                  ),
+                                  itemBuilder: (BuildContext context) {
+                                    return [
+                                      PopupMenuItem(
+                                        value: 'Pending',
+                                        child: TextWidget(
+                                          text: 'Pending',
+                                          fontSize: 18,
+                                          color: primary,
+                                          fontFamily: 'Regular',
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'Preparing',
+                                        child: TextWidget(
+                                          text: 'Preparing',
+                                          fontSize: 18,
+                                          color: primary,
+                                          fontFamily: 'Regular',
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'For Pick-up',
+                                        child: TextWidget(
+                                          text: 'For Pick-up',
+                                          fontSize: 18,
+                                          color: primary,
+                                          fontFamily: 'Regular',
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'On the way',
+                                        child: TextWidget(
+                                          text: 'On the way',
+                                          fontSize: 18,
+                                          color: primary,
+                                          fontFamily: 'Regular',
+                                        ),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'Delivered',
+                                        child: TextWidget(
+                                          text: 'Delivered',
+                                          fontSize: 18,
+                                          color: primary,
+                                          fontFamily: 'Regular',
+                                        ),
+                                      ),
+                                    ];
+                                  },
                                 ),
                               ],
-                            ),
+                            )
                           ],
                         ),
                       );
@@ -415,26 +469,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextWidget(
-                                      text: 'Transactions',
-                                      fontSize: 40,
-                                      fontFamily: 'Bold',
-                                      color: secondary,
-                                    ),
-                                    // TextWidget(
-                                    //   text: 'recent orders made in the week',
-                                    //   fontSize: 16,
-                                    //   fontFamily: 'Regular',
-                                    //   color: secondary,
-                                    // ),
-                                  ],
-                                ),
-                                Image.asset(
-                                  'assets/images/star.png',
-                                  height: 35,
+                                TextWidget(
+                                  text: 'Transactions',
+                                  fontSize: 40,
+                                  fontFamily: 'Bold',
+                                  color: secondary,
                                 ),
                               ],
                             ),
@@ -443,6 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             stream: FirebaseFirestore.instance
                                 .collection('Orders')
                                 .where('merchantId', isEqualTo: merchantId)
+                                .where('status', isEqualTo: selectedStatus)
                                 .snapshots(),
                             builder: (context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -886,7 +926,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
