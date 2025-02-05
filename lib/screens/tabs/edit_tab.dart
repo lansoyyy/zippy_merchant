@@ -475,7 +475,8 @@ class _EditScreenState extends State<EditScreen> {
                                   Expanded(
                                     child: TextField(
                                       controller: descController,
-                                      maxLines: 5,
+                                      maxLines: 4,
+                                      maxLength: 150,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius:
@@ -540,7 +541,9 @@ class _EditScreenState extends State<EditScreen> {
                                   });
                                 },
                                 child: Container(
-                                  height: 80,
+                                  padding: const EdgeInsets.all(4),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.15,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
@@ -607,7 +610,8 @@ class _EditScreenState extends State<EditScreen> {
                           ? Row(
                               children: [
                                 SizedBox(
-                                  width: 250,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.75,
                                   child: TextField(
                                     decoration: const InputDecoration(
                                         border: InputBorder.none),
@@ -675,7 +679,8 @@ class _EditScreenState extends State<EditScreen> {
                           ? Row(
                               children: [
                                 SizedBox(
-                                  width: 250,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.75,
                                   child: TextField(
                                     decoration: const InputDecoration(
                                         border: InputBorder.none),
@@ -742,7 +747,8 @@ class _EditScreenState extends State<EditScreen> {
                           ? Row(
                               children: [
                                 SizedBox(
-                                  width: 250,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.75,
                                   child: TextField(
                                     decoration: const InputDecoration(
                                         border: InputBorder.none),
