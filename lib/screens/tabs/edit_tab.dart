@@ -260,12 +260,12 @@ class _EditScreenState extends State<EditScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              TextWidget(
-                                text: '...',
-                                fontSize: 22,
-                                fontFamily: 'Bold',
-                                color: Colors.transparent,
-                              ),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.transparent,
+                                  )),
                               TextWidget(
                                 text: businessName ?? '...',
                                 fontSize: 22,

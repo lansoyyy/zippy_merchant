@@ -43,7 +43,8 @@ class _ShopTabState extends State<ShopTab> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
@@ -130,12 +131,12 @@ class _ShopTabState extends State<ShopTab> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextWidget(
-                    text: '...',
-                    fontSize: 22,
-                    fontFamily: 'Bold',
-                    color: Colors.transparent,
-                  ),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.transparent,
+                      )),
                   TextWidget(
                     text: businessName ?? '...',
                     fontSize: 22,
@@ -160,13 +161,17 @@ class _ShopTabState extends State<ShopTab> {
                   children: [
                     _buildCravingOption(Icons.home, 'Home', false, onTap: () {
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => const HomeScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()),
                       );
                     }),
-                    _buildCravingOption(Icons.store_mall_directory_outlined, 'Shop', true),
-                    _buildCravingOption(Icons.edit_square, 'Edit', false, onTap: () {
+                    _buildCravingOption(
+                        Icons.store_mall_directory_outlined, 'Shop', true),
+                    _buildCravingOption(Icons.edit_square, 'Edit', false,
+                        onTap: () {
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => const EditScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const EditScreen()),
                       );
                     }),
                   ],
@@ -428,13 +433,17 @@ class _ShopTabState extends State<ShopTab> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextWidget(
-                      text: item['price'] != null ? '₱ ${item['price']}.00' : 'Unavailable',
+                      text: item['price'] != null
+                          ? '₱ ${item['price']}.00'
+                          : 'Unavailable',
                       fontSize: 18,
                       fontFamily: 'Bold',
                       color: secondary,
                     ),
                     TextWidget(
-                      text: item['availability'] == 'Not Available' ? 'Not Available' : "Available",
+                      text: item['availability'] == 'Not Available'
+                          ? 'Not Available'
+                          : "Available",
                       fontSize: 16,
                       color: secondary,
                       fontFamily: "Bold",
@@ -462,7 +471,8 @@ class _ShopTabState extends State<ShopTab> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            decoration: const BoxDecoration(color: secondary, shape: BoxShape.circle),
+            decoration:
+                const BoxDecoration(color: secondary, shape: BoxShape.circle),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: GestureDetector(
@@ -483,7 +493,8 @@ class _ShopTabState extends State<ShopTab> {
     );
   }
 
-  Widget _buildCravingOption(IconData icon, String label, bool selected, {VoidCallback? onTap}) {
+  Widget _buildCravingOption(IconData icon, String label, bool selected,
+      {VoidCallback? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -551,7 +562,8 @@ class _ShopTabState extends State<ShopTab> {
                       Navigator.of(context).pop();
                       _auth.signOut();
                       Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
                         (Route<dynamic> route) => false,
                       );
                       showToast('Logout Successful');
@@ -613,7 +625,7 @@ class _ShopTabState extends State<ShopTab> {
                               isAvailable = !isAvailable;
                             });
                           },
-                                                    child: Container(
+                          child: Container(
                             width: double.infinity,
                             height: 50,
                             decoration: BoxDecoration(
@@ -627,12 +639,16 @@ class _ShopTabState extends State<ShopTab> {
                                 Expanded(
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 300),
-                                    alignment: isAvailable ? Alignment.centerLeft : Alignment.centerRight,
+                                    alignment: isAvailable
+                                        ? Alignment.centerLeft
+                                        : Alignment.centerRight,
                                     child: Container(
                                       width: double.infinity / 2,
                                       height: 50,
                                       decoration: BoxDecoration(
-                                        color: isAvailable ? secondary : Colors.transparent,
+                                        color: isAvailable
+                                            ? secondary
+                                            : Colors.transparent,
                                         borderRadius: BorderRadius.circular(25),
                                       ),
                                       alignment: Alignment.center,
@@ -648,12 +664,16 @@ class _ShopTabState extends State<ShopTab> {
                                 Expanded(
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 300),
-                                    alignment: isAvailable ? Alignment.centerRight : Alignment.centerLeft,
+                                    alignment: isAvailable
+                                        ? Alignment.centerRight
+                                        : Alignment.centerLeft,
                                     child: Container(
                                       width: double.infinity / 2,
                                       height: 50,
                                       decoration: BoxDecoration(
-                                        color: !isAvailable ? secondary : Colors.transparent,
+                                        color: !isAvailable
+                                            ? secondary
+                                            : Colors.transparent,
                                         borderRadius: BorderRadius.circular(25),
                                       ),
                                       alignment: Alignment.center,
@@ -674,7 +694,8 @@ class _ShopTabState extends State<ShopTab> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             StatefulBuilder(
-                              builder: (BuildContext context, StateSetter setState) {
+                              builder:
+                                  (BuildContext context, StateSetter setState) {
                                 return Card(
                                   child: Stack(
                                     children: [
@@ -690,11 +711,13 @@ class _ShopTabState extends State<ShopTab> {
                                               : item['imageUrl'] != ''
                                                   ? DecorationImage(
                                                       fit: BoxFit.fill,
-                                                      image: NetworkImage(item['imageUrl']),
+                                                      image: NetworkImage(
+                                                          item['imageUrl']),
                                                     )
                                                   : null,
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           border: Border.all(color: secondary),
                                         ),
                                       ),
@@ -829,7 +852,8 @@ class _ShopTabState extends State<ShopTab> {
                           'imageUrl': _image != null
                               ? await uploadImage(_image!)
                               : item['imageUrl'],
-                          'availability': isAvailable ? 'Available' : 'Not Available',
+                          'availability':
+                              isAvailable ? 'Available' : 'Not Available',
                         });
 
                         setState(() {
@@ -838,7 +862,8 @@ class _ShopTabState extends State<ShopTab> {
 
                         showToast('Successfully updated!');
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => const ShopTab()),
+                          MaterialPageRoute(
+                              builder: (context) => const ShopTab()),
                         );
                       },
                     ),
@@ -877,7 +902,10 @@ class _ShopTabState extends State<ShopTab> {
             ),
             TextButton(
               onPressed: () {
-                FirebaseFirestore.instance.collection('Menu').doc(itemId).delete();
+                FirebaseFirestore.instance
+                    .collection('Menu')
+                    .doc(itemId)
+                    .delete();
                 Navigator.of(context).pop();
                 showToast('Successfully removed!');
               },
@@ -912,7 +940,8 @@ class _ShopTabState extends State<ShopTab> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             StatefulBuilder(
-                              builder: (BuildContext context, StateSetter setState) {
+                              builder:
+                                  (BuildContext context, StateSetter setState) {
                                 return Card(
                                   child: Stack(
                                     children: [
@@ -927,7 +956,8 @@ class _ShopTabState extends State<ShopTab> {
                                                 )
                                               : null,
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           border: Border.all(color: secondary),
                                         ),
                                       ),
