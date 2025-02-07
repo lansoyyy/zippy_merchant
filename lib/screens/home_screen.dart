@@ -559,7 +559,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? 'For Pick-up'
                                   : status == 'For Pick-up'
                                       ? 'On the way'
-                                      : 'Pending',
+                                      : 'On the way',
                         });
                         Navigator.pop(context);
                       },
@@ -574,7 +574,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           text: status == 'Pending'
                               ? 'Prepare Food'
                               : status == 'Preparing'
-                                  ? 'Ready to Pick Up'
+                                  ? 'Ready for Pick-up'
                                   : status == 'For Pick-up'
                                       ? 'Picked Up'
                                       : status == 'On the way'
