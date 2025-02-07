@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:zippy/screens/auth/signup_screen.dart';
 import 'package:zippy/screens/home_screen.dart';
-import 'package:zippy/screens/initial_home_screen.dart';
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/widgets/button_widget.dart';
 import 'package:zippy/widgets/text_widget.dart';
@@ -109,7 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Align(
                         alignment: Alignment.topRight,
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            forgotPassword();
+                          },
                           child: TextWidget(
                             text: 'Forgot Password?',
                             fontSize: 15,
@@ -165,6 +165,42 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  forgotPassword() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: TextWidget(
+              text: 'For forgotten password, Please contact our Administrator',
+              fontSize: 20,
+              color: secondary,
+              fontFamily: 'Bold',
+              maxLines: 3,
+              align: TextAlign.start,
+            ),
+            actions: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                decoration: BoxDecoration(
+                    color: secondary, borderRadius: BorderRadius.circular(10)),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: TextWidget(
+                    text: 'Close',
+                    fontSize: 18,
+                    color: white,
+                    fontFamily: "Medium",
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   login(context) async {
