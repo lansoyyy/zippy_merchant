@@ -136,11 +136,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    TextWidget(
-                      text: 'Want to become a Merchant?',
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontFamily: 'Medium',
+                    GestureDetector(
+                      onTap: () {
+                        showToast('Available soon, stay tuned!');
+                      },
+                      child: TextWidget(
+                        text: 'Want to become a Merchant?',
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: 'Medium',
+                      ),
                     ),
                     const SizedBox(
                       height: 2.5,
