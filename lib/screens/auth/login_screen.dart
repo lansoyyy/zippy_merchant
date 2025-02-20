@@ -24,30 +24,31 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
-            child: SizedBox(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Image.asset(
-                    logo,
-                    width: 191,
-                    height: 80,
-                    color: secondary,
-                  ),
-                  const SizedBox(
-                    height: 12.5,
-                  ),
-                  TextWidget(
-                    text: 'Hi! Welcome',
-                    fontSize: 25,
-                    color: secondary,
-                  ),
-                ],
-              ),
+          SizedBox(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                ),
+                Image.asset(
+                  logo,
+                  width: 191,
+                  height: 80,
+                  color: secondary,
+                ),
+                // const SizedBox(
+                //   height: 12.5,
+                // ),
+                TextWidget(
+                  text: 'Hi! Welcome',
+                  fontSize: 25,
+                  color: secondary,
+                ),
+                const SizedBox(
+                  height: 45,
+                ),
+              ],
             ),
           ),
           Expanded(

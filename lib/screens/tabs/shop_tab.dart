@@ -115,7 +115,7 @@ class _ShopTabState extends State<ShopTab> {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.21,
+      height: MediaQuery.of(context).size.height * 0.25,
       decoration: const BoxDecoration(
         color: secondary,
         borderRadius: BorderRadius.only(
@@ -533,7 +533,7 @@ class _ShopTabState extends State<ShopTab> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.25,
-                  padding: const EdgeInsets.all(5),
+                  // padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: secondary,
                     borderRadius: BorderRadius.circular(10),
@@ -552,7 +552,7 @@ class _ShopTabState extends State<ShopTab> {
                 const SizedBox(width: 10),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.25,
-                  padding: const EdgeInsets.all(5),
+                  // padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: secondary),
@@ -748,7 +748,7 @@ class _ShopTabState extends State<ShopTab> {
                                     style: const TextStyle(color: primary),
                                     controller: name,
                                     decoration: const InputDecoration(
-                                      hintText: 'Enter Food Name',
+                                      hintText: 'Food Name',
                                       hintStyle: TextStyle(
                                         color: primary,
                                         fontSize: 12,
@@ -763,7 +763,7 @@ class _ShopTabState extends State<ShopTab> {
                                     keyboardType: TextInputType.number,
                                     controller: price,
                                     decoration: const InputDecoration(
-                                      hintText: 'Enter Price Amount',
+                                      hintText: 'Price Amount',
                                       hintStyle: TextStyle(
                                         color: primary,
                                         fontSize: 12,
@@ -988,7 +988,7 @@ class _ShopTabState extends State<ShopTab> {
                                     style: const TextStyle(color: primary),
                                     controller: name,
                                     decoration: const InputDecoration(
-                                      hintText: 'Enter Food Name',
+                                      hintText: 'Food Name',
                                       hintStyle: TextStyle(
                                         color: primary,
                                         fontSize: 12,
@@ -1003,7 +1003,7 @@ class _ShopTabState extends State<ShopTab> {
                                     keyboardType: TextInputType.number,
                                     controller: price,
                                     decoration: const InputDecoration(
-                                      hintText: 'Enter Price Amount',
+                                      hintText: 'Price Amount',
                                       hintStyle: TextStyle(
                                         color: primary,
                                         fontSize: 12,

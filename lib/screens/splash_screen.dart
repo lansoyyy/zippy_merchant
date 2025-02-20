@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
 
-    Timer(const Duration(seconds: 4), () async {
+    Timer(const Duration(seconds: 2), () async {
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const OnboardingOne()));
     });

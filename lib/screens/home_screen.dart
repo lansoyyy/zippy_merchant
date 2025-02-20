@@ -76,7 +76,10 @@ class _HomeScreenState extends State<HomeScreen> {
   double calculateTotalPrice(List<QueryDocumentSnapshot> docs) {
     return docs.fold(0.0, (sum, doc) {
       final data = doc.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey('items') && data['items'] is List) {
+      if (data != null &&
+          data['status'] == 'Delivered' &&
+          data.containsKey('items') &&
+          data['items'] is List) {
         for (var item in data['items']) {
           if (item.containsKey('price')) {
             sum += item['price'];
@@ -107,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.21,
+      height: MediaQuery.of(context).size.height * 0.25,
       decoration: const BoxDecoration(
         color: secondary,
         borderRadius: BorderRadius.only(
@@ -224,22 +227,60 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildTotalEarned() {
-    return Column(
-      children: [
-        TextWidget(
-          text: '₱${totalEarned.toStringAsFixed(2)}',
-          fontSize: 64,
-          fontFamily: 'Bold',
-          color: secondary,
-        ),
-        TextWidget(
-          text: 'total earned',
-          fontSize: 18,
-          fontFamily: 'Medium',
-          color: secondary,
-        ),
-        const SizedBox(height: 20),
-      ],
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('Orders')
+          .where('merchantId', isEqualTo: merchantId)
+          .where('status', isEqualTo: 'Delivered')
+          .snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Something went wrong'));
+        }
+
+        final orders = snapshot.data!.docs;
+
+        if (orders.isEmpty) {
+          return Center(
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+                Image.asset(
+                  'assets/images/Group 121 (2).png',
+                  width: 200,
+                  height: 200,
+                ),
+                TextWidget(
+                  text: 'No menu items available',
+                  fontSize: 25,
+                  fontFamily: 'Bold',
+                  color: secondary,
+                ),
+              ],
+            ),
+          );
+        }
+
+        return Column(
+          children: [
+            TextWidget(
+              text: '₱${totalEarned.toStringAsFixed(2)}',
+              fontSize: 64,
+              fontFamily: 'Bold',
+              color: secondary,
+            ),
+            TextWidget(
+              text: 'total earned',
+              fontSize: 18,
+              fontFamily: 'Medium',
+              color: secondary,
+            ),
+            const SizedBox(height: 20),
+          ],
+        );
+      },
     );
   }
 
@@ -391,7 +432,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 7),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.15,
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+        height: MediaQuery.of(context).size.height * 0.1,
         decoration: BoxDecoration(
           border: Border.all(color: secondary),
           borderRadius: BorderRadius.circular(10),
@@ -403,17 +446,17 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextWidget(
                     text: 'Total: ₱${grandTotal.toStringAsFixed(2)}',
-                    fontSize: 19,
+                    fontSize: 20,
                     fontFamily: 'Bold',
                     color: secondary,
                   ),
                   TextWidget(
                     text: 'Order ID: ${order.id}',
-                    fontSize: 14,
+                    fontSize: 10,
                     fontFamily: 'Bold',
                     color: secondary,
                   ),
@@ -421,7 +464,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     text: status == 'Completed'
                         ? 'Completed on $formattedDate'
                         : 'Ordered on $formattedDate',
-                    fontSize: 14,
+                    fontSize: 10,
                     fontFamily: 'Medium',
                     color: secondary,
                   ),
@@ -439,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 5),
                   TextWidget(
                     text: 'View List',
-                    fontSize: 14,
+                    fontSize: 12,
                     fontFamily: 'Bold',
                     color: secondary,
                   ),
@@ -564,11 +607,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        width: 140,
+                        width: MediaQuery.of(context).size.width * 0.25,
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: secondary,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: TextWidget(
                           text: status == 'Pending'
@@ -580,7 +623,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       : status == 'On the way'
                                           ? 'Close'
                                           : 'Close',
-                          fontSize: 18,
+                          fontSize: 14,
                           color: white,
                           fontFamily: "Bold",
                         ),
@@ -673,7 +716,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.25,
-                  padding: const EdgeInsets.all(5),
+                  // padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: secondary,
                     borderRadius: BorderRadius.circular(10),
@@ -694,7 +737,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 10),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.25,
-                  padding: const EdgeInsets.all(5),
+                  // padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: secondary),

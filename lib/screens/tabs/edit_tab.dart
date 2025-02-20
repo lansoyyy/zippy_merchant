@@ -239,7 +239,7 @@ class _EditScreenState extends State<EditScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.21,
+                  height: MediaQuery.of(context).size.height * 0.25,
                   decoration: const BoxDecoration(
                     color: secondary,
                     borderRadius: BorderRadius.only(
@@ -295,8 +295,8 @@ class _EditScreenState extends State<EditScreen> {
                                                           .size
                                                           .width *
                                                       0.25,
-                                                  padding:
-                                                      const EdgeInsets.all(5),
+                                                  // padding:
+                                                  //     const EdgeInsets.all(5),
                                                   decoration: BoxDecoration(
                                                     color: secondary,
                                                     borderRadius:
@@ -327,8 +327,8 @@ class _EditScreenState extends State<EditScreen> {
                                                           .size
                                                           .width *
                                                       0.25,
-                                                  padding:
-                                                      const EdgeInsets.all(5),
+                                                  // padding:
+                                                  //     const EdgeInsets.all(5),
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
