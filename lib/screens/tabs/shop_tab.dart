@@ -94,13 +94,12 @@ class _ShopTabState extends State<ShopTab> {
           Column(
             children: [
               _buildHeader(),
-              const SizedBox(height: 20),
-              _buildProfileCard(),
               const SizedBox(height: 10),
+              _buildProfileCard(),
               _buildMenuList(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 5),
               _buildAddMenuButton(),
-              const SizedBox(height: 15),
+              const SizedBox(height: 10),
             ],
           ),
           if (_isLoading)
@@ -201,6 +200,7 @@ class _ShopTabState extends State<ShopTab> {
         var img = userDoc['img'];
 
         return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.2,
           child: Card(
             child: Container(
               width: MediaQuery.of(context).size.width - 48,
@@ -459,36 +459,38 @@ class _ShopTabState extends State<ShopTab> {
   }
 
   Widget _buildAddMenuButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width - 48,
-      height: 100,
-      decoration: BoxDecoration(
-        border: Border.all(color: secondary),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            decoration:
-                const BoxDecoration(color: secondary, shape: BoxShape.circle),
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: GestureDetector(
-                onTap: _showAddMenuDialog,
-                child: const Icon(Icons.add, color: Colors.white),
+    return SingleChildScrollView(
+      child: Container(
+        width: MediaQuery.of(context).size.width - 48,
+        height: 100,
+        decoration: BoxDecoration(
+          border: Border.all(color: secondary),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              decoration:
+                  const BoxDecoration(color: secondary, shape: BoxShape.circle),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: GestureDetector(
+                  onTap: _showAddMenuDialog,
+                  child: const Icon(Icons.add, color: Colors.white),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 3),
-          TextWidget(
-            text: 'add menu item',
-            fontSize: 16,
-            fontFamily: 'Medium',
-            color: secondary,
-          ),
-        ],
+            // const SizedBox(height: 3),
+            TextWidget(
+              text: 'add menu item',
+              fontSize: 16,
+              fontFamily: 'Medium',
+              color: secondary,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -743,7 +745,8 @@ class _ShopTabState extends State<ShopTab> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  width: 100,
+                                  width:
+                                      MediaQuery.of(context).size.width - 300,
                                   child: TextFormField(
                                     style: const TextStyle(color: primary),
                                     controller: name,
@@ -757,7 +760,8 @@ class _ShopTabState extends State<ShopTab> {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 100,
+                                  width:
+                                      MediaQuery.of(context).size.width - 300,
                                   child: TextFormField(
                                     style: const TextStyle(color: primary),
                                     keyboardType: TextInputType.number,
@@ -774,7 +778,7 @@ class _ShopTabState extends State<ShopTab> {
                                 const SizedBox(height: 10),
                                 TextWidget(
                                   text: 'Accept Voucher',
-                                  fontSize: 18,
+                                  fontSize: 12,
                                   fontFamily: 'Medium',
                                   color: primary,
                                 ),
@@ -983,7 +987,8 @@ class _ShopTabState extends State<ShopTab> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  width: 100,
+                                  width:
+                                      MediaQuery.of(context).size.width - 300,
                                   child: TextFormField(
                                     style: const TextStyle(color: primary),
                                     controller: name,
@@ -997,7 +1002,8 @@ class _ShopTabState extends State<ShopTab> {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 100,
+                                  width:
+                                      MediaQuery.of(context).size.width - 300,
                                   child: TextFormField(
                                     style: const TextStyle(color: primary),
                                     keyboardType: TextInputType.number,
@@ -1014,7 +1020,7 @@ class _ShopTabState extends State<ShopTab> {
                                 const SizedBox(height: 10),
                                 TextWidget(
                                   text: 'Accept Voucher',
-                                  fontSize: 18,
+                                  fontSize: 12,
                                   fontFamily: 'Medium',
                                   color: primary,
                                 ),

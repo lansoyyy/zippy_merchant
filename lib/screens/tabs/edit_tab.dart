@@ -617,7 +617,7 @@ class _EditScreenState extends State<EditScreen> {
                               children: [
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.75,
+                                      MediaQuery.of(context).size.width * 0.50,
                                   child: TextField(
                                     decoration: const InputDecoration(
                                         border: InputBorder.none),
@@ -755,7 +755,7 @@ class _EditScreenState extends State<EditScreen> {
                               children: [
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.75,
+                                      MediaQuery.of(context).size.width * 0.50,
                                   child: TextField(
                                     decoration: const InputDecoration(
                                         border: InputBorder.none),
