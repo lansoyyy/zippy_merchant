@@ -253,8 +253,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 200,
                 ),
                 TextWidget(
-                  text: 'No menu items available',
-                  fontSize: 25,
+                  text: 'Order Empty',
+                  fontSize: 20,
                   fontFamily: 'Bold',
                   color: secondary,
                 ),
