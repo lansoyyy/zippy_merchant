@@ -248,16 +248,17 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const SizedBox(height: 10),
                 Image.asset(
-                  'assets/images/Group 121 (2).png',
-                  width: 200,
-                  height: 200,
+                  'assets/images/cat/CAT #8 1.png',
+                  width: 130,
+                  height: 130,
                 ),
-                TextWidget(
-                  text: 'Order Empty',
-                  fontSize: 20,
-                  fontFamily: 'Bold',
-                  color: secondary,
-                ),
+                const SizedBox(height: 10),
+                // TextWidget(
+                //   text: 'Order Empty',
+                //   fontSize: 20,
+                //   fontFamily: 'Bold',
+                //   color: secondary,
+                // ),
               ],
             ),
           );
@@ -316,30 +317,47 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildOrderHeader() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextWidget(
-            text: orderCount == 1 ? '1 order' : '$orderCount orders',
-            fontSize: 40,
-            fontFamily: 'Bold',
-            color: Colors.white,
-          ),
-          Row(
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('Orders')
+          .where('merchantId', isEqualTo: merchantId)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Something went wrong'));
+        }
+
+        final orders = snapshot.data!.docs;
+        orderCount = orders.length;
+
+        return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextWidget(
-                text: 'Filter by',
-                fontSize: 17,
+                text: orderCount == 1 ? '1 order' : '$orderCount orders',
+                fontSize: 40,
                 fontFamily: 'Bold',
-                color: white,
+                color: Colors.white,
               ),
-              _buildStatusFilter(),
+              Row(
+                children: [
+                  TextWidget(
+                    text: 'Filter by',
+                    fontSize: 17,
+                    fontFamily: 'Bold',
+                    color: white,
+                  ),
+                  _buildStatusFilter(),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -430,7 +448,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final grandTotal = _calculateGrandTotal(groupedItems);
 
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 7),
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+        bottom: 5,
+      ),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),

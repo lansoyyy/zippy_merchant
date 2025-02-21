@@ -3,13 +3,19 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:zippy/screens/auth/login_screen.dart';
 import 'package:zippy/screens/home_screen.dart';
 import 'package:zippy/screens/tabs/shop_tab.dart';
 import 'package:zippy/utils/colors.dart';
 import 'package:zippy/utils/const.dart';
+import 'package:zippy/utils/keys.dart';
 import 'package:zippy/widgets/text_widget.dart';
+import 'package:google_maps_webservice/places.dart' as location;
+
+import 'package:zippy/widgets/textfield_widget.dart';
 import 'package:zippy/widgets/toast_widget.dart';
+import 'package:google_api_headers/google_api_headers.dart';
 
 class EditScreen extends StatefulWidget {
   const EditScreen({super.key});
@@ -674,68 +680,69 @@ class _EditScreenState extends State<EditScreen> {
                         endIndent: 0,
                       ),
                       TextWidget(text: 'Address', fontSize: 18, color: black),
-                      //
-                      isAddEditing
-                          ? Row(
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.75,
-                                  child: TextField(
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none),
-                                    controller: addController,
-                                    style: TextStyle(
-                                      color: black,
-                                      fontSize: 23,
-                                      fontFamily: 'Bold',
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                    icon: const Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      updateAddress();
-                                      setState(() {
-                                        add = addController
-                                            .text; // Update description
-                                        isAddEditing = false;
-                                      });
-                                    } // Confirm number update
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              {
+                                location.Prediction? p =
+                                    await PlacesAutocomplete.show(
+                                        mode: Mode.overlay,
+                                        context: context,
+                                        apiKey: kGoogleApiKey,
+                                        language: 'en',
+                                        strictbounds: false,
+                                        types: [""],
+                                        decoration: InputDecoration(
+                                            hintText: 'Search Address',
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                borderSide: const BorderSide(
+                                                    color: Colors.white))),
+                                        components: [
+                                          location.Component(
+                                              location.Component.country, "ph")
+                                        ]);
 
-                                    ),
-                                const Padding(padding: EdgeInsets.zero),
-                                IconButton(
-                                  icon: const Icon(Icons.cancel,
-                                      color: Colors.red, size: 17),
-                                  onPressed: () {
-                                    setState(() {
-                                      isAddEditing = false;
-                                      addController.text = add ??
-                                          'No address available'; // Revert changes
-                                    });
-                                  },
-                                ),
-                              ],
-                            )
-                          : GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isAddEditing = true;
-                                  addController.text = add ?? '';
-                                });
-                              },
-                              child: TextWidget(
-                                text: add ?? '...',
-                                fontSize: 23,
-                                color: grey,
-                                fontFamily: 'Bold',
-                              ),
+                                if (p != null) {
+                                  location.GoogleMapsPlaces places =
+                                      location.GoogleMapsPlaces(
+                                          apiKey: kGoogleApiKey,
+                                          apiHeaders:
+                                              await const GoogleApiHeaders()
+                                                  .getHeaders());
+
+                                  location.PlacesDetailsResponse detail =
+                                      await places
+                                          .getDetailsByPlaceId(p.placeId!);
+
+                                  await FirebaseFirestore.instance
+                                      .collection('Merchant')
+                                      .doc(userId)
+                                      .update({
+                                    'address': detail.result.name,
+                                    'lat': detail.result.geometry!.location.lat,
+                                    'lng': detail.result.geometry!.location.lng,
+                                  });
+
+                                  setState(() {
+                                    add = detail.result.name;
+                                    addController.text = detail.result.name;
+                                  });
+                                }
+                              }
+                            },
+                            child: TextWidget(
+                              text: add ?? '...',
+                              fontSize: 23,
+                              color: grey,
+                              fontFamily: 'Bold',
                             ),
+                          ),
+                        ],
+                      ),
                       const Divider(
                         color: primary,
                         thickness: 1,
