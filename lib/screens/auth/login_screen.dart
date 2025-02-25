@@ -137,22 +137,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        showToast('Available soon, stay tuned!');
-                      },
-                      child: TextWidget(
-                        text: 'Want to become a Merchant?',
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontFamily: 'Medium',
-                      ),
+                    TextWidget(
+                      text: 'Want to become a Merchant?',
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontFamily: 'Medium',
                     ),
                     const SizedBox(
                       height: 2.5,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        showToast('Available soon, stay tuned!');
+                      },
                       child: TextWidget(
                         text: 'Learn how',
                         fontSize: 15,

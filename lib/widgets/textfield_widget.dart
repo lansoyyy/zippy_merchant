@@ -92,11 +92,11 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                         icon: widget.isObscure!
                             ? const Icon(
                                 Icons.visibility,
-                                color: secondary,
+                                color: Colors.white,
                               )
                             : const Icon(
                                 Icons.visibility_off,
-                                color: secondary,
+                                color: Colors.white,
                               ))
                     : const SizedBox()),
             hintText: widget.hint,

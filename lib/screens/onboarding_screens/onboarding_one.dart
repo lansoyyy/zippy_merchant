@@ -66,7 +66,7 @@ class OnboardingOne extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextWidget(
-                      text: 'with',
+                      text: 'with ',
                       fontSize: 32,
                       fontFamily: 'Regular',
                       color: secondary,
@@ -148,7 +148,7 @@ class OnboardingOne extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextWidget(
-                      text: 'with',
+                      text: 'width ',
                       fontSize: 32,
                       fontFamily: 'Regular',
                       color: secondary,
@@ -229,7 +229,7 @@ class OnboardingOne extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextWidget(
-                      text: 'with',
+                      text: 'width ',
                       fontSize: 32,
                       fontFamily: 'Regular',
                       color: secondary,
