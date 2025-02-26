@@ -235,7 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(
+            color: secondary,
+          ));
         } else if (snapshot.hasError) {
           return const Center(child: Text('Something went wrong'));
         }
@@ -278,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fontFamily: 'Medium',
               color: secondary,
             ),
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
           ],
         );
       },
@@ -294,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
           topRight: Radius.circular(20),
         ),
       ),
-      height: 500,
+      height: MediaQuery.of(context).size.height * 0.53,
       width: double.infinity,
       child: Column(
         children: [
@@ -324,7 +327,10 @@ class _HomeScreenState extends State<HomeScreen> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(
+            color: secondary,
+          ));
         } else if (snapshot.hasError) {
           return const Center(child: Text('Something went wrong'));
         }
@@ -397,6 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .collection('Orders')
           .where('merchantId', isEqualTo: merchantId)
           .where('status', isEqualTo: selectedStatus)
+          .orderBy('date', descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
