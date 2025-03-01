@@ -383,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'On the way',
           'Delivered'
         ]
-            .map((status) => PopupMenuItem(
+            .map((status) => PopupMenuItem( 
                   value: status,
                   child: TextWidget(
                     text: status,
