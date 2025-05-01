@@ -355,7 +355,7 @@ class _ShopTabState extends State<ShopTab> {
           elevation: 3,
           child: Container(
             width: MediaQuery.of(context).size.width / 4,
-            height: MediaQuery.of(context).size.height * 0.12,
+            height: MediaQuery.of(context).size.height * 0.17,
             decoration: BoxDecoration(
               image: item['imageUrl'] != ''
                   ? DecorationImage(
@@ -370,8 +370,8 @@ class _ShopTabState extends State<ShopTab> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width - 170,
-          height: MediaQuery.of(context).size.height * 0.12,
+          width: MediaQuery.of(context).size.width - 150,
+          height: MediaQuery.of(context).size.height * 0.17,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -382,8 +382,8 @@ class _ShopTabState extends State<ShopTab> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: double.infinity,
-                height: 33,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.05,
                 decoration: const BoxDecoration(
                   color: secondary,
                   borderRadius: BorderRadius.only(
@@ -391,29 +391,33 @@ class _ShopTabState extends State<ShopTab> {
                     topRight: Radius.circular(7.5),
                   ),
                 ),
-                child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextWidget(
-                        text: item['name'] ?? 'Unavailable',
-                        fontSize: 18,
-                        fontFamily: 'Bold',
-                        color: white,
-                      ),
-                      const SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () => _showEditDialog(item),
-                        child: Row(
-                          children: [
-                            Icon(Icons.edit, color: white, size: 20),
-                            const SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () => _showDeleteDialog(item.id),
-                              child: Icon(Icons.delete, color: white, size: 20),
-                            ),
-                          ],
+                      Expanded(
+                        child: TextWidget(
+                          text: item['name'] ?? 'Unavailable',
+                          fontSize: 15,
+                          fontFamily: 'Bold',
+                          color: white,
+                          maxLines: 1,
                         ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () => _showEditDialog(item),
+                            child: Icon(Icons.edit, color: white, size: 20),
+                          ),
+                          const SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () => _showDeleteDialog(item.id),
+                            child: Icon(Icons.delete, color: white, size: 20),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -421,12 +425,13 @@ class _ShopTabState extends State<ShopTab> {
               ),
               const SizedBox(height: 10),
               TextWidget(
+                maxLines: 2,
                 text: item['description'] ?? 'Unavailable',
                 fontSize: 15,
                 fontFamily: 'Medium',
                 color: Colors.black,
               ),
-              const SizedBox(height: 5),
+              // const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
