@@ -817,34 +817,111 @@ class _EditScreenState extends State<EditScreen> {
                         endIndent: 0,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           TextWidget(
                               text: 'Operating Hours',
                               fontSize: 18,
                               color: black),
-                          TextWidget(
-                              text: 'Operating Days',
-                              fontSize: 18,
-                              color: black),
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           isTimeEditing
                               ? Row(
                                   children: [
                                     SizedBox(
-                                      width: 55,
-                                      child: TextField(
-                                        decoration: const InputDecoration(
-                                            border: InputBorder.none),
-                                        controller: timeController,
-                                        style: TextStyle(
-                                          color: black,
-                                          fontSize: 23,
-                                          fontFamily: 'Bold',
+                                      width: MediaQuery.of(context).size.width *
+                                          0.30,
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          TimeOfDay? startTime =
+                                              await showTimePicker(
+                                            context: context,
+                                            initialTime: TimeOfDay.now(),
+                                            builder: (context, child) {
+                                              return MediaQuery(
+                                                data: MediaQuery.of(context)
+                                                    .copyWith(
+                                                  alwaysUse24HourFormat: true,
+                                                ),
+                                                child: child!,
+                                              );
+                                            },
+                                          );
+                                          if (startTime != null) {
+                                            setState(() {
+                                              String end = timeController.text
+                                                          .split('-')
+                                                          .length >
+                                                      1
+                                                  ? timeController.text
+                                                      .split('-')[1]
+                                                      .trim()
+                                                  : '';
+                                              timeController.text =
+                                                  '${startTime.format(context)}${end.isNotEmpty ? ' - $end' : ''}';
+                                              hours = timeController.text;
+                                            });
+                                          }
+                                        },
+                                        child: Text(
+                                          timeController.text
+                                              .split('-')
+                                              .first
+                                              .trim(),
+                                          style: TextStyle(
+                                            color: black,
+                                            fontSize: 23,
+                                            fontFamily: 'Bold',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const Text(' - '),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.30,
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          TimeOfDay? endTime =
+                                              await showTimePicker(
+                                            context: context,
+                                            initialTime: TimeOfDay.now(),
+                                            builder: (context, child) {
+                                              return MediaQuery(
+                                                data: MediaQuery.of(context)
+                                                    .copyWith(
+                                                  alwaysUse24HourFormat: true,
+                                                ),
+                                                child: child!,
+                                              );
+                                            },
+                                          );
+                                          if (endTime != null) {
+                                            setState(() {
+                                              String start = timeController.text
+                                                  .split('-')[0]
+                                                  .trim();
+                                              timeController.text =
+                                                  '$start - ${endTime.format(context)}';
+                                              hours = timeController.text;
+                                            });
+                                          }
+                                        },
+                                        child: Text(
+                                          timeController.text
+                                                      .split('-')
+                                                      .length >
+                                                  1
+                                              ? timeController.text
+                                                  .split('-')[1]
+                                                  .trim()
+                                              : '',
+                                          style: TextStyle(
+                                            color: black,
+                                            fontSize: 23,
+                                            fontFamily: 'Bold',
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -857,22 +934,17 @@ class _EditScreenState extends State<EditScreen> {
                                         onPressed: () {
                                           updateOpeHours();
                                           setState(() {
-                                            hours = timeController
-                                                .text; // Update description
                                             isTimeEditing = false;
                                           });
-                                        } // Confirm number update
-
-                                        ),
-                                    const Padding(padding: EdgeInsets.zero),
+                                        }),
                                     IconButton(
                                       icon: const Icon(Icons.cancel,
                                           color: Colors.red, size: 17),
                                       onPressed: () {
                                         setState(() {
                                           isTimeEditing = false;
-                                          timeController.text = hours ??
-                                              'No time available'; // Revert changes
+                                          timeController.text =
+                                              hours ?? '9:00 - 17:00';
                                         });
                                       },
                                     ),
@@ -882,7 +954,8 @@ class _EditScreenState extends State<EditScreen> {
                                   onTap: () {
                                     setState(() {
                                       isTimeEditing = true;
-                                      timeController.text = hours ?? '';
+                                      timeController.text =
+                                          hours ?? '9:00 - 17:00';
                                     });
                                   },
                                   child: TextWidget(
@@ -893,66 +966,6 @@ class _EditScreenState extends State<EditScreen> {
                                   ),
                                 ),
                           // Days daun ni
-                          isDayEditing
-                              ? Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 55,
-                                      child: TextField(
-                                        decoration: const InputDecoration(
-                                            border: InputBorder.none),
-                                        controller: dayController,
-                                        style: TextStyle(
-                                          color: black,
-                                          fontSize: 23,
-                                          fontFamily: 'Bold',
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                        icon: const Icon(
-                                          Icons.check,
-                                          color: Colors.green,
-                                          size: 20,
-                                        ),
-                                        onPressed: () {
-                                          updateOpeDays();
-                                          setState(() {
-                                            days = dayController
-                                                .text; // Update description
-                                            isDayEditing = false;
-                                          });
-                                        } // Confirm number update
-
-                                        ),
-                                    const Padding(padding: EdgeInsets.zero),
-                                    IconButton(
-                                      icon: const Icon(Icons.cancel,
-                                          color: Colors.red, size: 17),
-                                      onPressed: () {
-                                        setState(() {
-                                          isDayEditing = false;
-                                          dayController.text = days ??
-                                              'No days available'; // Revert changes
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isDayEditing = true;
-                                      dayController.text = days ?? '';
-                                    });
-                                  },
-                                  child: TextWidget(
-                                    text: days ?? '...',
-                                    fontSize: 23,
-                                    color: grey,
-                                    fontFamily: 'Bold',
-                                  ),
-                                ),
                         ],
                       ),
                       const Divider(
@@ -960,8 +973,145 @@ class _EditScreenState extends State<EditScreen> {
                         thickness: 1,
                         endIndent: 0,
                       ),
-                      const SizedBox(
-                        height: 10,
+                      TextWidget(
+                          text: 'Operating Days', fontSize: 18, color: black),
+                      isDayEditing
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.30,
+                                  child: DropdownButtonFormField<String>(
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
+                                    value: dayController.text
+                                        .split('-')
+                                        .first
+                                        .trim(),
+                                    items: [
+                                      'Monday',
+                                      'Tuesday',
+                                      'Wednesday',
+                                      'Thursday',
+                                      'Friday',
+                                      'Saturday',
+                                      'Sunday'
+                                    ].map((String day) {
+                                      return DropdownMenuItem<String>(
+                                        value: day,
+                                        child: Text(day),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      if (newValue != null) {
+                                        String endDay = dayController.text
+                                                    .split('-')
+                                                    .length >
+                                                1
+                                            ? dayController.text
+                                                .split('-')[1]
+                                                .trim()
+                                            : newValue;
+                                        dayController.text =
+                                            '$newValue - $endDay';
+                                      }
+                                    },
+                                  ),
+                                ),
+                                const Text(' - '),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.30,
+                                  child: DropdownButtonFormField<String>(
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
+                                    value:
+                                        dayController.text.split('-').length > 1
+                                            ? dayController.text
+                                                .split('-')[1]
+                                                .trim()
+                                            : dayController.text
+                                                .split('-')[0]
+                                                .trim(),
+                                    items: [
+                                      'Monday',
+                                      'Tuesday',
+                                      'Wednesday',
+                                      'Thursday',
+                                      'Friday',
+                                      'Saturday',
+                                      'Sunday'
+                                    ].map((String day) {
+                                      return DropdownMenuItem<String>(
+                                        value: day,
+                                        child: Text(day),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      if (newValue != null) {
+                                        String startDay = dayController.text
+                                            .split('-')[0]
+                                            .trim();
+                                        dayController.text =
+                                            '$startDay - $newValue';
+                                      }
+                                    },
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                    size: 20,
+                                  ),
+                                  onPressed: () {
+                                    updateOpeDays();
+                                    setState(() {
+                                      days = dayController.text;
+                                      isDayEditing = false;
+                                    });
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.cancel,
+                                      color: Colors.red, size: 17),
+                                  onPressed: () {
+                                    setState(() {
+                                      isDayEditing = false;
+                                      dayController.text =
+                                          days ?? 'Monday - Friday';
+                                    });
+                                  },
+                                ),
+                              ],
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isDayEditing = true;
+                                  dayController.text =
+                                      days ?? 'Monday - Friday';
+                                });
+                              },
+                              child: TextWidget(
+                                text: days ?? '...',
+                                fontSize: 23,
+                                color: grey,
+                                fontFamily: 'Bold',
+                              ),
+                            ),
+                      const Divider(
+                        color: primary,
+                        thickness: 1,
+                        endIndent: 0,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.1,
                       ),
                       // Row(
                       //   children: [

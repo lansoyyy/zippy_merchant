@@ -402,7 +402,8 @@ class _ShopTabState extends State<ShopTab> {
                           fontSize: 15,
                           fontFamily: 'Bold',
                           color: white,
-                          maxLines: 1,
+                          maxLines: 2,
+                          align: TextAlign.start,
                         ),
                       ),
                       Row(
@@ -780,37 +781,37 @@ class _ShopTabState extends State<ShopTab> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
-                                TextWidget(
-                                  text: 'Accept Voucher',
-                                  fontSize: 12,
-                                  fontFamily: 'Medium',
-                                  color: primary,
-                                ),
-                                Row(
-                                  children: [
-                                    Radio<String>(
-                                      value: 'Yes',
-                                      groupValue: _voucherOption,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          _voucherOption = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text('Yes'),
-                                    Radio<String>(
-                                      value: 'No',
-                                      groupValue: _voucherOption,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          _voucherOption = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text('No'),
-                                  ],
-                                ),
+                                // const SizedBox(height: 10),
+                                // TextWidget(
+                                //   text: 'Accept Voucher',
+                                //   fontSize: 12,
+                                //   fontFamily: 'Medium',
+                                //   color: primary,
+                                // ),
+                                // Row(
+                                //   children: [
+                                //     Radio<String>(
+                                //       value: 'Yes',
+                                //       groupValue: _voucherOption,
+                                //       onChanged: (String? value) {
+                                //         setState(() {
+                                //           _voucherOption = value!;
+                                //         });
+                                //       },
+                                //     ),
+                                //     const Text('Yes'),
+                                //     Radio<String>(
+                                //       value: 'No',
+                                //       groupValue: _voucherOption,
+                                //       onChanged: (String? value) {
+                                //         setState(() {
+                                //           _voucherOption = value!;
+                                //         });
+                                //       },
+                                //     ),
+                                //     const Text('No'),
+                                //   ],
+                                // ),
                               ],
                             ),
                           ],
@@ -1022,37 +1023,37 @@ class _ShopTabState extends State<ShopTab> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
-                                TextWidget(
-                                  text: 'Accept Voucher',
-                                  fontSize: 12,
-                                  fontFamily: 'Medium',
-                                  color: primary,
-                                ),
-                                Row(
-                                  children: [
-                                    Radio<String>(
-                                      value: 'Yes',
-                                      groupValue: _voucherOption,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          _voucherOption = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text('Yes'),
-                                    Radio<String>(
-                                      value: 'No',
-                                      groupValue: _voucherOption,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          _voucherOption = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text('No'),
-                                  ],
-                                ),
+                                // const SizedBox(height: 10),
+                                // TextWidget(
+                                //   text: 'Accept Voucher',
+                                //   fontSize: 12,
+                                //   fontFamily: 'Medium',
+                                //   color: primary,
+                                // ),
+                                // Row(
+                                //   children: [
+                                //     Radio<String>(
+                                //       value: 'Yes',
+                                //       groupValue: _voucherOption,
+                                //       onChanged: (String? value) {
+                                //         setState(() {
+                                //           _voucherOption = value!;
+                                //         });
+                                //       },
+                                //     ),
+                                //     const Text('Yes'),
+                                //     Radio<String>(
+                                //       value: 'No',
+                                //       groupValue: _voucherOption,
+                                //       onChanged: (String? value) {
+                                //         setState(() {
+                                //           _voucherOption = value!;
+                                //         });
+                                //       },
+                                //     ),
+                                //     const Text('No'),
+                                //   ],
+                                // ),
                               ],
                             ),
                           ],
