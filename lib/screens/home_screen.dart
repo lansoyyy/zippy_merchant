@@ -383,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'On the way',
           'Delivered'
         ]
-            .map((status) => PopupMenuItem( 
+            .map((status) => PopupMenuItem(
                   value: status,
                   child: TextWidget(
                     text: status,
@@ -463,7 +463,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-        height: MediaQuery.of(context).size.height * 0.1,
+        height: MediaQuery.of(context).size.height * 0.13,
         decoration: BoxDecoration(
           border: Border.all(color: secondary),
           borderRadius: BorderRadius.circular(10),

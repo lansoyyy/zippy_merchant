@@ -94,7 +94,7 @@ class _ShopTabState extends State<ShopTab> {
           Column(
             children: [
               _buildHeader(),
-              const SizedBox(height: 10),
+              // const SizedBox(height: 10),
               _buildProfileCard(),
               _buildMenuList(),
               const SizedBox(height: 5),
@@ -203,8 +203,8 @@ class _ShopTabState extends State<ShopTab> {
           height: MediaQuery.of(context).size.height * 0.2,
           child: Card(
             child: Container(
-              width: MediaQuery.of(context).size.width - 48,
-              height: MediaQuery.of(context).size.height * 0.25,
+              width: MediaQuery.of(context).size.width - 15,
+              height: MediaQuery.of(context).size.height * 0.35,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: secondary),
@@ -354,7 +354,7 @@ class _ShopTabState extends State<ShopTab> {
         Card(
           elevation: 3,
           child: Container(
-            width: MediaQuery.of(context).size.width / 4,
+            width: MediaQuery.of(context).size.width / 3,
             height: MediaQuery.of(context).size.height * 0.17,
             decoration: BoxDecoration(
               image: item['imageUrl'] != ''
@@ -467,8 +467,8 @@ class _ShopTabState extends State<ShopTab> {
   Widget _buildAddMenuButton() {
     return SingleChildScrollView(
       child: Container(
-        width: MediaQuery.of(context).size.width - 48,
-        height: 100,
+        width: MediaQuery.of(context).size.width - 15,
+        height: MediaQuery.of(context).size.height * 0.12,
         decoration: BoxDecoration(
           border: Border.all(color: secondary),
           borderRadius: BorderRadius.circular(15),
